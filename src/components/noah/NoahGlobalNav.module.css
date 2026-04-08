@@ -1,0 +1,169 @@
+@import url("https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1&family=Cormorant+Garamond:wght@500&display=swap");
+
+.bar {
+  position: fixed;
+  top: 18px;
+  left: 22px;
+  right: 22px;
+  z-index: 2000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  pointer-events: none;
+}
+
+.brand,
+.trigger {
+  pointer-events: auto;
+}
+
+.brand {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1rem;
+  letter-spacing: 0.18em;
+  color: rgba(255, 255, 255, 0.78);
+  text-decoration: none;
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.24);
+}
+
+.trigger {
+  appearance: none;
+  border: 0;
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.82);
+  font-family: "Cormorant Garamond", serif;
+  font-size: 0.95rem;
+  letter-spacing: 0.14em;
+  padding: 10px 14px;
+  border-radius: 999px;
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+}
+
+.panel {
+  position: fixed;
+  inset: 0;
+  z-index: 2100;
+  background: rgba(7, 8, 12, 0.58);
+  backdrop-filter: blur(10px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+
+.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.inner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: min(420px, 100%);
+  height: 100%;
+  padding: 28px 22px 32px;
+  background:
+    linear-gradient(180deg, rgba(18, 20, 28, 0.94) 0%, rgba(10, 12, 18, 0.98) 100%);
+  box-shadow: -20px 0 50px rgba(0, 0, 0, 0.28);
+  overflow-y: auto;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 22px;
+}
+
+.kicker {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 0.95rem;
+  letter-spacing: 0.18em;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.close {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.78);
+  font-family: "Cormorant Garamond", serif;
+  font-size: 0.95rem;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+}
+
+.nav {
+  display: grid;
+  gap: 10px;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 14px;
+  border-radius: 12px;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.76);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: 0.3s ease;
+}
+
+.item:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.14);
+  transform: translateY(-1px);
+}
+
+.active {
+  background: rgba(152, 166, 255, 0.09);
+  border-color: rgba(152, 166, 255, 0.28);
+}
+
+.label {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1.02rem;
+  letter-spacing: 0.12em;
+}
+
+.sub {
+  font-size: 0.88rem;
+  color: rgba(255, 255, 255, 0.52);
+}
+
+@media (max-width: 768px) {
+  .bar {
+    top: 14px;
+    left: 14px;
+    right: 14px;
+  }
+
+  .brand {
+    font-size: 0.92rem;
+  }
+
+  .trigger {
+    font-size: 0.88rem;
+    padding: 9px 12px;
+  }
+
+  .inner {
+    width: 100%;
+    padding: 22px 16px 28px;
+  }
+
+  .item {
+    padding: 13px 12px;
+  }
+
+  .label {
+    font-size: 0.96rem;
+  }
+
+  .sub {
+    font-size: 0.84rem;
+  }
+}

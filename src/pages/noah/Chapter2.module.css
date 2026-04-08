@@ -1,0 +1,303 @@
+@import url("https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1&family=Cormorant+Garamond:wght@500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@400&display=swap");
+
+.page {
+  min-height: 100vh;
+  background: #fdfaf6;
+  color: #2b2b2b;
+  font-family: "Shippori Mincho B1", serif;
+  line-height: 2;
+  overflow-x: hidden;
+  position: relative;
+  isolation: isolate;
+}
+
+.bgBase {
+  position: fixed;
+  inset: 0;
+  background: #fdfaf6;
+  z-index: -4;
+}
+
+.bgImage {
+  position: fixed;
+  inset: 0;
+  background-image: url("/assets/bg_ch2.jpg");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  filter: brightness(0.78) blur(1.2px);
+  z-index: -3;
+  pointer-events: none;
+}
+
+.bgOverlay {
+  position: fixed;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(255, 250, 242, 0.08) 0%, rgba(255, 248, 236, 0.18) 100%),
+    radial-gradient(circle at 50% 22%, rgba(226, 183, 110, 0.16), transparent 38%);
+  z-index: -2;
+  pointer-events: none;
+}
+
+.canvas {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* body ready */
+:global(body).bodyReady .chapterText,
+:global(body).bodyReady .textBox,
+:global(body).bodyReady .chapterTitleFixed {
+  opacity: 1;
+}
+
+:global(body).bodyReady .chapterText {
+  transform: translateY(0);
+}
+
+/* イントロ */
+.chapterIntro {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  background: none;
+  opacity: 1;
+  transition: opacity 2.8s ease, transform 3.2s ease;
+}
+
+.fadeOut {
+  opacity: 0;
+  transform: translateY(60px);
+}
+
+.introTitle span {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 3.8rem;
+  color: #c58d3a;
+  opacity: 0;
+  animation: fadeUp 2.2s ease forwards;
+}
+
+.introTitle span:nth-child(1) { animation-delay: 0.5s; }
+.introTitle span:nth-child(2) { animation-delay: 0.7s; }
+.introTitle span:nth-child(3) { animation-delay: 0.9s; }
+.introTitle span:nth-child(4) { animation-delay: 1.1s; }
+.introTitle span:nth-child(5) { animation-delay: 1.3s; }
+.introTitle span:nth-child(6) { animation-delay: 1.5s; }
+.introTitle span:nth-child(7) { animation-delay: 1.7s; }
+
+@keyframes fadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.introSub {
+  font-size: 1rem;
+  color: rgba(100, 80, 50, 0.75);
+  margin-top: 1em;
+  opacity: 0;
+  animation: fadeIn 2s ease 2.4s forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+/* 固定タイトル */
+.chapterTitleFixed {
+  text-align: center;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1.35rem;
+  color: #c58d3a;
+  text-shadow:
+    0 14px 38px rgba(0, 0, 0, 0.1),
+    0 0 1px rgba(255, 255, 255, 0.3) inset;
+  margin: 10vh 0 -8vh 0;
+  opacity: 0;
+  transition: opacity 1.6s ease;
+}
+
+/* 本文 */
+.chapterText {
+  background: none;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0;
+  margin: 8vh auto 14vh;
+  max-width: 760px;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 1.8s ease, transform 2.4s ease;
+  font-size: 1.1rem;
+}
+
+.textBox {
+  background: rgba(255, 255, 255, 0.58);
+  backdrop-filter: blur(1.8px);
+  -webkit-backdrop-filter: blur(1.8px);
+  border-radius: 14px;
+  padding: 8vh 7%;
+  margin: 18vh auto 18vh;
+  max-width: 670px;
+  min-height: 80vh;
+  border: 1px solid rgba(200, 170, 140, 0.22);
+  background-image: radial-gradient(rgba(0, 0, 0, 0.035) 1px, transparent 1px);
+  background-size: 4px 4px;
+  box-shadow:
+    0 14px 38px rgba(0, 0, 0, 0.1),
+    0 0 1px rgba(255, 255, 255, 0.3) inset;
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+
+.textBox p + p {
+  margin-top: 1.2em;
+}
+
+/* ノア */
+.noah {
+  color: #574c38;
+  font-family: "Fira Code", monospace;
+  font-size: 1.05rem;
+  line-height: 1.9;
+}
+
+.em {
+  display: inline-block;
+  animation: wobble 2.2s ease-in-out infinite;
+  font-weight: 600;
+  color: #6b5843;
+}
+
+@keyframes wobble {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  45% {
+    transform: translateY(-1.5px);
+    opacity: 0.92;
+  }
+  60% {
+    transform: translateY(0.8px);
+    opacity: 0.95;
+  }
+}
+
+.storyBreak {
+  margin: 2.5em 0;
+  font-style: italic;
+  opacity: 0.88;
+}
+
+.thinking {
+  margin-top: 3em;
+  margin-bottom: 4.2em;
+}
+
+/* 次章リンク */
+.nextChapter {
+  display: block;
+  text-align: center;
+  margin-top: 3rem;
+  font-family: "Cormorant Garamond", serif;
+  text-decoration: none;
+  font-size: 1.15rem;
+  color: #2b2b2b;
+  letter-spacing: 0.07em;
+  transition: color 0.35s ease;
+}
+
+.nextChapter:hover {
+  color: #d8a764;
+}
+
+/* responsive */
+@media (max-width: 768px) {
+  .page {
+    font-size: 15px;
+    line-height: 1.9;
+  }
+
+  .bgImage {
+    filter: brightness(0.85) blur(1px);
+    background-position: center top;
+  }
+
+  .introTitle span {
+    font-size: 2.4rem;
+    line-height: 1.2;
+    text-align: center;
+  }
+
+  .introSub {
+    font-size: 0.85rem;
+    margin-top: 0.8em;
+    letter-spacing: 0.1em;
+  }
+
+  .chapterTitleFixed {
+    position: relative;
+    margin: 8vh auto 4vh;
+    font-size: 1.05rem;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+  }
+
+  .chapterText {
+    max-width: 90%;
+    margin: 6vh auto 10vh;
+    font-size: 0.95rem;
+  }
+
+  .textBox {
+    padding: 6vh 6%;
+    margin: 10vh auto 10vh;
+    min-height: 70vh;
+    max-width: 92%;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(2px);
+  }
+
+  .noah {
+    font-size: 0.9rem;
+    line-height: 1.8;
+    word-break: break-word;
+  }
+
+  .nextChapter {
+    font-size: 1rem;
+    margin-top: 2.4rem;
+    letter-spacing: 0.05em;
+  }
+
+  .storyBreak {
+    margin: 2em 0;
+    font-size: 0.9rem;
+  }
+
+  .thinking {
+    margin-top: 2em;
+    margin-bottom: 3em;
+  }
+}

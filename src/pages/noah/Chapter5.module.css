@@ -1,0 +1,224 @@
+@import url("https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1&family=Cormorant+Garamond:wght@500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@400&display=swap");
+
+.page {
+  min-height: 100vh;
+  font-family: "Shippori Mincho B1", serif;
+  background: #f7f8fb;
+  color: #2b2b2b;
+  overflow-x: hidden;
+  line-height: 2;
+  position: relative;
+  isolation: isolate;
+}
+
+.memoryBg {
+  position: fixed;
+  inset: 0;
+  background: url("/assets/noah_memory_sea.jpg") center / cover no-repeat;
+  z-index: -3;
+  opacity: 1;
+  filter: brightness(1.05) contrast(1.1) saturate(1.08);
+}
+
+.whiteVeil {
+  display: none;
+}
+
+.particles {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+/* イントロ */
+.chapterIntro {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.9);
+  z-index: 3;
+  animation: introFade 6s ease forwards;
+}
+
+@keyframes introFade {
+  0% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.introTitle {
+  display: flex;
+  gap: 0.2em;
+}
+
+.c {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 3.4rem;
+  letter-spacing: 0.1em;
+  color: #6b79ff;
+  opacity: 0;
+  transform: translateY(16px);
+  animation: floatChar 1.3s ease forwards;
+}
+
+.c:nth-child(1) {
+  animation-delay: 0.3s;
+}
+.c:nth-child(2) {
+  animation-delay: 0.5s;
+}
+
+@keyframes floatChar {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.introSub {
+  font-family: "Cormorant Garamond", serif;
+  margin-top: 1rem;
+  color: rgba(50, 60, 120, 0.6);
+  opacity: 0;
+  animation: fadeSub 1.2s ease 0.9s forwards;
+}
+
+@keyframes fadeSub {
+  to {
+    opacity: 1;
+  }
+}
+
+/* 本文 */
+.chapter {
+  position: relative;
+  z-index: 1;
+  max-width: 720px;
+  margin: 16vh auto 14vh;
+  padding: 3rem 6%;
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(6px);
+  border-radius: 18px;
+  box-shadow: 0 10px 40px rgba(80, 110, 180, 0.15);
+  opacity: 0;
+  transform: translateY(40px);
+  animation: fadeInText 1.6s ease 5.4s forwards;
+}
+
+@keyframes fadeInText {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 段落フェード */
+.f {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.show {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 900ms ease, transform 900ms ease;
+}
+
+/* ノア */
+.noah {
+  color: #6a8dff;
+  font-family: "Fira Code", monospace;
+  text-shadow: 0 0 8px rgba(150, 170, 255, 0.45);
+}
+
+/* システムログ */
+.sys {
+  color: #5b6a86;
+  font-family: "Fira Code", monospace;
+  font-size: 0.95rem;
+}
+
+/* 次章リンク */
+.nextChapter {
+  display: block;
+  text-align: center;
+  margin-top: 3rem;
+  font-family: "Cormorant Garamond", serif;
+  color: rgba(40, 50, 90, 0.6);
+  text-decoration: none;
+  letter-spacing: 0.08em;
+  transition: 0.35s ease;
+}
+
+.nextChapter:hover {
+  color: #25305a;
+  text-shadow: 0 0 10px rgba(150, 170, 255, 0.35);
+}
+
+@media (max-width: 768px) {
+  .page {
+    font-size: 15px;
+    line-height: 1.8;
+    background: #f8f9fb;
+  }
+
+  .memoryBg {
+    background-position: center top;
+    filter: brightness(1) contrast(1.05) saturate(1.05);
+  }
+
+  .c {
+    font-size: 2.2rem;
+    letter-spacing: 0.05em;
+  }
+
+  .introSub {
+    font-size: 0.9rem;
+    margin-top: 0.6rem;
+    letter-spacing: 0.08em;
+  }
+
+  .chapter {
+    max-width: 90%;
+    margin: 10vh auto 8vh;
+    padding: 2rem 5%;
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(3px);
+    border-radius: 12px;
+    box-shadow: 0 6px 25px rgba(80, 110, 180, 0.12);
+  }
+
+  .f {
+    line-height: 1.9;
+    letter-spacing: 0.03em;
+  }
+
+  .noah {
+    font-size: 0.9rem;
+    color: #4c68d9;
+    text-shadow: 0 0 6px rgba(130, 150, 255, 0.35);
+  }
+
+  .sys {
+    font-size: 0.9rem;
+    color: #5b6a86;
+    opacity: 0.9;
+  }
+
+  .nextChapter {
+    font-size: 1rem;
+    margin-top: 2.5rem;
+    letter-spacing: 0.05em;
+  }
+}

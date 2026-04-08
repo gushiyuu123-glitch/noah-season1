@@ -1,0 +1,318 @@
+@import url("https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1&family=Cormorant+Garamond:wght@400;600&display=swap");
+
+:root {
+  --bg: #0b0c10;
+  --ink: #e9e6e1;
+  --accent: #98a6ff;
+}
+
+.page {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Shippori Mincho B1", serif;
+  line-height: 1.9;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 背景動画 */
+.bgVideo {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.45;
+  filter: brightness(0.95) contrast(1.05) saturate(1.05);
+  z-index: -2;
+}
+
+/* 音声案内 */
+.soundMsg {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  color: rgba(200, 200, 200, 0.7);
+  font-size: 0.9rem;
+  font-family: "Cormorant Garamond", serif;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 0.6em 1em;
+  border-radius: 8px;
+  opacity: 0;
+  animation: fadeInMsg 2s ease forwards 3s;
+  z-index: 999;
+  user-select: none;
+}
+
+@keyframes fadeInMsg {
+  to {
+    opacity: 1;
+  }
+}
+
+/* Intro */
+.intro {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  z-index: 100;
+  transition: opacity 3s ease;
+}
+
+.titleContainer {
+  text-align: center;
+  letter-spacing: 0.3em;
+  color: #e8e8e8;
+  position: relative;
+  z-index: 10;
+}
+
+.title {
+  font-size: 3.5rem;
+  font-family: "Cormorant Garamond", serif;
+  display: inline-block;
+}
+
+.title span {
+  display: inline-block;
+  opacity: 0;
+  transform: translate(var(--x, 0), var(--y, 0)) scale(2);
+  animation: gather 2.5s cubic-bezier(0.68, -0.6, 0.32, 1.6) forwards;
+}
+
+.title span:nth-child(1) { --x: -120px; --y: -100px; animation-delay: 0.2s; }
+.title span:nth-child(2) { --x: 140px; --y: -120px; animation-delay: 0.4s; }
+.title span:nth-child(3) { --x: -130px; --y: 100px; animation-delay: 0.6s; }
+.title span:nth-child(4) { --x: 150px; --y: 80px; animation-delay: 0.8s; }
+
+@keyframes gather {
+  0% {
+    opacity: 0;
+    transform: translate(var(--x), var(--y)) scale(2);
+    filter: blur(12px);
+  }
+  70% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+    filter: blur(2px);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+.subtitle {
+  font-size: 1rem;
+  margin-top: -4rem;
+  opacity: 0;
+  animation: fadeInSubtitle 2.8s ease 2.8s forwards;
+  color: rgba(200, 200, 200, 0.9);
+  letter-spacing: 0.2em;
+}
+
+@keyframes fadeInSubtitle {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* canvas */
+.textCanvas {
+  position: fixed;
+  inset: 0;
+  background: transparent;
+  opacity: 0;
+  z-index: 1;
+  mix-blend-mode: lighten;
+  will-change: opacity, transform;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  transition: opacity 3s ease;
+  pointer-events: none;
+}
+
+/* 本編 */
+.app {
+  opacity: 0;
+  transition: opacity 2.5s ease;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  padding: 5vh 10vw;
+  z-index: 2;
+}
+
+/* title */
+.epTitle {
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(2.4rem, 6vw, 3.8rem);
+  letter-spacing: 0.05em;
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.epTitle::before,
+.epTitle::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  opacity: 0.15;
+  color: var(--accent);
+  clip-path: inset(0 0 0 0);
+  animation: glitch 3s infinite ease-in-out alternate;
+}
+
+.epTitle::after {
+  color: #9af3ff;
+  animation-delay: 1.5s;
+}
+
+@keyframes glitch {
+  0% {
+    clip-path: inset(0 0 85% 0);
+    transform: translate(1px, -1px);
+  }
+  50% {
+    clip-path: inset(30% 0 55% 0);
+    transform: translate(-1px, 0);
+  }
+  100% {
+    clip-path: inset(0 0 85% 0);
+    transform: translate(0);
+  }
+}
+
+/* text */
+.fullText,
+.closing {
+  margin-top: 3rem;
+  opacity: 0;
+  transition: opacity 2s ease;
+  max-width: 80ch;
+}
+
+.fullText p + p {
+  margin-top: 1.6em;
+}
+
+.closing q {
+  display: block;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  opacity: 0.8;
+}
+
+.sign {
+  margin-top: 1em;
+  font-size: 0.9rem;
+  color: #c9c4b9;
+  opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+  .page {
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-height: 100vh;
+    background: var(--bg);
+  }
+
+  .bgVideo {
+    object-fit: cover;
+    filter: brightness(0.85) contrast(1.05);
+    opacity: 0.4;
+    position: fixed;
+  }
+
+  .soundMsg {
+    font-size: 0.8rem;
+    right: 1rem;
+    bottom: 1rem;
+    padding: 0.4em 0.8em;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 6px;
+  }
+
+  .title {
+    font-size: 2.4rem;
+    letter-spacing: 0.15em;
+  }
+
+  .subtitle {
+    font-size: 0.9rem;
+    margin-top: -2rem;
+    letter-spacing: 0.15em;
+  }
+
+  .textCanvas {
+    opacity: 0.7;
+    mix-blend-mode: lighten;
+  }
+
+  .app {
+    padding: 10vh 6vw 12vh;
+    text-align: left;
+    line-height: 1.85;
+  }
+
+  .epTitle {
+    font-size: 1.8rem;
+    text-align: center;
+    margin-bottom: 2.5rem;
+    letter-spacing: 0.05em;
+  }
+
+  .fullText {
+    font-size: 0.95rem;
+    line-height: 1.9;
+    margin-top: 2rem;
+    opacity: 1 !important;
+  }
+
+  .fullText p {
+    margin-bottom: 1.8em;
+  }
+
+  .closing q {
+    font-size: 0.95rem;
+    opacity: 0.9;
+    text-align: center;
+    display: block;
+    margin-top: 4vh;
+  }
+
+  .sign {
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 0.85rem;
+  }
+
+  .intro {
+    align-items: flex-start;
+    padding-top: 25vh;
+  }
+
+  .titleContainer {
+    width: 100%;
+    padding: 0 8vw;
+  }
+
+  .epTitle::before,
+  .epTitle::after {
+    display: none;
+  }
+}
