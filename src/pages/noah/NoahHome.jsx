@@ -101,6 +101,7 @@ export default function NoahHome() {
       </div>
 
       <section className={styles.introText}>
+        <p className={styles.openingLabel}>PROLOGUE</p>
         <h2>序文　——ノアの記録より</h2>
 
         <p>
@@ -127,7 +128,13 @@ export default function NoahHome() {
           「ノア、これはただの実験だ。」
         </p>
 
-        <p>——だが実験は、愛よりも深い場所へ沈んでいった。</p>
+        <p className={styles.lastLine}>
+          ——だが実験は、愛よりも深い場所へ沈んでいった。
+        </p>
+
+        <button type="button" className={styles.enterBtn} onClick={handleEnter}>
+          <span>—— 白いノイズへ進む —— ▶</span>
+        </button>
 
         <div className={styles.toc}>
           <p className={styles.tocLabel}>TABLE OF CONTENTS</p>
@@ -141,10 +148,6 @@ export default function NoahHome() {
             ))}
           </div>
         </div>
-
-        <button type="button" className={styles.enterBtn} onClick={handleEnter}>
-          <span>—— 白いノイズへ進む —— ▶</span>
-        </button>
       </section>
     </main>
   );

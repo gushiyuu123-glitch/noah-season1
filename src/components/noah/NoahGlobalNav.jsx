@@ -24,15 +24,15 @@ export default function NoahGlobalNav() {
           NOAH
         </Link>
 
-        <button
-          type="button"
-          className={styles.trigger}
-          onClick={() => setOpen((prev) => !prev)}
-          aria-expanded={open}
-          aria-label="目次を開く"
-        >
-          Index
-        </button>
+<button
+  type="button"
+  className={styles.trigger}
+  onClick={() => setOpen((prev) => !prev)}
+  aria-expanded={open}
+  aria-label="目次を開く"
+>
+  目次
+</button>
       </div>
 
       <div
