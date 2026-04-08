@@ -17,7 +17,7 @@
 .bgLab {
   position: fixed;
   inset: 0;
-  background: url("/assets/noah_reconstruction4.jpg") center / cover no-repeat;
+  background: url("/assets/noah_reconstruction4.png") center / cover no-repeat;
   z-index: -2;
   filter: brightness(0.92) contrast(1.2) blur(2px);
 }

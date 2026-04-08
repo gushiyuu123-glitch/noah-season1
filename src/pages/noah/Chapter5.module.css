@@ -15,7 +15,7 @@
 .memoryBg {
   position: fixed;
   inset: 0;
-  background: url("/assets/noah_memory_sea.jpg") center / cover no-repeat;
+  background: url("/assets/noah_memory_sea.png") center / cover no-repeat;
   z-index: -3;
   opacity: 1;
   filter: brightness(1.05) contrast(1.1) saturate(1.08);

@@ -22,7 +22,7 @@
 .bgImage {
   position: fixed;
   inset: 0;
-  background-image: url("/assets/bg_ch2.jpg");
+  background-image: url("/assets/bg_ch2.png");
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
