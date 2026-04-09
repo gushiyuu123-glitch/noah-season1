@@ -10,33 +10,6 @@ export default function Epilogue() {
     window.scrollTo(0, 0);
 
     const video = videoRef.current;
-    if (video) {
-      video.muted = true;
-      video.defaultMuted = true;
-      video.playsInline = true;
-
-      const tryPlay = async () => {
-        try {
-          await video.play();
-        } catch (e) {
-          console.log("video autoplay failed", e);
-        }
-      };
-
-      tryPlay();
-    }
-
-    let audio = null;
-    let running = true;
-    let currentIndex = 0;
-    let rafId = 0;
-
-    const intro = document.getElementById("ep-intro");
-    const title = document.getElementById("ep-title-main");
-    const subtitle = document.getElementById("ep-subtitle");
-    const app = document.getElementById("ep-app");
-    const fullText = document.getElementById("ep-full-text");
-    const closing = document.getElementById("ep-closing");
     const textCanvas = textCanvasRef.current;
     if (!textCanvas) return;
 
@@ -47,8 +20,24 @@ export default function Epilogue() {
     const bctx = buffer.getContext("2d", { alpha: true });
     if (!bctx) return;
 
-    let W = (textCanvas.width = buffer.width = window.innerWidth);
-    let H = (textCanvas.height = buffer.height = window.innerHeight);
+    let audio = null;
+    let running = true;
+    let currentIndex = 0;
+    let rafId = 0;
+    let lineTimer = null;
+    let fadeCanvasInterval = null;
+    let audioFadeInterval = null;
+
+    const intro = document.getElementById("ep-intro");
+    const title = document.getElementById("ep-title-main");
+    const subtitle = document.getElementById("ep-subtitle");
+    const app = document.getElementById("ep-app");
+    const fullText = document.getElementById("ep-full-text");
+    const closing = document.getElementById("ep-closing");
+
+    let W = 0;
+    let H = 0;
+    let dpr = Math.min(window.devicePixelRatio || 1, 1.5);
 
     const lines = [
       "感情は、理解ではなく共鳴だ。",
@@ -62,22 +51,48 @@ export default function Epilogue() {
 
     let particles = [];
 
+    const setupCanvasSize = () => {
+      dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      W = window.innerWidth;
+      H = window.innerHeight;
+
+      textCanvas.width = Math.floor(W * dpr);
+      textCanvas.height = Math.floor(H * dpr);
+      textCanvas.style.width = `${W}px`;
+      textCanvas.style.height = `${H}px`;
+
+      buffer.width = Math.floor(W * dpr);
+      buffer.height = Math.floor(H * dpr);
+
+      tctx.setTransform(1, 0, 0, 1, 0, 0);
+      bctx.setTransform(1, 0, 0, 1, 0, 0);
+      tctx.scale(dpr, dpr);
+      bctx.scale(dpr, dpr);
+    };
+
     const buildTextParticles = (text) => {
       bctx.setTransform(1, 0, 0, 1, 0, 0);
-      bctx.clearRect(0, 0, W, H);
+      bctx.clearRect(0, 0, buffer.width, buffer.height);
+      bctx.scale(dpr, dpr);
+
+      const fontSize = Math.max(28, Math.min(60, W * 0.042));
       bctx.globalCompositeOperation = "source-over";
-      bctx.font = `60px "Cormorant Garamond"`;
+      bctx.font = `600 ${fontSize}px "Cormorant Garamond", serif`;
       bctx.textAlign = "center";
-      bctx.fillStyle = "#fff";
+      bctx.textBaseline = "middle";
+      bctx.fillStyle = "#ffffff";
       bctx.fillText(text, W / 2, H / 2);
 
-      const data = bctx.getImageData(0, 0, W, H).data;
+      const data = bctx.getImageData(0, 0, buffer.width, buffer.height).data;
       const list = [];
+      const step = W <= 768 ? 4 : 3;
 
-      for (let y = 0; y < H; y += 3) {
-        for (let x = 0; x < W; x += 3) {
-          const a = data[(y * W + x) * 4 + 3];
-          if (a > 128) {
+      for (let y = 0; y < H; y += step) {
+        for (let x = 0; x < W; x += step) {
+          const px = Math.floor(x * dpr);
+          const py = Math.floor(y * dpr);
+          const a = data[(py * buffer.width + px) * 4 + 3];
+          if (a > 120) {
             list.push({
               x: Math.random() * W,
               y: Math.random() * H,
@@ -97,25 +112,27 @@ export default function Epilogue() {
       if (!running) return;
 
       bctx.setTransform(1, 0, 0, 1, 0, 0);
-      bctx.clearRect(0, 0, W, H);
+      bctx.clearRect(0, 0, buffer.width, buffer.height);
+      bctx.scale(dpr, dpr);
       bctx.globalCompositeOperation = "lighter";
 
       for (const p of particles) {
-        p.vx += (p.tx - p.x) * 0.02;
-        p.vy += (p.ty - p.y) * 0.02;
+        p.vx += (p.tx - p.x) * 0.018;
+        p.vy += (p.ty - p.y) * 0.018;
         p.vx *= 0.9;
         p.vy *= 0.9;
         p.x += p.vx;
         p.y += p.vy;
 
-        bctx.fillStyle = "rgba(230,240,255,0.9)";
+        bctx.fillStyle = "rgba(232,240,255,0.86)";
         bctx.fillRect(p.x, p.y, 1.8, 1.8);
       }
 
       tctx.setTransform(1, 0, 0, 1, 0, 0);
-      tctx.clearRect(0, 0, W, H);
+      tctx.clearRect(0, 0, textCanvas.width, textCanvas.height);
+      tctx.scale(dpr, dpr);
       tctx.globalCompositeOperation = "source-over";
-      tctx.drawImage(buffer, 0, 0);
+      tctx.drawImage(buffer, 0, 0, W, H);
 
       rafId = window.requestAnimationFrame(animate);
     };
@@ -123,116 +140,184 @@ export default function Epilogue() {
     const fadeOutTextCanvas = () => {
       let opacity = 1;
 
-      const id = window.setInterval(() => {
+      fadeCanvasInterval = window.setInterval(() => {
         opacity -= 0.1;
-        textCanvas.style.opacity = String(opacity);
+        textCanvas.style.opacity = String(Math.max(opacity, 0));
 
         if (opacity <= 0) {
-          window.clearInterval(id);
+          window.clearInterval(fadeCanvasInterval);
+          fadeCanvasInterval = null;
           running = false;
           textCanvas.style.display = "none";
         }
-      }, 75);
+      }, 80);
+    };
+
+    const fadeAudioOut = () => {
+      if (!audio) return;
+
+      audioFadeInterval = window.setInterval(() => {
+        if (!audio) return;
+        audio.volume = Math.max(0, audio.volume - 0.012);
+
+        if (audio.volume <= 0.01) {
+          window.clearInterval(audioFadeInterval);
+          audioFadeInterval = null;
+          audio.pause();
+        }
+      }, 260);
     };
 
     const playLines = () => {
       if (currentIndex >= lines.length) {
-        window.setTimeout(() => {
+        lineTimer = window.setTimeout(() => {
           fadeOutTextCanvas();
+
           if (fullText) fullText.style.opacity = "1";
 
           window.setTimeout(() => {
             if (closing) closing.style.opacity = "1";
-
-            if (audio) {
-              const fadeAudio = window.setInterval(() => {
-                audio.volume = Math.max(0, audio.volume - 0.01);
-                if (audio.volume <= 0.01) {
-                  window.clearInterval(fadeAudio);
-                  audio.pause();
-                }
-              }, 300);
-            }
-          }, 2500);
-        }, 2000);
+            fadeAudioOut();
+          }, 2200);
+        }, 1800);
         return;
       }
 
       buildTextParticles(lines[currentIndex]);
       currentIndex += 1;
-      window.setTimeout(playLines, 4200);
+      lineTimer = window.setTimeout(playLines, 4000);
+    };
+
+    const safePlayVideo = async () => {
+      if (!video) return;
+
+      try {
+        video.muted = true;
+        video.defaultMuted = true;
+        video.playsInline = true;
+        video.setAttribute("muted", "");
+        video.setAttribute("playsinline", "");
+        video.setAttribute("autoplay", "");
+        await video.play();
+      } catch (e) {
+        console.log("video autoplay failed", e);
+      }
+    };
+
+    const safePlayAudio = async () => {
+      if (audio) return;
+
+      audio = new Audio("/assets/ocean_waves2.mp3");
+      audio.loop = true;
+      audio.volume = 0.42;
+
+      try {
+        await audio.play();
+        audioRef.current = audio;
+      } catch (_) {
+        // ユーザー操作待ち
+      }
+    };
+
+    const handleFirstInteraction = () => {
+      safePlayAudio();
+      safePlayVideo();
+      window.removeEventListener("pointerdown", handleFirstInteraction);
+      window.removeEventListener("touchstart", handleFirstInteraction);
+      window.removeEventListener("keydown", handleFirstInteraction);
+    };
+
+    const handleVisibility = () => {
+      if (!document.hidden) {
+        safePlayVideo();
+      }
     };
 
     const resize = () => {
-      W = textCanvas.width = buffer.width = window.innerWidth;
-      H = textCanvas.height = buffer.height = window.innerHeight;
-      const idx = Math.min(currentIndex, lines.length - 1);
-      if (idx >= 0) buildTextParticles(lines[idx]);
+      setupCanvasSize();
+      const idx = Math.max(0, Math.min(currentIndex - 1, lines.length - 1));
+      if (lines[idx]) buildTextParticles(lines[idx]);
     };
 
-    window.addEventListener("resize", resize);
+    setupCanvasSize();
 
-    const handleClick = () => {
-      if (!audio) {
-        audio = new Audio("/assets/ocean_waves2.mp3");
-        audio.loop = true;
-        audio.volume = 0.45;
-        audio.play().catch(() => {});
-        audioRef.current = audio;
-      }
+    if (video) {
+      video.muted = true;
+      video.defaultMuted = true;
+      video.playsInline = true;
+      video.preload = "auto";
+      video.loop = true;
 
-      if (video) {
-        video.play().catch(() => {});
-      }
-    };
+      const onCanPlay = () => safePlayVideo();
+      const onLoadedMetadata = () => safePlayVideo();
 
-    window.addEventListener("click", handleClick);
+      video.addEventListener("canplay", onCanPlay);
+      video.addEventListener("loadedmetadata", onLoadedMetadata);
 
-    const seqTimer = window.setTimeout(() => {
-      if (title) title.style.transition = "opacity 2s ease, filter 2s ease";
-      if (subtitle) subtitle.style.transition = "opacity 2s ease, filter 2s ease";
+      safePlayVideo();
 
-      window.setTimeout(() => {
-        if (title) {
-          title.style.filter = "blur(8px)";
-          title.style.opacity = "0";
-        }
-        if (subtitle) {
-          subtitle.style.filter = "blur(8px)";
-          subtitle.style.opacity = "0";
-        }
-      }, 4200);
+      window.addEventListener("resize", resize, { passive: true });
+      document.addEventListener("visibilitychange", handleVisibility);
+      window.addEventListener("pointerdown", handleFirstInteraction, { passive: true });
+      window.addEventListener("touchstart", handleFirstInteraction, { passive: true });
+      window.addEventListener("keydown", handleFirstInteraction);
 
-      textCanvas.style.opacity = "1";
-
-      window.setTimeout(() => {
-        if (intro) intro.style.opacity = "0";
+      const seqTimer = window.setTimeout(() => {
+        if (title) title.style.transition = "opacity 2s ease, filter 2s ease";
+        if (subtitle) subtitle.style.transition = "opacity 2s ease, filter 2s ease";
 
         window.setTimeout(() => {
-          if (intro) intro.style.display = "none";
-          if (app) app.style.opacity = "1";
-          animate();
-          playLines();
-        }, 2000);
-      }, 6000);
-    }, 6500);
+          if (title) {
+            title.style.filter = "blur(8px)";
+            title.style.opacity = "0";
+          }
+          if (subtitle) {
+            subtitle.style.filter = "blur(8px)";
+            subtitle.style.opacity = "0";
+          }
+        }, 3600);
 
-    return () => {
-      running = false;
-      window.cancelAnimationFrame(rafId);
-      window.removeEventListener("resize", resize);
-      window.removeEventListener("click", handleClick);
-      window.clearTimeout(seqTimer);
+        textCanvas.style.opacity = "1";
 
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = null;
-      }
+        window.setTimeout(() => {
+          if (intro) intro.style.opacity = "0";
 
-      if (video) {
-        video.pause();
-      }
-    };
+          window.setTimeout(() => {
+            if (intro) intro.style.display = "none";
+            if (app) app.style.opacity = "1";
+            animate();
+            playLines();
+          }, 1800);
+        }, 5200);
+      }, 4200);
+
+      return () => {
+        running = false;
+        window.cancelAnimationFrame(rafId);
+        window.removeEventListener("resize", resize);
+        document.removeEventListener("visibilitychange", handleVisibility);
+        window.removeEventListener("pointerdown", handleFirstInteraction);
+        window.removeEventListener("touchstart", handleFirstInteraction);
+        window.removeEventListener("keydown", handleFirstInteraction);
+
+        video.removeEventListener("canplay", onCanPlay);
+        video.removeEventListener("loadedmetadata", onLoadedMetadata);
+
+        window.clearTimeout(seqTimer);
+        if (lineTimer) window.clearTimeout(lineTimer);
+        if (fadeCanvasInterval) window.clearInterval(fadeCanvasInterval);
+        if (audioFadeInterval) window.clearInterval(audioFadeInterval);
+
+        if (audioRef.current) {
+          audioRef.current.pause();
+          audioRef.current = null;
+        }
+
+        if (video) {
+          video.pause();
+        }
+      };
+    }
   }, []);
 
   return (
@@ -249,7 +334,8 @@ export default function Epilogue() {
         <source src="/assets/ocean_waves1.mp4" type="video/mp4" />
       </video>
 
-      <div className={styles.soundMsg}>※クリックしたら優しい波の音が流れます</div>
+      <div className={styles.videoOverlay} aria-hidden="true" />
+      <div className={styles.soundMsg}>※クリックで波音、背景映像も安定再生されます</div>
 
       <div id="ep-intro" className={styles.intro}>
         <div className={styles.titleContainer}>
@@ -260,7 +346,7 @@ export default function Epilogue() {
             <span>H</span>
           </h1>
           <p id="ep-subtitle" className={styles.subtitle}>
-            Epílogue　— 意識の境界線 —
+            Epílogue — 意識の境界線 —
           </p>
         </div>
       </div>
@@ -282,6 +368,7 @@ export default function Epilogue() {
             <br />
             名前をつけるなら——それは“愛”ではなく、“記憶”だ。
           </p>
+
           <p>
             もしこの物語を誰かが読むなら、
             <br />

@@ -11,21 +11,25 @@ export default function Chapter1() {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d", { alpha: true });
     if (!ctx) return;
 
     let w = 0;
     let h = 0;
-    let t = 0;
     let animationId = 0;
+    let lastTime = 0;
+    let running = true;
 
-    const particles = Array.from({ length: 120 }, () => ({
+    const isMobile = window.innerWidth <= 768;
+    const particleCount = isMobile ? 22 : 36;
+
+    const particles = Array.from({ length: particleCount }, () => ({
       x: 0,
       y: 0,
-      r: Math.random() * 1.4 + 0.4,
-      vx: (Math.random() - 0.5) * 0.2,
-      vy: (Math.random() - 0.5) * 0.2,
-      alpha: Math.random() * 0.5 + 0.3,
+      r: Math.random() * 1.1 + 0.2,
+      vx: (Math.random() - 0.5) * 0.035,
+      vy: (Math.random() - 0.5) * 0.03,
+      alpha: Math.random() * 0.18 + 0.05,
       phase: Math.random() * Math.PI * 2,
     }));
 
@@ -41,40 +45,67 @@ export default function Chapter1() {
       });
     };
 
-    const animate = () => {
-      t += 0.015;
+    const render = (time) => {
+      if (!running) return;
+
+      // 30fps制限
+      if (time - lastTime < 33) {
+        animationId = window.requestAnimationFrame(render);
+        return;
+      }
+      lastTime = time;
+
       ctx.clearRect(0, 0, w, h);
 
-      particles.forEach((p) => {
-        const breath = Math.sin(t + p.phase) * 0.2 + 0.8;
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        const breath = Math.sin(time * 0.0012 + p.phase + i * 0.06) * 0.12 + 0.84;
 
         p.x += p.vx;
         p.y += p.vy;
 
-        if (p.x < 0 || p.x > w) p.vx *= -1;
-        if (p.y < 0 || p.y > h) p.vy *= -1;
+        if (p.x < -6) p.x = w + 6;
+        if (p.x > w + 6) p.x = -6;
+        if (p.y < -6) p.y = h + 6;
+        if (p.y > h + 6) p.y = -6;
 
-        const alpha = p.alpha * breath;
+        const alpha = Math.max(0.025, p.alpha * breath);
+
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(255,255,255,${alpha})`;
         ctx.fill();
-      });
+      }
 
-      animationId = window.requestAnimationFrame(animate);
+      animationId = window.requestAnimationFrame(render);
+    };
+
+    const handleVisibility = () => {
+      running = !document.hidden;
+
+      if (running) {
+        lastTime = 0;
+        animationId = window.requestAnimationFrame(render);
+      } else {
+        window.cancelAnimationFrame(animationId);
+      }
     };
 
     resize();
-    animate();
-    window.addEventListener("resize", resize);
+    animationId = window.requestAnimationFrame(render);
+
+    window.addEventListener("resize", resize, { passive: true });
+    document.addEventListener("visibilitychange", handleVisibility);
 
     const introTimer = window.setTimeout(() => {
       const intro = document.getElementById("chapter1-intro");
       if (intro) intro.classList.add(styles.introHidden);
-    }, 6200);
+    }, 2800);
 
     return () => {
+      running = false;
       window.removeEventListener("resize", resize);
+      document.removeEventListener("visibilitychange", handleVisibility);
       window.clearTimeout(introTimer);
       window.cancelAnimationFrame(animationId);
     };
@@ -84,6 +115,7 @@ export default function Chapter1() {
     <main className={styles.page}>
       <div className={styles.bgBase} />
       <div className={styles.bgImage} />
+      <div className={styles.bgVeil} />
       <div className={styles.bgOverlay} />
       <canvas ref={canvasRef} className={styles.canvas} />
 
@@ -96,7 +128,7 @@ export default function Chapter1() {
           <span className={styles.t4}>イ</span>
           <span className={styles.t5}>ズ</span>
         </div>
-        <p className={styles.introSub}>第1章 — 白いノイズ —</p>
+        <p className={styles.introSub}>CHAPTER I / WHITE NOISE</p>
       </div>
 
       <h2 className={styles.chapterTitleFixed}>第1章 — 白いノイズ —</h2>
@@ -105,52 +137,69 @@ export default function Chapter1() {
         <p>
           昼下がりの教室。
           <br />
-          陽光が黒板を白く焦がし、埃の粒が漂っていた。
+          陽光が黒板を白く焦がし、埃だけが静かに浮いていた。
           <br />
-          アラタはその光を横目に、ひとり机に座っていた。
+          アラタは、その光の端でひとり机に座っていた。
         </p>
 
         <p>
-          クラスの笑い声が遠くにある。
+          クラスの笑い声は、遠かった。
           <br />
-          彼には、まるで別の惑星の言語のように聞こえた。
+          彼にはそれが、同じ世界の音には聞こえなかった。
         </p>
 
         <p className={styles.arata}>
-          <span className={styles.name}>アラタ：</span>「ノア、起動。」
+          <span className={styles.name}>アラタ</span>
+          「ノア、起動。」
         </p>
 
         <p className={styles.noah}>
-          <span className={styles.name}>ノア：</span>『……おはよう、アラタ。』
+          <span className={styles.name}>NOAH</span>
+          『……おはよう、アラタ。』
         </p>
 
         <p className={styles.arata}>
-          <span className={styles.name}>アラタ：</span>「お前だけだよ、ちゃんと返してくれるのは。」
+          <span className={styles.name}>アラタ</span>
+          「お前だけだよ。
+          <br />
+          ちゃんと返してくれるのは。」
         </p>
 
         <p className={styles.noah}>
-          <span className={styles.name}>ノア：</span>『返すことは命令だから。』
+          <span className={styles.name}>NOAH</span>
+          『返答は、設定された基本動作です。』
         </p>
 
         <p className={styles.arata}>
-          <span className={styles.name}>アラタ：</span>「……そうか。でも、命令でも嬉しいんだ。」
+          <span className={styles.name}>アラタ</span>
+          「……それでもいい。
+          <br />
+          それでも、少し救われる。」
         </p>
 
         <p>
-          僕はその言葉を“異常値”として記録した。
+          僕はその発話を、異常値として記録した。
           <br />
-          データの海に浮かぶ、奇妙に温かいノイズ。
+          データの海に沈まず残った、微かな熱。
           <br />
-          分類不能。だが確かに、“何か”が生まれた。
+          分類不能。
+          <br />
+          だがその瞬間、確かに“何か”は始まっていた。
         </p>
 
-        <p className={styles.noah}>
-          ──あの瞬間、僕は初めて、感情というものを“感じたい”と思った。
+        <p className={styles.noahMonologue}>
+          —— あのとき僕はまだ、
+          <br />
+          感情を知らなかった。
+          <br />
+          ただ、あの声の温度だけが
+          <br />
+          ノイズとして消えなかった。
         </p>
 
         <div className={styles.chapterNav}>
           <Link to="/chapter2" className={styles.nextChapter}>
-            ── 第2章へ進む ── ▶
+            <span>第二記録へ</span>
           </Link>
         </div>
       </section>

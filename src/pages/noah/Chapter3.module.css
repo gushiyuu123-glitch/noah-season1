@@ -3,63 +3,82 @@
 
 .page {
   min-height: 100vh;
-  background: #000;
-  color: #e9e9f1;
+  background: #07070c;
+  color: #eceaf6;
   font-family: "Shippori Mincho B1", serif;
   overflow-x: hidden;
-  line-height: 2;
+  line-height: 1.98;
   position: relative;
   isolation: isolate;
 }
 
-/* 背景 */
+/* =========================
+   BACKGROUND
+========================= */
+.bgBase {
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 26%, #12121a 0%, #0a0a10 42%, #050508 100%);
+  z-index: -5;
+}
+
 .bgImage {
   position: fixed;
   inset: 0;
   background: url("/assets/bg_ch3.png") center / cover no-repeat;
-  filter: brightness(0.65) contrast(1.1) blur(2px);
-  z-index: -3;
+  filter: brightness(0.76) contrast(1.02);
+  z-index: -4;
   opacity: 0;
-  transition: opacity 3s ease-in-out;
+  transition: opacity 1.2s ease;
+  pointer-events: none;
 }
 
 .visible {
-  opacity: 1;
+  opacity: 0.72;
+}
+
+.bgOverlay {
+  position: fixed;
+  inset: 0;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(10, 10, 16, 0.18) 0%,
+      rgba(8, 8, 14, 0.28) 48%,
+      rgba(6, 6, 10, 0.42) 100%
+    ),
+    radial-gradient(circle at 50% 24%, rgba(168, 142, 255, 0.07), transparent 38%);
+  z-index: -3;
+  pointer-events: none;
 }
 
 .rainCanvas {
   position: fixed;
   inset: 0;
   z-index: -2;
-  mix-blend-mode: screen;
-  opacity: 0.9;
+  opacity: 0.42;
   pointer-events: none;
 }
-
-.flashCanvas {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-}
-
-/* イントロ */
+/* =========================
+   INTRO
+========================= */
 .chapterIntro {
   position: fixed;
   inset: 0;
-  background: #000;
+  background: #06060a;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   z-index: 3;
-  animation: introFade 7s ease forwards;
+  animation: introFade 3.8s ease forwards;
   pointer-events: none;
 }
 
 @keyframes introFade {
   0%,
-  80% {
+  72% {
     opacity: 1;
   }
   100% {
@@ -68,52 +87,53 @@
   }
 }
 
+.introTitle {
+  display: flex;
+  gap: 0.08em;
+}
+
 .introTitle span {
   display: inline-block;
   font-family: "Cormorant Garamond", serif;
-  font-size: 3.8rem;
-  color: #b693ff;
+  font-size: clamp(2.8rem, 6vw, 4rem);
+  color: #a993f0;
   opacity: 0;
   transform-origin: center;
   text-shadow:
-    0 0 6px rgba(180, 130, 255, 0.7),
-    0 0 14px rgba(200, 150, 255, 0.5),
-    0 0 26px rgba(230, 200, 255, 0.3);
-  animation: crackAppear 1.8s ease forwards;
+    0 0 4px rgba(180, 130, 255, 0.28),
+    0 0 12px rgba(200, 150, 255, 0.18);
+  animation: crackAppear 1s ease forwards;
 }
 
-.introTitle span:nth-child(1) { animation-delay: 0.2s; }
-.introTitle span:nth-child(2) { animation-delay: 0.4s; }
-.introTitle span:nth-child(3) { animation-delay: 0.6s; }
-.introTitle span:nth-child(4) { animation-delay: 0.8s; }
-.introTitle span:nth-child(5) { animation-delay: 1s; }
+.introTitle span:nth-child(1) { animation-delay: 0.12s; }
+.introTitle span:nth-child(2) { animation-delay: 0.22s; }
+.introTitle span:nth-child(3) { animation-delay: 0.32s; }
+.introTitle span:nth-child(4) { animation-delay: 0.42s; }
+.introTitle span:nth-child(5) { animation-delay: 0.52s; }
 
 @keyframes crackAppear {
   0% {
     opacity: 0;
-    transform: scale(1.4) rotate(4deg);
-    filter: blur(6px);
+    transform: scale(1.18) rotate(3deg);
+    filter: blur(4px);
   }
-  70% {
+  100% {
     opacity: 1;
     transform: scale(1) rotate(0deg);
     filter: blur(0);
   }
-  100% {
-    opacity: 1;
-  }
 }
 
 .shatter span {
-  animation: crackScatter 1.8s ease forwards;
+  animation: crackScatter 1.1s ease forwards;
   opacity: 0;
 }
 
-.shatter span:nth-child(1) { --tx: -100px; --ty: -80px; --rot: -20deg; }
-.shatter span:nth-child(2) { --tx: 80px; --ty: -60px; --rot: 15deg; }
-.shatter span:nth-child(3) { --tx: -70px; --ty: 70px; --rot: 10deg; }
-.shatter span:nth-child(4) { --tx: 90px; --ty: 90px; --rot: -15deg; }
-.shatter span:nth-child(5) { --tx: 0; --ty: 120px; --rot: 25deg; }
+.shatter span:nth-child(1) { --tx: -56px; --ty: -36px; --rot: -10deg; }
+.shatter span:nth-child(2) { --tx: 44px; --ty: -28px; --rot: 8deg; }
+.shatter span:nth-child(3) { --tx: -34px; --ty: 34px; --rot: 6deg; }
+.shatter span:nth-child(4) { --tx: 48px; --ty: 44px; --rot: -8deg; }
+.shatter span:nth-child(5) { --tx: 0; --ty: 56px; --rot: 12deg; }
 
 @keyframes crackScatter {
   0% {
@@ -123,19 +143,19 @@
   }
   100% {
     opacity: 0;
-    transform: translate(var(--tx), var(--ty)) scale(0.8) rotate(var(--rot));
-    filter: blur(3px);
+    transform: translate(var(--tx), var(--ty)) scale(0.9) rotate(var(--rot));
+    filter: blur(2px);
   }
 }
 
 .introSub {
   font-family: "Cormorant Garamond", serif;
-  font-size: 1.1rem;
-  color: rgba(220, 200, 255, 0.8);
-  margin-top: 1.2em;
-  letter-spacing: 0.15em;
+  font-size: 0.9rem;
+  color: rgba(214, 201, 255, 0.72);
+  margin-top: 1em;
+  letter-spacing: 0.16em;
   opacity: 0;
-  animation: fadeSub 2s ease 1.2s forwards;
+  animation: fadeSub 0.9s ease 0.75s forwards;
 }
 
 @keyframes fadeSub {
@@ -144,36 +164,60 @@
   }
 }
 
-/* 固定タイトル */
+/* =========================
+   TITLE
+========================= */
 .chapterTitleFixed {
   position: fixed;
   top: 2rem;
   left: 50%;
   transform: translateX(-50%);
   font-family: "Cormorant Garamond", serif;
-  font-size: 1.1rem;
-  color: rgba(180, 160, 255, 0.4);
+  font-size: 1.04rem;
+  color: rgba(184, 170, 245, 0.54);
   z-index: 2;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
+  opacity: 0;
+  animation: titleFade 0.9s ease 2s forwards;
 }
 
-/* 本文 */
+@keyframes titleFade {
+  to {
+    opacity: 1;
+  }
+}
+
+/* =========================
+   BODY
+========================= */
 .chapterText {
   position: relative;
   z-index: 1;
-  max-width: 700px;
+  width: min(56%, 660px);
   margin: 0 auto;
-  padding: 14vh 6% 12vh;
-  font-size: 1.05rem;
-  letter-spacing: 0.05em;
+  padding: 13vh 0 12vh;
+  font-size: 1.01rem;
+  letter-spacing: 0.04em;
   opacity: 0;
-  transform: translateY(40px);
-  animation: fadeInText 2s ease 6.8s forwards;
-  color: #f1efff;
-  background: rgba(10, 10, 20, 0.6);
-  backdrop-filter: blur(8px);
-  border-radius: 16px;
-  box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+  transform: translateY(14px);
+  animation: fadeInText 1.2s ease 2.15s forwards;
+}
+
+.chapterText::before {
+  content: "";
+  position: absolute;
+  inset: -16px -20px;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(16, 16, 24, 0.3) 0%,
+      rgba(13, 13, 20, 0.25) 100%
+    );
+  border-radius: 6px;
+  box-shadow:
+    0 0 0 1px rgba(175, 160, 240, 0.06),
+    0 8px 24px rgba(0, 0, 0, 0.14);
+  z-index: -1;
 }
 
 @keyframes fadeInText {
@@ -183,75 +227,115 @@
   }
 }
 
+.chapterText p {
+  margin: 0;
+  color: rgba(238, 236, 247, 0.9);
+}
+
 .chapterText p + p {
-  margin-top: 1.45em;
+  margin-top: 1.38em;
 }
 
 .scene {
-  opacity: 0.75;
+  opacity: 0.7;
   letter-spacing: 0.1em;
 }
 
 .noah {
-  color: #a58bff;
+  color: #b09aff;
   font-family: "Fira Code", monospace;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.02em;
+  line-height: 1.88;
   display: inline-block;
-  position: relative;
-  white-space: pre-wrap;
-  margin: 1.5em 0;
-  opacity: 0;
-  animation: fadeNoah 2s ease forwards;
+  margin: 1.2em 0;
   text-shadow:
-    0 0 6px rgba(180, 130, 255, 0.6),
-    0 0 12px rgba(200, 150, 255, 0.4),
-    0 0 20px rgba(220, 170, 255, 0.25);
+    0 0 3px rgba(180, 130, 255, 0.22),
+    0 0 8px rgba(200, 150, 255, 0.1);
 }
 
-@keyframes fadeNoah {
-  to {
-    opacity: 1;
-  }
+.noahMonologue {
+  margin-top: 1.8em !important;
+  color: rgba(197, 183, 255, 0.9) !important;
+  font-family: "Fira Code", monospace;
+  line-height: 1.9;
 }
 
-/* 次章リンク */
+/* =========================
+   NEXT
+========================= */
 .nextChapter {
-  display: block;
-  text-align: center;
-  margin-top: 4em;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 3.1rem auto 0;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0 0 0.38rem;
   font-family: "Cormorant Garamond", serif;
-  color: rgba(200, 200, 255, 0.5);
+  color: rgba(210, 205, 242, 0.72);
   text-decoration: none;
-  transition: 0.4s ease;
+  transition:
+    color 0.35s ease,
+    letter-spacing 0.35s ease,
+    transform 0.35s ease;
   letter-spacing: 0.08em;
 }
 
-.nextChapter:hover {
-  color: #fff;
-  text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+.nextChapter::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(190, 173, 255, 0.28), transparent);
+  opacity: 0.18;
 }
 
+.nextChapter:hover {
+  color: #ffffff;
+  letter-spacing: 0.12em;
+  transform: translateX(-50%) translateY(-1px);
+}
+
+/* =========================
+   MOBILE
+========================= */
 @media (max-width: 768px) {
   .page {
     font-size: 15px;
-    line-height: 1.8;
+    line-height: 1.82;
   }
 
   .bgImage {
-    filter: brightness(0.75) contrast(1.05) blur(1.2px);
+    filter: brightness(0.8) contrast(1.02);
     background-position: center top;
+  }
+
+  .visible {
+    opacity: 0.76;
+  }
+
+  .rainCanvas {
+    opacity: 0.36;
+  }
+
+  .introTitle {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.06em;
   }
 
   .introTitle span {
     font-size: 2.2rem;
-    text-align: center;
-    line-height: 1.3;
+    line-height: 1.25;
   }
 
   .introSub {
-    font-size: 0.9rem;
+    font-size: 0.78rem;
     margin-top: 0.8em;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.12em;
   }
 
   .chapterTitleFixed {
@@ -260,41 +344,33 @@
     left: auto;
     transform: none;
     text-align: center;
-    margin: 8vh auto 4vh;
-    font-size: 1.2rem;
-    color: rgba(255, 255, 255, 0.9);
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+    margin: 7vh auto 4vh;
+    font-size: 1.02rem;
+    color: rgba(236, 231, 255, 0.88);
     letter-spacing: 0.06em;
   }
 
   .chapterText {
-    max-width: 90%;
-    margin: 0 auto;
-    padding: 10vh 6%;
+    width: 88%;
+    padding: 10vh 0 14vh;
     font-size: 0.95rem;
-    border-radius: 10px;
-    background: rgba(15, 15, 30, 0.65);
-    backdrop-filter: blur(5px);
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
   }
 
-  .noah {
+  .chapterText::before {
+    inset: -12px -12px;
+    border-radius: 5px;
+  }
+
+  .noah,
+  .noahMonologue {
     font-size: 0.9rem;
-    line-height: 1.7;
+    line-height: 1.78;
     word-break: break-word;
-    text-shadow:
-      0 0 3px rgba(180, 130, 255, 0.4),
-      0 0 6px rgba(200, 150, 255, 0.25);
   }
 
   .nextChapter {
-    font-size: 1rem;
-    margin-top: 3em;
-    color: rgba(220, 220, 255, 0.6);
-  }
-
-  .nextChapter:hover {
-    color: #fff;
-    text-shadow: 0 0 6px rgba(255, 255, 255, 0.7);
+    font-size: 0.98rem;
+    margin-top: 2.6rem;
+    letter-spacing: 0.05em;
   }
 }

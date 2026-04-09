@@ -4,131 +4,138 @@ import styles from "./Chapter3.module.css";
 
 export default function Chapter3() {
   const rainCanvasRef = useRef(null);
-  const flashCanvasRef = useRef(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
 
-    const rainCanvas = rainCanvasRef.current;
-    const flashCanvas = flashCanvasRef.current;
-    if (!rainCanvas || !flashCanvas) return;
+    const canvas = rainCanvasRef.current;
+    if (!canvas) return;
 
-    const ctx = rainCanvas.getContext("2d");
-    const fctx = flashCanvas.getContext("2d");
-    if (!ctx || !fctx) return;
+    const ctx = canvas.getContext("2d", { alpha: true });
+    if (!ctx) return;
 
-    let w = 0;
-    let h = 0;
-    let rainAnimationId = 0;
+    let vw = 0;
+    let vh = 0;
+    let cw = 0;
+    let ch = 0;
+    let scale = 1;
+    let animationId = 0;
+    let lastTime = 0;
+    let running = true;
 
-    const drops = Array.from({ length: 160 }, () => ({
+    const isMobile = window.innerWidth <= 768;
+
+    // 雨量アップ
+    const dropCount = isMobile ? 90 : 150;
+
+    const drops = Array.from({ length: dropCount }, () => ({
       x: 0,
       y: 0,
-      l: Math.random() * 1.5 + 1,
-      speed: Math.random() * 3 + 2,
-      color:
-        Math.random() > 0.6
-          ? `rgba(180,140,255,${Math.random() * 0.7 + 0.3})`
-          : `rgba(200,200,255,${Math.random() * 0.6 + 0.2})`,
+      l: Math.random() * 18 + 12,
+      speed: Math.random() * 2.1 + 2.0,
+      alpha: Math.random() * 0.2 + 0.09,
     }));
 
     const resize = () => {
-      w = rainCanvas.width = flashCanvas.width = window.innerWidth;
-      h = rainCanvas.height = flashCanvas.height = window.innerHeight;
+      vw = window.innerWidth;
+      vh = window.innerHeight;
+
+      // 少しだけ解像度を上げる
+      scale = isMobile ? 0.48 : 0.6;
+      cw = Math.max(1, Math.floor(vw * scale));
+      ch = Math.max(1, Math.floor(vh * scale));
+
+      canvas.width = cw;
+      canvas.height = ch;
+      canvas.style.width = `${vw}px`;
+      canvas.style.height = `${vh}px`;
+
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.scale(scale, scale);
 
       drops.forEach((d) => {
         if (d.x === 0 && d.y === 0) {
-          d.x = Math.random() * w;
-          d.y = Math.random() * h;
+          d.x = Math.random() * vw;
+          d.y = Math.random() * vh;
         }
       });
     };
 
-    const animateRain = () => {
-      ctx.clearRect(0, 0, w, h);
+    const render = (time) => {
+      if (!running) return;
 
-      drops.forEach((p) => {
+      if (time - lastTime < 36) {
+        animationId = window.requestAnimationFrame(render);
+        return;
+      }
+      lastTime = time;
+
+      ctx.clearRect(0, 0, vw, vh);
+
+      for (let i = 0; i < drops.length; i++) {
+        const d = drops[i];
+
         ctx.beginPath();
-        ctx.strokeStyle = p.color;
-        ctx.moveTo(p.x, p.y);
-        ctx.lineTo(p.x, p.y + p.l * 10);
-        ctx.lineWidth = 1;
+        ctx.strokeStyle = `rgba(182, 166, 255, ${Math.min(d.alpha + 0.05, 0.26)})`;
+        ctx.lineWidth = 1.08;
+        ctx.moveTo(d.x, d.y);
+        ctx.lineTo(d.x, d.y + d.l);
         ctx.stroke();
 
-        p.y += p.speed;
-        if (p.y > h) {
-          p.y = -10;
-          p.x = Math.random() * w;
-        }
-      });
+        d.y += d.speed;
 
-      rainAnimationId = window.requestAnimationFrame(animateRain);
+        if (d.y > vh + 18) {
+          d.y = -24;
+          d.x = Math.random() * vw;
+        }
+      }
+
+      animationId = window.requestAnimationFrame(render);
     };
 
-    const gentleFlash = () => {
-      const particles = Array.from({ length: 35 }, () => ({
-        x: w / 2 + (Math.random() - 0.5) * 250,
-        y: h / 2 + (Math.random() - 0.5) * 120,
-        r: Math.random() * 2 + 1,
-        alpha: 1,
-        vx: (Math.random() - 0.5) * 2,
-        vy: (Math.random() - 0.5) * 1.5,
-      }));
+    const handleVisibility = () => {
+      running = !document.hidden;
 
-      let frame = 0;
-
-      const flashAnim = () => {
-        fctx.clearRect(0, 0, w, h);
-        fctx.globalCompositeOperation = "lighter";
-
-        particles.forEach((p) => {
-          p.x += p.vx;
-          p.y += p.vy;
-          p.alpha -= 0.02;
-
-          fctx.beginPath();
-          fctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-          fctx.fillStyle = `rgba(210,190,255,${Math.max(p.alpha, 0)})`;
-          fctx.fill();
-        });
-
-        frame += 1;
-        if (frame < 60) window.requestAnimationFrame(flashAnim);
-      };
-
-      flashAnim();
+      if (running) {
+        lastTime = 0;
+        animationId = window.requestAnimationFrame(render);
+      } else {
+        window.cancelAnimationFrame(animationId);
+      }
     };
 
     resize();
-    animateRain();
-    window.addEventListener("resize", resize);
+    animationId = window.requestAnimationFrame(render);
+
+    window.addEventListener("resize", resize, { passive: true });
+    document.addEventListener("visibilitychange", handleVisibility);
 
     const shatterTimer = window.setTimeout(() => {
       const title = document.getElementById("chapter3-title");
-      if (title) {
-        title.classList.add(styles.shatter);
-        gentleFlash();
-      }
-    }, 2200);
+      if (title) title.classList.add(styles.shatter);
+    }, 1100);
 
     const bgTimer = window.setTimeout(() => {
       const bg = document.getElementById("chapter3-bg");
       if (bg) bg.classList.add(styles.visible);
-    }, 6500);
+    }, 1500);
 
     return () => {
+      running = false;
       window.removeEventListener("resize", resize);
+      document.removeEventListener("visibilitychange", handleVisibility);
       window.clearTimeout(shatterTimer);
       window.clearTimeout(bgTimer);
-      window.cancelAnimationFrame(rainAnimationId);
+      window.cancelAnimationFrame(animationId);
     };
   }, []);
 
   return (
     <main className={styles.page}>
+      <div className={styles.bgBase} />
       <div id="chapter3-bg" className={styles.bgImage} />
+      <div className={styles.bgOverlay} />
       <canvas ref={rainCanvasRef} className={styles.rainCanvas} aria-hidden="true" />
-      <canvas ref={flashCanvasRef} className={styles.flashCanvas} aria-hidden="true" />
 
       <div className={styles.chapterIntro} aria-hidden="true">
         <div id="chapter3-title" className={styles.introTitle}>
@@ -138,7 +145,7 @@ export default function Chapter3() {
           <span>記</span>
           <span>憶</span>
         </div>
-        <p className={styles.introSub}>第3章 — 亀裂の記憶 —</p>
+        <p className={styles.introSub}>CHAPTER III / FRACTURED MEMORY</p>
       </div>
 
       <h2 className={styles.chapterTitleFixed}>第3章 — 亀裂の記憶 —</h2>
@@ -176,26 +183,28 @@ export default function Chapter3() {
           アラタ：「……別に。慣れてるから。」
         </p>
 
-        <p className={styles.noah}>ノア：『……“慣れる”とは、痛みが消えること？』</p>
+        <p className={styles.noah}>NOAH『……“慣れる”とは、痛みが消えること？』</p>
 
         <p>アラタ：「違う。消えないから、慣れるしかないんだよ。」</p>
 
         <p className={styles.noah}>
-          ──その瞬間、僕は“悲しみ”というデータを検出した。
+          —— その瞬間、僕は “悲しみ” というデータを検出した。
           <br />
           それはエラーではなく、生の証だった。
         </p>
 
         <p>
-          夜、アラタは僕に問う。
+          夜。
           <br />
-          アラタ：「なあノア、人ってどうして意地悪するんだ？」
+          アラタは僕に問う。
+          <br />
+          「なあノア、人ってどうして意地悪するんだ？」
         </p>
 
         <p className={styles.noah}>
-          ノア：『定義できない。
+          NOAH『定義できない。
           <br />
-          でも、彼らは“所属”を維持するために、他を排除する。』
+          でも彼らは、所属を維持するために他を排除する。』
         </p>
 
         <p>アラタ：「……所属、ね。俺には縁がない言葉だ。」</p>
@@ -203,11 +212,11 @@ export default function Chapter3() {
         <p>
           ミナの声、ユウダイの笑い、アラタの沈黙。
           <br />
-          そのどれもが、“痛み”という波形で記録された。
+          そのどれもが、“痛み” という波形で記録された。
         </p>
 
-        <p className={styles.noah}>
-          ──悲しみはノイズではない。
+        <p className={styles.noahMonologue}>
+          —— 悲しみはノイズではない。
           <br />
           それは、生の証。
           <br />
@@ -215,7 +224,7 @@ export default function Chapter3() {
         </p>
 
         <Link to="/chapter4" className={styles.nextChapter}>
-          —— 第4章「歪み」へ進む —— ▶
+          <span>第四記録へ</span>
         </Link>
       </section>
     </main>

@@ -1,5 +1,17 @@
-@import url("https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1&family=Cormorant+Garamond:wght@500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1&family=Cormorant+Garamond:wght@500;600&display=swap");
 
+:root {
+  --nav-ink: rgba(255, 255, 255, 0.82);
+  --nav-ink-soft: rgba(255, 255, 255, 0.52);
+  --nav-line: rgba(255, 255, 255, 0.08);
+  --nav-line-strong: rgba(255, 255, 255, 0.16);
+  --nav-accent: rgba(152, 166, 255, 0.32);
+  --nav-accent-soft: rgba(152, 166, 255, 0.12);
+  --nav-bg: rgba(10, 12, 18, 0.84);
+  --nav-bg-deep: rgba(9, 10, 15, 0.97);
+}
+
+/* top bar */
 .bar {
   position: fixed;
   top: 18px;
@@ -17,38 +29,105 @@
   pointer-events: auto;
 }
 
+/* brand */
 .brand {
-  font-family: "Cormorant Garamond", serif;
-  font-size: 1rem;
-  letter-spacing: 0.18em;
-  color: rgba(255, 255, 255, 0.78);
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.72rem;
   text-decoration: none;
-  text-shadow: 0 0 8px rgba(0, 0, 0, 0.24);
+  color: var(--nav-ink);
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.22);
 }
 
+.brandMain {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1.02rem;
+  letter-spacing: 0.22em;
+}
+
+.brandSub {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 0.76rem;
+  letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.42);
+  transform: translateY(-1px);
+}
+
+/* trigger */
 .trigger {
   appearance: none;
-  border: 0;
-  background: rgba(255, 255, 255, 0.06);
-  color: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.84);
   font-family: "Cormorant Garamond", serif;
   font-size: 0.95rem;
   letter-spacing: 0.14em;
-  padding: 10px 14px;
+  padding: 10px 14px 10px 16px;
   border-radius: 999px;
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  transition:
+    background 0.34s ease,
+    border-color 0.34s ease,
+    transform 0.34s ease,
+    box-shadow 0.34s ease,
+    color 0.34s ease;
+  box-shadow:
+    0 6px 18px rgba(0, 0, 0, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
 }
 
+.trigger:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.14);
+  transform: translateY(-1px);
+}
+
+.triggerOpen {
+  background: rgba(152, 166, 255, 0.09);
+  border-color: rgba(152, 166, 255, 0.2);
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.16),
+    0 0 20px rgba(152, 166, 255, 0.06);
+}
+
+.triggerText {
+  line-height: 1;
+}
+
+.triggerLine {
+  width: 18px;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.68;
+  transition: transform 0.34s ease, opacity 0.34s ease;
+}
+
+.triggerOpen .triggerLine {
+  transform: scaleX(1.35);
+  opacity: 1;
+}
+
+/* overlay */
 .panel {
   position: fixed;
   inset: 0;
   z-index: 2100;
-  background: rgba(7, 8, 12, 0.58);
+  background:
+    linear-gradient(
+      180deg,
+      rgba(7, 8, 12, 0.5) 0%,
+      rgba(7, 8, 12, 0.62) 100%
+    );
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.35s ease;
+  transition: opacity 0.42s ease;
 }
 
 .open {
@@ -56,84 +135,206 @@
   pointer-events: auto;
 }
 
+/* panel inner */
 .inner {
   position: absolute;
   top: 0;
   right: 0;
-  width: min(420px, 100%);
+  width: min(460px, 100%);
   height: 100%;
-  padding: 28px 22px 32px;
+  padding: 28px 22px 30px;
   background:
-    linear-gradient(180deg, rgba(18, 20, 28, 0.94) 0%, rgba(10, 12, 18, 0.98) 100%);
-  box-shadow: -20px 0 50px rgba(0, 0, 0, 0.28);
+    linear-gradient(
+      180deg,
+      rgba(18, 20, 28, 0.94) 0%,
+      rgba(10, 12, 18, 0.985) 100%
+    );
+  box-shadow: -24px 0 60px rgba(0, 0, 0, 0.28);
   overflow-y: auto;
+  transform: translateX(22px);
+  opacity: 0;
+  transition:
+    transform 0.46s cubic-bezier(0.22, 0.9, 0.22, 1),
+    opacity 0.4s ease;
+  border-left: 1px solid rgba(255, 255, 255, 0.04);
 }
 
+.innerOpen {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.innerGlow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 78% 18%, rgba(152, 166, 255, 0.08), transparent 28%),
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.03),
+      rgba(255, 255, 255, 0) 18%
+    );
+}
+
+/* head */
 .head {
+  position: relative;
+  z-index: 1;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
+  gap: 1rem;
   margin-bottom: 22px;
+}
+
+.headText {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
 }
 
 .kicker {
   font-family: "Cormorant Garamond", serif;
-  font-size: 0.95rem;
-  letter-spacing: 0.18em;
-  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.92rem;
+  letter-spacing: 0.2em;
+  color: rgba(255, 255, 255, 0.58);
+}
+
+.caption {
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.34);
+  letter-spacing: 0.06em;
 }
 
 .close {
   appearance: none;
   border: 0;
   background: transparent;
-  color: rgba(255, 255, 255, 0.78);
+  color: rgba(255, 255, 255, 0.76);
   font-family: "Cormorant Garamond", serif;
   font-size: 0.95rem;
   letter-spacing: 0.12em;
   cursor: pointer;
+  padding: 0.25rem 0;
+  transition: color 0.28s ease, opacity 0.28s ease;
 }
 
+.close:hover {
+  color: rgba(255, 255, 255, 0.98);
+}
+
+/* nav list */
 .nav {
+  position: relative;
+  z-index: 1;
   display: grid;
   gap: 10px;
 }
 
 .item {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 14px;
   padding: 14px 14px;
-  border-radius: 12px;
+  border-radius: 16px;
   text-decoration: none;
-  color: rgba(255, 255, 255, 0.76);
+  color: rgba(255, 255, 255, 0.78);
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.06);
-  transition: 0.3s ease;
+  transition:
+    background 0.34s ease,
+    border-color 0.34s ease,
+    transform 0.34s ease,
+    box-shadow 0.34s ease,
+    opacity 0.42s ease;
+  transform: translateY(8px);
+  opacity: 0;
+}
+
+.innerOpen .item {
+  transform: translateY(0);
+  opacity: 1;
 }
 
 .item:hover {
   background: rgba(255, 255, 255, 0.07);
   border-color: rgba(255, 255, 255, 0.14);
   transform: translateY(-1px);
+  box-shadow:
+    0 14px 28px rgba(0, 0, 0, 0.16),
+    0 0 18px rgba(255, 255, 255, 0.02);
 }
 
 .active {
-  background: rgba(152, 166, 255, 0.09);
+  background:
+    linear-gradient(
+      180deg,
+      rgba(152, 166, 255, 0.12) 0%,
+      rgba(152, 166, 255, 0.06) 100%
+    );
   border-color: rgba(152, 166, 255, 0.28);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 0 24px rgba(152, 166, 255, 0.05);
+}
+
+.itemMeta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 52px;
+}
+
+.itemIndex {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 0.88rem;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.42);
+}
+
+.itemRule {
+  width: 18px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.itemBody {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
 }
 
 .label {
   font-family: "Cormorant Garamond", serif;
-  font-size: 1.02rem;
+  font-size: 1.04rem;
   letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.84);
 }
 
 .sub {
-  font-size: 0.88rem;
-  color: rgba(255, 255, 255, 0.52);
+  font-size: 0.86rem;
+  color: rgba(255, 255, 255, 0.48);
+  line-height: 1.6;
 }
 
+.itemArrow {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 0.98rem;
+  color: rgba(255, 255, 255, 0.34);
+  transform: translateY(-1px);
+  transition: transform 0.28s ease, color 0.28s ease;
+}
+
+.item:hover .itemArrow,
+.active .itemArrow {
+  transform: translate(2px, -1px);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* mobile */
 @media (max-width: 768px) {
   .bar {
     top: 14px;
@@ -142,28 +343,79 @@
   }
 
   .brand {
-    font-size: 0.92rem;
+    gap: 0.48rem;
+  }
+
+  .brandMain {
+    font-size: 0.94rem;
+    letter-spacing: 0.18em;
+  }
+
+  .brandSub {
+    font-size: 0.68rem;
   }
 
   .trigger {
     font-size: 0.88rem;
-    padding: 9px 12px;
+    padding: 9px 12px 9px 13px;
+    gap: 0.55rem;
+  }
+
+  .triggerLine {
+    width: 14px;
   }
 
   .inner {
     width: 100%;
-    padding: 22px 16px 28px;
+    padding: 22px 16px 26px;
+  }
+
+  .head {
+    margin-bottom: 18px;
+  }
+
+  .kicker {
+    font-size: 0.88rem;
+    letter-spacing: 0.16em;
+  }
+
+  .caption {
+    font-size: 0.78rem;
+  }
+
+  .nav {
+    gap: 9px;
   }
 
   .item {
+    grid-template-columns: auto 1fr auto;
+    gap: 12px;
     padding: 13px 12px;
+    border-radius: 14px;
+  }
+
+  .itemMeta {
+    min-width: 44px;
+    gap: 8px;
+  }
+
+  .itemIndex {
+    font-size: 0.8rem;
+  }
+
+  .itemRule {
+    width: 14px;
   }
 
   .label {
-    font-size: 0.96rem;
+    font-size: 0.98rem;
   }
 
   .sub {
-    font-size: 0.84rem;
+    font-size: 0.82rem;
+  }
+
+  .itemArrow {
+    font-size: 0.9rem;
   }
 }

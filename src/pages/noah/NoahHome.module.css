@@ -6,24 +6,28 @@
 
 :global(body.bodyFadeOut) {
   opacity: 0;
-  transition: opacity 1.6s ease;
+  transition: opacity 1.5s ease;
 }
 
+/* =========================================
+   PAGE
+========================================= */
 .page {
   position: relative;
   min-height: 100vh;
   overflow-x: hidden;
-  color: #e9e9e9;
+  color: #ece9e6;
   font-family: "Shippori Mincho B1", serif;
-  line-height: 2.2;
+  line-height: 2.12;
   isolation: isolate;
 }
 
 .bgBase {
   position: fixed;
   inset: 0;
-  background: radial-gradient(circle at 50% 50%, #0b0b0f 0%, #000 100%);
-  z-index: -4;
+  background:
+    radial-gradient(circle at 50% 46%, #101116 0%, #07080b 44%, #020203 100%);
+  z-index: -5;
 }
 
 .bgImage {
@@ -33,6 +37,18 @@
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
+  opacity: 0.88;
+  z-index: -4;
+  pointer-events: none;
+}
+
+.bgVeil {
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 40%, rgba(255, 255, 255, 0.055), transparent 42%),
+    radial-gradient(circle at 52% 72%, rgba(112, 145, 255, 0.03), transparent 52%);
+  opacity: 0.82;
   z-index: -3;
   pointer-events: none;
 }
@@ -41,9 +57,20 @@
   position: fixed;
   inset: 0;
   background:
-    linear-gradient(180deg, rgba(0, 0, 0, 0.28) 0%, rgba(0, 0, 0, 0.52) 100%),
-    radial-gradient(circle at 50% 40%, rgba(255, 255, 255, 0.08), transparent 42%);
-  backdrop-filter: blur(2px);
+    linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.14) 0%,
+      rgba(0, 0, 0, 0.34) 52%,
+      rgba(0, 0, 0, 0.56) 100%
+    ),
+    linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.16) 0%,
+      transparent 18%,
+      transparent 82%,
+      rgba(0, 0, 0, 0.14) 100%
+    );
+  backdrop-filter: blur(0.85px);
   z-index: -2;
   pointer-events: none;
 }
@@ -52,12 +79,14 @@
   position: fixed;
   inset: 0;
   z-index: -1;
-  opacity: 0.72;
+  opacity: 0.54;
   mix-blend-mode: screen;
   pointer-events: none;
 }
 
-/* タイトル演出 */
+/* =========================================
+   TITLE
+========================================= */
 .introTitle {
   position: fixed;
   inset: 0;
@@ -65,49 +94,54 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.08em;
+  gap: 0.06em;
   pointer-events: none;
 }
 
 .introTitle span {
   display: inline-block;
   font-family: "Cormorant Garamond", serif;
-  font-size: clamp(3rem, 10vw, 9rem);
-  color: rgba(255, 255, 255, 0.56);
+  font-size: clamp(3.1rem, 9.6vw, 8.8rem);
+  color: rgba(255, 255, 255, 0.42);
   opacity: 0;
-  will-change: transform, opacity;
-  animation: gatherLetter 2.8s ease forwards, fadeOut 2s ease 3.5s forwards;
+  will-change: transform, opacity, filter;
+  animation:
+    gatherLetter 2.7s cubic-bezier(0.22, 0.8, 0.2, 1) forwards,
+    fadeOutTitle 1.9s ease 3.5s forwards;
 }
 
 .n {
-  --tx: -180px;
-  --ty: -120px;
+  --tx: -170px;
+  --ty: -110px;
   animation-delay: 0s, 3.5s !important;
 }
 
 .o {
-  --tx: 180px;
-  --ty: -140px;
-  animation-delay: 0.2s, 3.5s !important;
+  --tx: 170px;
+  --ty: -130px;
+  animation-delay: 0.18s, 3.5s !important;
 }
 
 .a {
-  --tx: -160px;
-  --ty: 120px;
-  animation-delay: 0.4s, 3.5s !important;
+  --tx: -150px;
+  --ty: 115px;
+  animation-delay: 0.36s, 3.5s !important;
 }
 
 .h {
-  --tx: 170px;
-  --ty: 110px;
-  animation-delay: 0.6s, 3.5s !important;
+  --tx: 160px;
+  --ty: 100px;
+  animation-delay: 0.54s, 3.5s !important;
 }
 
 @keyframes gatherLetter {
   0% {
     opacity: 0;
-    transform: translate(var(--tx), var(--ty)) scale(1.2);
-    filter: blur(8px);
+    transform: translate(var(--tx), var(--ty)) scale(1.16);
+    filter: blur(7px);
+  }
+  60% {
+    opacity: 0.92;
   }
   100% {
     opacity: 1;
@@ -116,214 +150,277 @@
   }
 }
 
-@keyframes fadeOut {
-  to {
+@keyframes fadeOutTitle {
+  0% {
+    opacity: 1;
+    filter: blur(0);
+  }
+  100% {
     opacity: 0;
-    filter: blur(4px);
+    filter: blur(3px);
   }
 }
 
-/* 本文 */
+/* =========================================
+   TEXT
+========================================= */
 .introText {
   position: relative;
   z-index: 2;
-  width: min(60%, 860px);
+  width: min(60%, 820px);
   margin: 0 auto;
-  padding: 30vh 0 20vh;
-  font-size: 1.08rem;
-  line-height: 2.18;
+  padding: 29vh 0 18vh;
+  font-size: 1.04rem;
+  line-height: 2.14;
   opacity: 0;
-  animation: fadeIn 4s ease 5s forwards;
   text-align: justify;
+  animation: fadeInBlock 2.8s ease 4.8s forwards;
+}
+
+@keyframes fadeInBlock {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+    filter: blur(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
 }
 
 .openingLabel {
-  margin-bottom: 0.8rem;
+  margin-bottom: 0.82rem;
   font-family: "Cormorant Garamond", serif;
-  font-size: 0.9rem;
-  letter-spacing: 0.22em;
-  color: rgba(255, 255, 255, 0.46);
+  font-size: 0.88rem;
+  letter-spacing: 0.24em;
+  color: rgba(255, 255, 255, 0.44);
 }
 
 .introText h2 {
-  font-size: 1.3rem;
-  letter-spacing: 0.1em;
-  margin-bottom: 1.2em;
-  opacity: 0.84;
+  margin: 0 0 1.2em;
+  font-size: 1.18rem;
+  letter-spacing: 0.11em;
   font-weight: 500;
+  color: rgba(255, 255, 255, 0.84);
+}
+
+.introText p {
+  margin: 0;
+  color: rgba(241, 239, 236, 0.84);
 }
 
 .introText p + p {
-  margin-top: 1.1em;
+  margin-top: 1.14em;
 }
 
 .lastLine {
-  margin-top: 1.3em;
+  margin-top: 1.34em !important;
+  color: rgba(255, 255, 255, 0.92) !important;
 }
 
-@keyframes fadeIn {
-  to {
-    opacity: 1;
-  }
-}
-
-/* ボタン */
+/* =========================================
+   ENTER
+========================================= */
 .enterBtn {
   position: relative;
-  display: block;
-  text-align: center;
-  margin: 2.8rem auto 0;
-  font-family: "Cormorant Garamond", serif;
-  font-size: 1.15rem;
-  color: rgba(255, 255, 255, 0.75);
-  letter-spacing: 0.08em;
-  cursor: pointer;
-  z-index: 5;
-  opacity: 0;
-  animation: fadeInBtn 3s ease 6s forwards, pulse 6s ease-in-out infinite 9s;
-  transition: all 0.6s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 2.7rem 0 0;
+  padding: 0 0 0.42rem;
   background: transparent;
   border: 0;
-  padding: 0;
+  cursor: pointer;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1.04rem;
+  letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.72);
+  opacity: 0;
+  animation: fadeInEnter 1.8s ease 5.7s forwards;
+  transition:
+    color 0.45s ease,
+    transform 0.45s ease,
+    letter-spacing 0.45s ease,
+    opacity 0.45s ease;
 }
 
-@keyframes fadeInBtn {
+@keyframes fadeInEnter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
   to {
     opacity: 0.82;
-  }
-}
-
-@keyframes pulse {
-  0%,
-  100% {
-    text-shadow:
-      0 0 4px rgba(255, 255, 255, 0.15),
-      0 0 8px rgba(255, 255, 255, 0.1);
-    opacity: 0.62;
-  }
-  50% {
-    text-shadow:
-      0 0 10px rgba(255, 255, 255, 0.35),
-      0 0 20px rgba(255, 255, 255, 0.25);
-    opacity: 0.9;
+    transform: translateY(0);
   }
 }
 
 .enterBtn::before {
   content: "";
   position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 160px;
-  height: 160px;
-  transform: translate(-50%, -50%);
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%);
-  border-radius: 50%;
-  filter: blur(12px);
-  animation: haloPulse 8s ease-in-out infinite;
-  z-index: -1;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background:
+    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.46), transparent);
+  opacity: 0.18;
+  transform-origin: center;
+  animation: recordLine 5.2s ease-in-out infinite;
 }
 
-@keyframes haloPulse {
+@keyframes recordLine {
   0%,
   100% {
-    opacity: 0.15;
-    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.14;
+    transform: scaleX(0.86);
   }
   50% {
-    opacity: 0.4;
-    transform: translate(-50%, -50%) scale(1.1);
-  }
-}
-
-.enterBtn::after {
-  content: "";
-  position: absolute;
-  bottom: -6px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 65%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
-  opacity: 0.3;
-  animation: lineFlow 4s linear infinite;
-}
-
-@keyframes lineFlow {
-  0% {
-    opacity: 0.2;
-    transform: translateX(-60%) scaleX(0.9);
-  }
-  50% {
-    opacity: 0.6;
-    transform: translateX(-50%) scaleX(1);
-  }
-  100% {
-    opacity: 0.2;
-    transform: translateX(-40%) scaleX(0.9);
+    opacity: 0.42;
+    transform: scaleX(1);
   }
 }
 
 .enterBtn:hover {
   color: rgba(255, 255, 255, 0.95);
-  text-shadow: 0 0 14px rgba(255, 255, 255, 0.6);
-  transform: translateY(-3px) scale(1.05);
+  transform: translateY(-1px);
+  letter-spacing: 0.18em;
 }
 
-/* 目次 */
+/* =========================================
+   TOC / ARCHIVE
+========================================= */
 .toc {
-  margin-top: 3.2rem;
-  padding-top: 2rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  margin-top: 3.9rem;
+  padding-top: 1.95rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .tocLabel {
-  margin: 0 0 1.2rem 0 !important;
+  margin: 0 0 1.34rem 0 !important;
   font-family: "Cormorant Garamond", serif;
-  font-size: 1rem;
-  letter-spacing: 0.2em;
-  color: rgba(255, 255, 255, 0.62);
+  font-size: 0.94rem;
+  letter-spacing: 0.25em;
+  color: rgba(255, 255, 255, 0.46);
 }
 
 .tocList {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+  gap: 14px 16px;
 }
 
 .tocItem {
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
-  padding: 14px 16px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(3px);
-  border-radius: 10px;
-  transition: 0.35s ease;
+  gap: 0.3rem;
+  padding: 15px 16px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.075);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.026), rgba(255, 255, 255, 0.012));
+  border-radius: 8px;
+  overflow: hidden;
+  text-decoration: none;
+  opacity: 0;
+  animation: archiveFadeIn 1.05s ease forwards;
+  transition:
+    border-color 0.45s ease,
+    background 0.45s ease,
+    transform 0.45s ease,
+    box-shadow 0.45s ease;
+}
+
+@keyframes archiveFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.tocItem::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.04), transparent);
+  opacity: 0;
+  transform: translateX(-36%);
+  transition: opacity 0.55s ease, transform 0.8s ease;
+  pointer-events: none;
+}
+
+.tocItem::after {
+  content: "";
+  position: absolute;
+  left: 14px;
+  top: 14px;
+  width: 26px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.16);
+  opacity: 0.85;
+}
+
+.tocItem:nth-child(2),
+.tocItem:nth-child(5) {
+  transform: translateX(10px);
+}
+
+.tocItem:nth-child(3),
+.tocItem:nth-child(7) {
+  transform: translateX(-8px);
 }
 
 .tocItem:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.24);
-  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.16);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.048), rgba(255, 255, 255, 0.018));
+  transform: translateY(-1px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.16);
+}
+
+.tocItem:nth-child(2):hover,
+.tocItem:nth-child(5):hover {
+  transform: translateX(10px) translateY(-1px);
+}
+
+.tocItem:nth-child(3):hover,
+.tocItem:nth-child(7):hover {
+  transform: translateX(-8px) translateY(-1px);
+}
+
+.tocItem:hover::before {
+  opacity: 1;
+  transform: translateX(18%);
 }
 
 .tocItemLabel {
+  position: relative;
+  z-index: 1;
   font-family: "Cormorant Garamond", serif;
-  font-size: 1rem;
-  letter-spacing: 0.12em;
-  color: rgba(255, 255, 255, 0.88);
+  font-size: 0.97rem;
+  letter-spacing: 0.15em;
+  color: rgba(255, 255, 255, 0.84);
 }
 
 .tocItemTitle {
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.6);
+  position: relative;
+  z-index: 1;
+  font-size: 0.89rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.56);
 }
 
+/* =========================================
+   MOBILE
+========================================= */
 @media (max-width: 768px) {
   .page {
-    line-height: 1.9;
+    line-height: 1.92;
   }
 
   .introTitle {
@@ -331,52 +428,65 @@
   }
 
   .n {
-    --tx: -90px;
-    --ty: -90px;
+    --tx: -88px;
+    --ty: -82px;
   }
 
   .o {
-    --tx: 90px;
-    --ty: -95px;
+    --tx: 88px;
+    --ty: -92px;
   }
 
   .a {
-    --tx: -85px;
-    --ty: 85px;
+    --tx: -82px;
+    --ty: 82px;
   }
 
   .h {
-    --tx: 85px;
-    --ty: 80px;
+    --tx: 80px;
+    --ty: 76px;
   }
 
   .introText {
-    width: 88%;
+    width: 87%;
     padding-top: 22vh;
-    padding-bottom: 28vh;
+    padding-bottom: 24vh;
     font-size: 0.95rem;
-    line-height: 1.9;
+    line-height: 1.92;
     text-align: left;
   }
 
   .openingLabel {
-    font-size: 0.82rem;
-    margin-bottom: 0.6rem;
+    margin-bottom: 0.58rem;
+    font-size: 0.8rem;
     letter-spacing: 0.18em;
   }
 
   .introText h2 {
-    font-size: 1.08rem;
-    margin-bottom: 0.8em;
+    margin-bottom: 0.9em;
+    font-size: 1.03rem;
+    letter-spacing: 0.08em;
   }
 
   .lastLine {
-    margin-top: 1.1em;
+    margin-top: 1.18em !important;
+  }
+
+  .enterBtn {
+    margin-top: 2.2rem;
+    font-size: 0.98rem;
+    letter-spacing: 0.08em;
   }
 
   .toc {
-    margin-top: 2.4rem;
-    padding-top: 1.4rem;
+    margin-top: 2.65rem;
+    padding-top: 1.45rem;
+  }
+
+  .tocLabel {
+    margin-bottom: 1rem !important;
+    font-size: 0.88rem;
+    letter-spacing: 0.18em;
   }
 
   .tocList {
@@ -384,23 +494,41 @@
     gap: 10px;
   }
 
-  .tocItem {
-    padding: 12px 14px;
+  .tocItem,
+  .tocItem:nth-child(2),
+  .tocItem:nth-child(3),
+  .tocItem:nth-child(5),
+  .tocItem:nth-child(7) {
+    transform: translateX(0);
   }
 
-  .enterBtn {
-    margin-top: 2.2rem;
-    margin-bottom: 0;
-    font-size: 1rem;
-    letter-spacing: 0.05em;
+  .tocItem {
+    padding: 13px 14px 14px;
+    border-radius: 7px;
+  }
+
+  .tocItem:hover,
+  .tocItem:nth-child(2):hover,
+  .tocItem:nth-child(3):hover,
+  .tocItem:nth-child(5):hover,
+  .tocItem:nth-child(7):hover {
+    transform: translateY(-1px);
+  }
+
+  .tocItemLabel {
+    font-size: 0.92rem;
+  }
+
+  .tocItemTitle {
+    font-size: 0.84rem;
   }
 
   .bgOverlay {
-    backdrop-filter: blur(1.2px);
+    backdrop-filter: blur(0.55px);
   }
 
   .canvas {
-    opacity: 0.58;
+    opacity: 0.46;
     mix-blend-mode: lighten;
   }
 }

@@ -26,14 +26,16 @@ export default function NoahHome() {
     let w = 0;
     let h = 0;
     let animationId = 0;
+    let tick = 0;
 
-    const particles = Array.from({ length: 100 }, () => ({
+    const particles = Array.from({ length: 78 }, () => ({
       x: 0,
       y: 0,
-      r: Math.random() * 1.5 + 0.3,
-      vx: (Math.random() - 0.5) * 0.2,
-      vy: (Math.random() - 0.5) * 0.2,
-      a: Math.random() * 0.5 + 0.3,
+      r: Math.random() * 1.35 + 0.22,
+      vx: (Math.random() - 0.5) * 0.08,
+      vy: (Math.random() - 0.5) * 0.06,
+      a: Math.random() * 0.22 + 0.08,
+      pulse: Math.random() * Math.PI * 2,
     }));
 
     const resize = () => {
@@ -49,18 +51,23 @@ export default function NoahHome() {
     };
 
     const animate = () => {
+      tick += 0.0045;
       ctx.clearRect(0, 0, w, h);
 
-      particles.forEach((p) => {
+      particles.forEach((p, i) => {
         p.x += p.vx;
         p.y += p.vy;
 
-        if (p.x < 0 || p.x > w) p.vx *= -1;
-        if (p.y < 0 || p.y > h) p.vy *= -1;
+        if (p.x < -8) p.x = w + 8;
+        if (p.x > w + 8) p.x = -8;
+        if (p.y < -8) p.y = h + 8;
+        if (p.y > h + 8) p.y = -8;
+
+        const alpha = p.a + Math.sin(tick * 2 + p.pulse + i * 0.07) * 0.04;
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255,255,255,${p.a})`;
+        ctx.fillStyle = `rgba(255,255,255,${Math.max(0.03, alpha)})`;
         ctx.fill();
       });
 
@@ -83,13 +90,14 @@ export default function NoahHome() {
     window.setTimeout(() => {
       navigate("/chapter1");
       document.body.classList.remove("bodyFadeOut");
-    }, 1600);
+    }, 1500);
   };
 
   return (
     <main className={styles.page}>
       <div className={styles.bgBase} />
       <div className={styles.bgImage} />
+      <div className={styles.bgVeil} />
       <div className={styles.bgOverlay} />
       <canvas ref={canvasRef} className={styles.canvas} />
 
@@ -133,15 +141,20 @@ export default function NoahHome() {
         </p>
 
         <button type="button" className={styles.enterBtn} onClick={handleEnter}>
-          <span>—— 白いノイズへ進む —— ▶</span>
+          <span>第一記録群へ</span>
         </button>
 
         <div className={styles.toc}>
-          <p className={styles.tocLabel}>TABLE OF CONTENTS</p>
+          <p className={styles.tocLabel}>ARCHIVE INDEX</p>
 
           <div className={styles.tocList}>
-            {chapterLinks.map((item) => (
-              <Link key={item.to} to={item.to} className={styles.tocItem}>
+            {chapterLinks.map((item, index) => (
+              <Link
+                key={item.to}
+                to={item.to}
+                className={styles.tocItem}
+                style={{ animationDelay: `${6.15 + index * 0.12}s` }}
+              >
                 <span className={styles.tocItemLabel}>{item.label}</span>
                 <span className={styles.tocItemTitle}>{item.title}</span>
               </Link>

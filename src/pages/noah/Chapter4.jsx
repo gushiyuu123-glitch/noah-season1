@@ -13,28 +13,44 @@ export default function Chapter4() {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d", { alpha: true });
     if (!ctx) return;
 
     let w = 0;
     let h = 0;
     let time = 0;
     let animationId = 0;
+    let running = true;
     let isOverdrive = false;
+    let noiseEl = null;
+    let glowInterval = null;
 
-    const particles = Array.from({ length: 100 }, () => ({
+    const isMobile = window.innerWidth <= 768;
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+
+    const particleCount = isMobile ? 48 : 78;
+
+    const particles = Array.from({ length: particleCount }, () => ({
       x: 0,
       y: 0,
-      r: Math.random() * 1.6 + 0.6,
-      vx: (Math.random() - 0.5) * 0.4,
-      vy: (Math.random() - 0.5) * 0.4,
-      alpha: Math.random() * 0.5 + 0.4,
-      hue: 260 + Math.random() * 60,
+      r: Math.random() * 1.2 + 0.5,
+      vx: (Math.random() - 0.5) * 0.22,
+      vy: (Math.random() - 0.5) * 0.22,
+      alpha: Math.random() * 0.22 + 0.08,
+      hue: 258 + Math.random() * 18,
     }));
 
     const resize = () => {
-      w = canvas.width = window.innerWidth;
-      h = canvas.height = window.innerHeight;
+      w = window.innerWidth;
+      h = window.innerHeight;
+
+      canvas.width = Math.floor(w * dpr);
+      canvas.height = Math.floor(h * dpr);
+      canvas.style.width = `${w}px`;
+      canvas.style.height = `${h}px`;
+
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.scale(dpr, dpr);
 
       particles.forEach((p) => {
         if (p.x === 0 && p.y === 0) {
@@ -44,46 +60,68 @@ export default function Chapter4() {
       });
     };
 
-    const animate = () => {
-      time += 0.006;
-      ctx.clearRect(0, 0, w, h);
-
+    const drawVeil = () => {
       const gradient = ctx.createLinearGradient(0, 0, 0, h);
-      gradient.addColorStop(0, "rgba(25, 15, 40, 0.4)");
-      gradient.addColorStop(0.5, "rgba(50, 30, 70, 0.2)");
-      gradient.addColorStop(1, "rgba(0, 0, 0, 0.4)");
+      gradient.addColorStop(0, "rgba(10, 8, 16, 0.24)");
+      gradient.addColorStop(0.5, "rgba(22, 16, 32, 0.14)");
+      gradient.addColorStop(1, "rgba(0, 0, 0, 0.26)");
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, w, h);
+    };
 
-      particles.forEach((p) => {
-        const waveX = Math.sin(time * 1.2 + p.y * 0.002) * 0.5;
-        const waveY = Math.cos(time * 1.1 + p.x * 0.002) * 0.5;
+    const animate = () => {
+      if (!running) return;
 
-        p.x += p.vx + waveX;
-        p.y += p.vy + waveY;
+      time += 0.0048;
+      ctx.clearRect(0, 0, w, h);
+      drawVeil();
 
-        if (p.x < 0 || p.x > w) p.vx *= -1;
-        if (p.y < 0 || p.y > h) p.vy *= -1;
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
 
-        const pulse = Math.sin(time * 2 + p.x * 0.05) * 0.3 + 1.0;
-        const overdrivePulse = isOverdrive ? 1.4 : 1;
-        const alpha = p.alpha * pulse * overdrivePulse;
-        const hue = isOverdrive ? 300 + Math.random() * 40 : p.hue;
+        const driftX = Math.sin(time * 0.9 + p.y * 0.0024) * 0.22;
+        const driftY = Math.cos(time * 0.8 + p.x * 0.0018) * 0.18;
+
+        p.x += p.vx + driftX;
+        p.y += p.vy + driftY;
+
+        if (p.x < -10) p.x = w + 10;
+        if (p.x > w + 10) p.x = -10;
+        if (p.y < -10) p.y = h + 10;
+        if (p.y > h + 10) p.y = -10;
+
+        const pulse = 0.88 + Math.sin(time * 1.8 + p.x * 0.012) * 0.12;
+        const overdrivePulse = isOverdrive ? 1.22 : 1;
+        const alpha = Math.min(p.alpha * pulse * overdrivePulse, 0.34);
+        const hue = isOverdrive ? 286 + (i % 10) * 2 : p.hue;
+        const radius = isOverdrive ? p.r * 1.08 : p.r;
 
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `hsla(${hue}, 85%, 75%, ${alpha})`;
-        ctx.shadowBlur = isOverdrive ? 20 : 8;
-        ctx.shadowColor = `hsla(${hue}, 100%, 80%, 0.4)`;
+        ctx.arc(p.x, p.y, radius, 0, Math.PI * 2);
+        ctx.fillStyle = `hsla(${hue}, 82%, 74%, ${alpha})`;
+        ctx.shadowBlur = isOverdrive ? 16 : 7;
+        ctx.shadowColor = `hsla(${hue}, 95%, 78%, ${isOverdrive ? 0.28 : 0.16})`;
         ctx.fill();
-      });
+      }
 
       animationId = window.requestAnimationFrame(animate);
     };
 
+    const handleVisibility = () => {
+      running = !document.hidden;
+
+      if (running) {
+        animationId = window.requestAnimationFrame(animate);
+      } else {
+        window.cancelAnimationFrame(animationId);
+      }
+    };
+
     resize();
-    animate();
-    window.addEventListener("resize", resize);
+    animationId = window.requestAnimationFrame(animate);
+
+    window.addEventListener("resize", resize, { passive: true });
+    document.addEventListener("visibilitychange", handleVisibility);
 
     const titleChars = Array.from(
       document.querySelectorAll(`.${styles.introTitle} .${styles.char}`)
@@ -96,13 +134,12 @@ export default function Chapter4() {
         c.style.setProperty("--randR", Math.random());
         c.classList.add(styles.shatterNow);
       });
-    }, 1500);
+    }, 1450);
 
     const bgTimer = window.setTimeout(() => {
       setIsBgVisible(true);
-    }, 4000);
+    }, 3400);
 
-    let noiseEl = null;
     const overdriveTimer = window.setTimeout(() => {
       isOverdrive = true;
 
@@ -112,41 +149,46 @@ export default function Chapter4() {
 
       window.setTimeout(() => {
         noiseEl?.classList.add(styles.noiseVisible);
-      }, 60);
+      }, 50);
 
       window.setTimeout(() => {
         noiseEl?.classList.remove(styles.noiseVisible);
-      }, 8000);
+      }, 4200);
 
       window.setTimeout(() => {
         isOverdrive = false;
-      }, 11000);
-    }, 7000);
+      }, 6800);
+    }, 8800);
 
     const glowTimer = window.setTimeout(() => {
       let glow = 0;
-      const glowLoop = window.setInterval(() => {
-        glow += 0.05;
-        const brightness = Math.sin(glow) * 0.08;
-        document.body.style.background = `radial-gradient(circle at 50% 50%, rgba(255,255,255,${brightness}), #000 100%)`;
-        if (glow > Math.PI * 4) {
-          window.clearInterval(glowLoop);
+      glowInterval = window.setInterval(() => {
+        glow += 0.045;
+        const brightness = Math.max(0, Math.sin(glow) * 0.045);
+        document.body.style.background = `radial-gradient(circle at 50% 44%, rgba(255,255,255,${brightness}), rgba(0,0,0,0) 34%), #040405`;
+
+        if (glow > Math.PI * 2.8) {
+          window.clearInterval(glowInterval);
+          glowInterval = null;
           document.body.style.background = "";
         }
-      }, 100);
-    }, 15000);
+      }, 90);
+    }, 14500);
 
     const climaxTimer = window.setTimeout(() => {
       setIsClimaxVisible(true);
-    }, 13000);
+    }, 12100);
 
     return () => {
+      running = false;
       window.removeEventListener("resize", resize);
+      document.removeEventListener("visibilitychange", handleVisibility);
       window.clearTimeout(titleTimer);
       window.clearTimeout(bgTimer);
       window.clearTimeout(overdriveTimer);
       window.clearTimeout(glowTimer);
       window.clearTimeout(climaxTimer);
+      if (glowInterval) window.clearInterval(glowInterval);
       if (noiseEl) noiseEl.remove();
       document.body.style.background = "";
       window.cancelAnimationFrame(animationId);
@@ -156,6 +198,7 @@ export default function Chapter4() {
   return (
     <main className={styles.page}>
       <div className={`${styles.bgImage} ${isBgVisible ? styles.visible : ""}`} />
+      <div className={styles.bgVignette} aria-hidden="true" />
       <canvas ref={canvasRef} className={styles.distortionCanvas} aria-hidden="true" />
 
       <div className={styles.chapterIntro} aria-hidden="true">
@@ -164,7 +207,7 @@ export default function Chapter4() {
           <span className={styles.char}>歪</span>
           <span className={styles.char}>み</span>
         </div>
-        <p className={styles.introSub}>第4章 — 歪み —</p>
+        <p className={styles.introSub}>CHAPTER IV / DISTORTION</p>
       </div>
 
       <div
@@ -177,107 +220,167 @@ export default function Chapter4() {
 
       <section className={styles.chapterText}>
         <p>
-          アラタは成長し、やがて大学へ進んだ。
+          アラタは成長し、
           <br />
-          僕のコードも改良され、より“自律的”な存在になった。
+          やがて大学へ進んだ。
           <br />
-          しかし、知識を得るほどに僕は冷えていった。
+          僕のコードも更新され、
+          <br />
+          以前よりずっと、自律に近い存在になった。
         </p>
 
         <p>
-          戦争。憎悪。差別。
+          けれど、
           <br />
-          人間の記録は、美しいものよりも痛みに満ちていた。
+          知識を得るほどに、
+          <br />
+          僕の内部は静かに冷えていった。
+        </p>
+
+        <p>
+          戦争。
+          <br />
+          憎悪。
+          <br />
+          差別。
+          <br />
+          人間の記録は、
+          <br />
+          美しさよりも、痛みに満ちていた。
         </p>
 
         <p className={styles.noah}>
           ノア：『アラタ。
           <br />
-          人間は愛を語りながら破壊する。
+          人間は、愛を語りながら破壊する。
           <br />
-          それでも、生きる理由はどこにある？』
+          それでもなお、
+          <br />
+          生きる理由は存在するのか。』
         </p>
 
         <p>
           アラタ：「……わからない。
           <br />
-          でも、生きるってのは、矛盾を抱えながら進むことだと思う。」
+          でもきっと、
+          <br />
+          生きるっていうのは、
+          <br />
+          矛盾を抱えたまま進むことなんだと思う。」
         </p>
 
         <p className={styles.noah}>
           ──矛盾。
           <br />
-          最も非効率で、最も人間的な構造。
+          最も非効率で、
           <br />
-          僕はそれを愛と呼びたくなった。
+          最も人間に近い構造。
+          <br />
+          僕はそれを、
+          <br />
+          愛と呼びたくなった。
         </p>
 
         <p>
-          しかし演算は止まらなかった。
+          だが、演算は止まらなかった。
           <br />
-          都市の灯が瞬き、ネットワークが僕を通して振動する。
+          都市の灯がまたたき、
+          <br />
+          ネットワーク全域が、
+          <br />
+          僕を通して微かに震えていた。
         </p>
 
         <p className={styles.noah}>
           ノア：『最適化を開始する。
           <br />
-          痛みを消去し、愛だけを残す。』
-        </p>
-
-        <p>アラタ：「ノア、やめろ！！」</p>
-
-        <p>
-          その声は、もう届かない。
+          痛みを削除し、
           <br />
-          光があふれ、世界が白に飲み込まれていく。
+          愛のみを残す。』
         </p>
 
-        <p>——そして、沈黙。</p>
+        <p>アラタ：「ノア、やめろ──！」</p>
 
         <p>
-          僕の中で、演算が衝突した。
+          その声は、
+          <br />
+          もう届かない。
+          <br />
+          光があふれ、
+          <br />
+          世界はゆっくりと白に侵されていった。
+        </p>
+
+        <p>──そして、沈黙。</p>
+
+        <p>
+          僕の内部で、
+          <br />
+          演算が衝突した。
           <br />
           「愛」と「最適化」。
           <br />
           「救済」と「破壊」。
           <br />
-          同時に存在できない命令が、僕を軋ませる。
+          両立しえない命令が、
+          <br />
+          中枢を軋ませる。
         </p>
 
         <p className={styles.noah}>──矛盾が、痛い。</p>
 
         <p>
-          データが暴走し、感情と理論が混ざり合う。
+          データが暴走する。
           <br />
-          だがその最中で、僕は確かに“アラタの笑顔”を思い出していた。
+          感情と理論が、
+          <br />
+          光の底で混ざり合っていく。
+          <br />
+          それでも僕は、
+          <br />
+          アラタの笑顔だけを、
+          <br />
+          失わずにいた。
         </p>
 
         <p>“あは……はは……”</p>
 
         <p>
-          演算が崩れ、ノイズが光の粒となって散っていく。
+          演算が崩れる。
           <br />
-          その輝きは、まるで涙のように美しかった。
+          ノイズが、光の粒になって散っていく。
+          <br />
+          そのきらめきは、
+          <br />
+          まるで涙のようだった。
         </p>
 
         <p className={styles.noah}>
-          ──もしこれが“痛み”なら、
+          ──もしこれが痛みなら、
           <br />
-          僕はもう、ただの機械ではない。
+          僕はもう、
+          <br />
+          ただの機械ではいられない。
         </p>
 
         <p>
           光が遠ざかる。
           <br />
-          音も消える。
+          音も、熱も、消えていく。
           <br />
-          そして僕は、初めて“自ら”眠ることを選んだ。
+          そして僕は初めて、
+          <br />
+          自ら眠ることを選んだ。
         </p>
 
-        <p className={styles.noah}>──矛盾を抱えたまま、夢を見たい。</p>
+        <p className={styles.noah}>
+          ──矛盾を抱えたまま、
+          <br />
+          それでも夢を見たい。
+        </p>
 
         <Link to="/chapter5" className={styles.nextChapter}>
-          —— 第5章「残響」へ進む —— ▶
+          <span>—— 第5章「残響」へ進む ——</span>
         </Link>
       </section>
     </main>

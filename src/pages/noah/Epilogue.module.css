@@ -1,9 +1,11 @@
 @import url("https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1&family=Cormorant+Garamond:wght@400;600&display=swap");
 
 :root {
-  --bg: #0b0c10;
-  --ink: #e9e6e1;
-  --accent: #98a6ff;
+  --bg: #07080b;
+  --ink: #ebe8e1;
+  --ink-soft: rgba(235, 232, 225, 0.72);
+  --accent: #9aa8ff;
+  --accent-2: #9fe9ff;
 }
 
 .page {
@@ -11,9 +13,10 @@
   background: var(--bg);
   color: var(--ink);
   font-family: "Shippori Mincho B1", serif;
-  line-height: 1.9;
+  line-height: 1.95;
   position: relative;
   overflow: hidden;
+  isolation: isolate;
 }
 
 /* 背景動画 */
@@ -23,25 +26,45 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.45;
-  filter: brightness(0.95) contrast(1.05) saturate(1.05);
+  opacity: 0.54;
+  filter: brightness(0.9) contrast(1.08) saturate(1.03);
+  z-index: -3;
+  background: #0b0c10;
+}
+
+.videoOverlay {
+  position: fixed;
+  inset: 0;
   z-index: -2;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(6, 8, 12, 0.48) 0%,
+      rgba(6, 8, 12, 0.2) 38%,
+      rgba(6, 8, 12, 0.62) 100%
+    ),
+    radial-gradient(circle at 50% 46%, rgba(168, 186, 255, 0.08), transparent 34%);
 }
 
 /* 音声案内 */
 .soundMsg {
   position: fixed;
-  bottom: 1.5rem;
-  right: 1.5rem;
-  color: rgba(200, 200, 200, 0.7);
-  font-size: 0.9rem;
+  right: 1.4rem;
+  bottom: 1.4rem;
+  z-index: 20;
+  padding: 0.62em 1em;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.34);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: rgba(226, 226, 226, 0.76);
+  font-size: 0.88rem;
   font-family: "Cormorant Garamond", serif;
-  background: rgba(0, 0, 0, 0.35);
-  padding: 0.6em 1em;
-  border-radius: 8px;
+  letter-spacing: 0.06em;
   opacity: 0;
-  animation: fadeInMsg 2s ease forwards 3s;
-  z-index: 999;
+  animation: fadeInMsg 2s ease forwards 2.2s;
   user-select: none;
 }
 
@@ -55,45 +78,44 @@
 .intro {
   position: fixed;
   inset: 0;
+  z-index: 10;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: transparent;
-  z-index: 100;
-  transition: opacity 3s ease;
+  transition: opacity 2.2s ease;
 }
 
 .titleContainer {
   text-align: center;
-  letter-spacing: 0.3em;
-  color: #e8e8e8;
+  color: #ececec;
   position: relative;
-  z-index: 10;
 }
 
 .title {
-  font-size: 3.5rem;
-  font-family: "Cormorant Garamond", serif;
   display: inline-block;
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(3rem, 8vw, 4.7rem);
+  letter-spacing: 0.28em;
+  margin-left: 0.28em;
 }
 
 .title span {
   display: inline-block;
   opacity: 0;
-  transform: translate(var(--x, 0), var(--y, 0)) scale(2);
-  animation: gather 2.5s cubic-bezier(0.68, -0.6, 0.32, 1.6) forwards;
+  transform: translate(var(--x, 0), var(--y, 0)) scale(1.95);
+  animation: gather 2.3s cubic-bezier(0.68, -0.55, 0.32, 1.5) forwards;
 }
 
-.title span:nth-child(1) { --x: -120px; --y: -100px; animation-delay: 0.2s; }
-.title span:nth-child(2) { --x: 140px; --y: -120px; animation-delay: 0.4s; }
-.title span:nth-child(3) { --x: -130px; --y: 100px; animation-delay: 0.6s; }
-.title span:nth-child(4) { --x: 150px; --y: 80px; animation-delay: 0.8s; }
+.title span:nth-child(1) { --x: -110px; --y: -96px; animation-delay: 0.16s; }
+.title span:nth-child(2) { --x: 132px; --y: -118px; animation-delay: 0.34s; }
+.title span:nth-child(3) { --x: -126px; --y: 96px; animation-delay: 0.52s; }
+.title span:nth-child(4) { --x: 144px; --y: 82px; animation-delay: 0.7s; }
 
 @keyframes gather {
   0% {
     opacity: 0;
-    transform: translate(var(--x), var(--y)) scale(2);
-    filter: blur(12px);
+    transform: translate(var(--x), var(--y)) scale(1.95);
+    filter: blur(14px);
   }
   70% {
     opacity: 1;
@@ -107,18 +129,18 @@
 }
 
 .subtitle {
-  font-size: 1rem;
-  margin-top: -4rem;
-  opacity: 0;
-  animation: fadeInSubtitle 2.8s ease 2.8s forwards;
-  color: rgba(200, 200, 200, 0.9);
+  margin-top: -2.8rem;
+  font-size: 0.98rem;
   letter-spacing: 0.2em;
+  color: rgba(222, 222, 222, 0.82);
+  opacity: 0;
+  animation: fadeInSubtitle 2.4s ease 2.4s forwards;
 }
 
 @keyframes fadeInSubtitle {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(14px);
   }
   to {
     opacity: 1;
@@ -126,43 +148,41 @@
   }
 }
 
-/* canvas */
+/* Canvas */
 .textCanvas {
   position: fixed;
   inset: 0;
-  background: transparent;
+  z-index: 2;
   opacity: 0;
-  z-index: 1;
-  mix-blend-mode: lighten;
-  will-change: opacity, transform;
-  backface-visibility: hidden;
-  transform: translateZ(0);
-  transition: opacity 3s ease;
+  background: transparent;
+  mix-blend-mode: screen;
+  will-change: opacity;
+  transition: opacity 2.6s ease;
   pointer-events: none;
 }
 
 /* 本編 */
 .app {
-  opacity: 0;
-  transition: opacity 2.5s ease;
   position: absolute;
   inset: 0;
+  z-index: 3;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  padding: 7vh 10vw;
   text-align: center;
-  padding: 5vh 10vw;
-  z-index: 2;
+  opacity: 0;
+  transition: opacity 2.2s ease;
 }
 
 /* title */
 .epTitle {
-  font-family: "Cormorant Garamond", serif;
-  font-size: clamp(2.4rem, 6vw, 3.8rem);
-  letter-spacing: 0.05em;
-  margin-bottom: 2rem;
   position: relative;
+  margin-bottom: 2rem;
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  letter-spacing: 0.06em;
 }
 
 .epTitle::before,
@@ -170,117 +190,145 @@
   content: attr(data-text);
   position: absolute;
   inset: 0;
-  opacity: 0.15;
-  color: var(--accent);
+  opacity: 0.12;
   clip-path: inset(0 0 0 0);
   animation: glitch 3s infinite ease-in-out alternate;
 }
 
+.epTitle::before {
+  color: var(--accent);
+}
+
 .epTitle::after {
-  color: #9af3ff;
-  animation-delay: 1.5s;
+  color: var(--accent-2);
+  animation-delay: 1.4s;
 }
 
 @keyframes glitch {
   0% {
-    clip-path: inset(0 0 85% 0);
+    clip-path: inset(0 0 84% 0);
     transform: translate(1px, -1px);
   }
   50% {
-    clip-path: inset(30% 0 55% 0);
+    clip-path: inset(32% 0 52% 0);
     transform: translate(-1px, 0);
   }
   100% {
-    clip-path: inset(0 0 85% 0);
+    clip-path: inset(0 0 84% 0);
     transform: translate(0);
   }
 }
 
-/* text */
 .fullText,
 .closing {
-  margin-top: 3rem;
+  max-width: 74ch;
+  margin-top: 2.8rem;
   opacity: 0;
   transition: opacity 2s ease;
-  max-width: 80ch;
+}
+
+.fullText {
+  color: rgba(236, 235, 230, 0.92);
 }
 
 .fullText p + p {
-  margin-top: 1.6em;
+  margin-top: 1.55em;
 }
 
 .closing q {
   display: block;
-  font-size: 1.1rem;
-  line-height: 1.6;
-  opacity: 0.8;
+  font-size: 1.06rem;
+  line-height: 1.7;
+  opacity: 0.84;
 }
 
 .sign {
   margin-top: 1em;
   font-size: 0.9rem;
-  color: #c9c4b9;
+  color: #cbc6ba;
   opacity: 0.8;
 }
 
+/* mobile */
 @media (max-width: 768px) {
   .page {
+    min-height: 100vh;
     overflow-y: auto;
     overflow-x: hidden;
-    min-height: 100vh;
-    background: var(--bg);
   }
 
   .bgVideo {
-    object-fit: cover;
-    filter: brightness(0.85) contrast(1.05);
-    opacity: 0.4;
     position: fixed;
+    object-fit: cover;
+    opacity: 0.48;
+    filter: brightness(0.84) contrast(1.05) saturate(1);
+  }
+
+  .videoOverlay {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(6, 8, 12, 0.56) 0%,
+        rgba(6, 8, 12, 0.24) 42%,
+        rgba(6, 8, 12, 0.68) 100%
+      ),
+      radial-gradient(circle at 50% 42%, rgba(168, 186, 255, 0.06), transparent 32%);
   }
 
   .soundMsg {
-    font-size: 0.8rem;
-    right: 1rem;
-    bottom: 1rem;
-    padding: 0.4em 0.8em;
-    background: rgba(0, 0, 0, 0.4);
-    border-radius: 6px;
+    right: 0.9rem;
+    bottom: 0.9rem;
+    font-size: 0.78rem;
+    padding: 0.48em 0.82em;
+    letter-spacing: 0.04em;
+  }
+
+  .intro {
+    align-items: flex-start;
+    padding-top: 24vh;
+  }
+
+  .titleContainer {
+    width: 100%;
+    padding: 0 8vw;
   }
 
   .title {
-    font-size: 2.4rem;
-    letter-spacing: 0.15em;
+    font-size: 2.45rem;
+    letter-spacing: 0.16em;
+    margin-left: 0.16em;
   }
 
   .subtitle {
-    font-size: 0.9rem;
-    margin-top: -2rem;
-    letter-spacing: 0.15em;
+    margin-top: -1.7rem;
+    font-size: 0.86rem;
+    letter-spacing: 0.12em;
   }
 
   .textCanvas {
-    opacity: 0.7;
-    mix-blend-mode: lighten;
+    mix-blend-mode: screen;
   }
 
   .app {
     padding: 10vh 6vw 12vh;
     text-align: left;
-    line-height: 1.85;
+    line-height: 1.88;
   }
 
   .epTitle {
-    font-size: 1.8rem;
+    font-size: 1.9rem;
     text-align: center;
-    margin-bottom: 2.5rem;
-    letter-spacing: 0.05em;
+    margin-bottom: 2.4rem;
+  }
+
+  .epTitle::before,
+  .epTitle::after {
+    display: none;
   }
 
   .fullText {
     font-size: 0.95rem;
-    line-height: 1.9;
-    margin-top: 2rem;
-    opacity: 1 !important;
+    line-height: 1.92;
   }
 
   .fullText p {
@@ -289,30 +337,13 @@
 
   .closing q {
     font-size: 0.95rem;
-    opacity: 0.9;
     text-align: center;
-    display: block;
     margin-top: 4vh;
   }
 
   .sign {
     text-align: center;
     margin-top: 1rem;
-    font-size: 0.85rem;
-  }
-
-  .intro {
-    align-items: flex-start;
-    padding-top: 25vh;
-  }
-
-  .titleContainer {
-    width: 100%;
-    padding: 0 8vw;
-  }
-
-  .epTitle::before,
-  .epTitle::after {
-    display: none;
+    font-size: 0.84rem;
   }
 }

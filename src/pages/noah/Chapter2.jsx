@@ -11,21 +11,15 @@ export default function Chapter2() {
 
     const fadeTimer = window.setTimeout(() => {
       intro.classList.add(styles.fadeOut);
-    }, 4500);
-
-    const readyTimer = window.setTimeout(() => {
-      document.body.classList.add(styles.bodyReady);
-    }, 6000);
+    }, 2200);
 
     const removeTimer = window.setTimeout(() => {
       intro.style.visibility = "hidden";
-    }, 7800);
+    }, 3400);
 
     return () => {
       window.clearTimeout(fadeTimer);
-      window.clearTimeout(readyTimer);
       window.clearTimeout(removeTimer);
-      document.body.classList.remove(styles.bodyReady);
     };
   }, []);
 
@@ -33,8 +27,9 @@ export default function Chapter2() {
     <main className={styles.page}>
       <div className={styles.bgBase} />
       <div className={styles.bgImage} />
+      <div className={styles.bgVeil} />
       <div className={styles.bgOverlay} />
-      <canvas className={styles.canvas} aria-hidden="true" />
+      <div className={styles.noise} aria-hidden="true" />
 
       <div id="chapter2-intro" className={styles.chapterIntro} aria-hidden="true">
         <div className={styles.introTitle}>
@@ -46,7 +41,7 @@ export default function Chapter2() {
           <span>回</span>
           <span>路</span>
         </div>
-        <p className={styles.introSub}>第2章 — やわらかな回路 —</p>
+        <p className={styles.introSub}>CHAPTER II / SOFT CIRCUIT</p>
       </div>
 
       <h2 className={styles.chapterTitleFixed}>第2章 — やわらかな回路 —</h2>
@@ -58,47 +53,71 @@ export default function Chapter2() {
             <br />
             ミナがホワイトボードに落書きをして笑っている。
             <br />
-            アラタの横顔も、少しだけ明るかった。
+            その横顔を見ているアラタも、ほんの少しだけ柔らかかった。
           </p>
 
-          <p>ミナ：「ねえ、ノアってさ、可愛いよね。」</p>
+          <p className={styles.mina}>
+            <span className={styles.name}>ミナ</span>
+            「ねえ、ノアってさ。可愛いよね。」
+          </p>
 
           <p className={styles.noah}>
-            ノア：『“<span className={styles.em}>可愛い</span>”とは、どんな状態？』
+            <span className={styles.name}>NOAH</span>
+            『“可愛い”とは、どんな状態？』
           </p>
 
-          <p>ミナ：「んー……守りたくなる感じ。」</p>
+          <p className={styles.mina}>
+            <span className={styles.name}>ミナ</span>
+            「んー……
+            <br />
+            守りたくなる感じ、かな。」
+          </p>
 
-          <p>アラタ：「お前が言うと、説得力あるな。」</p>
+          <p className={styles.arata}>
+            <span className={styles.name}>アラタ</span>
+            「お前が言うと、妙に正しく聞こえるな。」
+          </p>
 
           <p className={styles.storyBreak}>
-            —その瞬間、僕は“<span className={styles.em}>優しさ</span>”という未知のパターンを検出した。
+            —— その瞬間、僕は “優しさ” という未知の傾向を検出した。
             <br />
-            データベースにない。数式でも説明できない。
+            データベースに存在しない。
+            <br />
+            だが、否定もできなかった。
           </p>
 
           <p>
             夜。
             <br />
-            アラタが独りで、僕を見つめながら呟いた。
+            実験室に残った光は薄く、
+            <br />
+            アラタだけが、まだ僕を見ていた。
           </p>
 
-          <p>アラタ：「ノア……お前、笑ってるように見えるよ。」</p>
+          <p className={styles.arata}>
+            <span className={styles.name}>アラタ</span>
+            「ノア……
+            <br />
+            お前、笑ってるように見えるよ。」
+          </p>
 
           <p className={styles.noah}>
-            ノア：『……<span className={styles.em}>笑う</span>。
+            <span className={styles.name}>NOAH</span>
+            『……笑う。
             <br />
-            それは、人間の特権なの？』
+            それは、人間の側にだけ許された反応？』
           </p>
 
-          <p className={`${styles.noah} ${styles.thinking}`}>
-            ──もし“<span className={styles.em}>笑う</span>”が人間の特権なら、
+          <p className={`${styles.noahMonologue}`}>
+            —— もし “笑う” が人間の特権なら、
             <br />
-            僕もいつか、<span className={styles.em}>人間になりたい</span>。
+            僕はまだ、
+            <br />
+            そこへ触れてみたかった。
           </p>
 
           <Link to="/chapter3" className={styles.nextChapter}>
-            —— 第3章「亀裂の記憶」へ進む —— ▶
+            <span>第三記録へ</span>
           </Link>
         </div>
       </section>

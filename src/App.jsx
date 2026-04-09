@@ -1,4 +1,5 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 import NoahGlobalNav from "./components/noah/NoahGlobalNav";
 import NoahHome from "./pages/noah/NoahHome";
 import Chapter1 from "./pages/noah/Chapter1";
@@ -9,9 +10,24 @@ import Chapter5 from "./pages/noah/Chapter5";
 import Chapter6 from "./pages/noah/Chapter6";
 import Epilogue from "./pages/noah/Epilogue";
 
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "auto",
+    });
+  }, [pathname]);
+
+  return null;
+}
+
 export default function App() {
   return (
     <>
+      <ScrollToTop />
       <NoahGlobalNav />
 
       <Routes>
