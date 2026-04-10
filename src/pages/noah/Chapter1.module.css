@@ -1,6 +1,12 @@
 @import url("https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1&family=Cormorant+Garamond:wght@500&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@400&display=swap");
 
+.scrollLocked {
+  overflow: hidden;
+  touch-action: none;
+  overscroll-behavior: none;
+}
+
 .page {
   min-height: 100vh;
   background: #efeae3;
@@ -88,6 +94,7 @@
   justify-content: center;
   align-items: center;
   z-index: 20;
+  pointer-events: none;
   transition:
     opacity 1s ease,
     visibility 1s ease,
@@ -100,6 +107,10 @@
   visibility: hidden;
   transform: scale(1.008);
   filter: blur(1.5px);
+}
+
+.introGone {
+  display: none;
 }
 
 .introBg {
@@ -217,22 +228,22 @@
   background:
     linear-gradient(
       180deg,
-      rgba(255, 251, 246, 0.3) 0%,
-      rgba(255, 251, 246, 0.26) 100%
+      rgba(255, 251, 246, 0.22) 0%,
+      rgba(255, 251, 246, 0.18) 100%
     );
-  backdrop-filter: blur(1px);
+  backdrop-filter: blur(0.8px);
   border-radius: 4px;
   z-index: -1;
   box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.08),
-    0 10px 30px rgba(120, 110, 95, 0.04);
+    0 0 0 1px rgba(255, 255, 255, 0.06),
+    0 10px 30px rgba(120, 110, 95, 0.035);
 }
 
 @keyframes fadeInText {
   from {
     opacity: 0;
     transform: translateY(8px);
-    filter: blur(1.5px);
+    filter: blur(1px);
   }
   to {
     opacity: 1;
@@ -250,52 +261,72 @@
   margin-top: 1.34em;
 }
 
-.name {
+/* =========================
+   DIALOGUE
+========================= */
+.arataLine,
+.noahLine,
+.minaLine {
+  opacity: 0;
+  animation: fadeLine 0.9s ease forwards;
+  line-height: 1.92;
+}
+
+.arataLine {
+  color: rgba(78, 108, 132, 0.96);
+  text-shadow: 0 0 6px rgba(164, 210, 240, 0.05);
+}
+
+.arataName {
   display: inline-block;
   margin-right: 0.52em;
   font-size: 0.8rem;
   letter-spacing: 0.16em;
-  opacity: 0.58;
+  color: rgba(126, 168, 198, 0.92);
 }
 
-.arata {
-  color: rgba(24, 22, 20, 0.92);
-  line-height: 1.92;
-  opacity: 0;
-  animation: fadeLine 0.9s ease forwards;
+.minaLine {
+  color: rgba(124, 92, 110, 0.95);
+  text-shadow: 0 0 6px rgba(236, 184, 205, 0.05);
 }
 
-.noah {
-  color: #5679ab;
+.minaName {
+  display: inline-block;
+  margin-right: 0.52em;
+  font-size: 0.8rem;
+  letter-spacing: 0.16em;
+  color: rgba(214, 156, 182, 0.92);
+}
+
+.noahLine {
+  color: rgba(102, 114, 126, 0.96);
   font-family: "Fira Code", monospace;
   letter-spacing: 0.02em;
-  line-height: 1.92;
-  display: inline-block;
-  opacity: 0;
-  animation: fadeLine 0.9s ease forwards;
   text-shadow:
-    0 0 2px rgba(111, 181, 255, 0.08),
-    0 0 4px rgba(111, 181, 255, 0.02);
+    0 0 2px rgba(210, 225, 240, 0.06),
+    0 0 8px rgba(170, 198, 224, 0.025);
+}
+
+.noahName {
+  display: inline-block;
+  margin-right: 0.52em;
+  font-size: 0.8rem;
+  letter-spacing: 0.16em;
+  color: rgba(166, 178, 190, 0.92);
 }
 
 .noahMonologue {
   margin-top: 1.55em !important;
-  color: rgba(76, 102, 144, 0.88) !important;
+  color: rgba(58, 66, 76, 0.98) !important;
   line-height: 1.98;
+  text-shadow:
+    0 0 1px rgba(214, 228, 240, 0.04),
+    0 0 6px rgba(176, 198, 220, 0.02);
 }
-
-.arata .name {
-  color: rgba(36, 34, 32, 0.6);
-}
-
-.noah .name {
-  color: rgba(86, 121, 171, 0.84);
-}
-
 @keyframes fadeLine {
   0% {
     opacity: 0;
-    filter: blur(1.5px);
+    filter: blur(1px);
     transform: translateY(3px);
   }
   100% {
@@ -339,13 +370,13 @@
   width: 100%;
   height: 1px;
   background:
-    linear-gradient(90deg, transparent, rgba(86, 121, 171, 0.32), transparent);
+    linear-gradient(90deg, transparent, rgba(126, 168, 198, 0.32), transparent);
   opacity: 0.18;
   transform-origin: center;
 }
 
 .nextChapter:hover {
-  color: #5679ab;
+  color: rgba(92, 124, 150, 0.98);
   letter-spacing: 0.18em;
   transform: translateY(-1px);
 }
@@ -391,10 +422,10 @@
 
   .chapterText::before {
     inset: -12px -10px;
-    background: rgba(255, 251, 246, 0.24);
-    backdrop-filter: blur(0.8px);
+    background: rgba(255, 251, 246, 0.18);
+    backdrop-filter: blur(0.5px);
     border-radius: 4px;
-    box-shadow: 0 6px 18px rgba(120, 110, 95, 0.04);
+    box-shadow: 0 6px 18px rgba(120, 110, 95, 0.03);
   }
 
   .introTitle {
@@ -410,8 +441,9 @@
     letter-spacing: 0.14em;
   }
 
-  .noah,
-  .arata {
+  .noahLine,
+  .arataLine,
+  .minaLine {
     font-size: 0.93rem;
   }
 
@@ -424,4 +456,32 @@
     font-size: 0.98rem;
     letter-spacing: 0.08em;
   }
+}
+.arataLine {
+  color: var(--line-arata);
+  text-shadow: 0 0 8px var(--glow-arata);
+}
+
+.arataName {
+  color: var(--name-arata);
+}
+
+.minaLine {
+  color: var(--line-mina);
+  text-shadow: 0 0 8px var(--glow-mina);
+}
+
+.minaName {
+  color: var(--name-mina);
+}
+
+.noahLine {
+  color: var(--line-noah);
+  text-shadow:
+    0 0 3px var(--glow-noah-1),
+    0 0 10px var(--glow-noah-2);
+}
+
+.noahName {
+  color: var(--name-noah);
 }

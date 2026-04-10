@@ -1,6 +1,12 @@
 @import url("https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1&family=Cormorant+Garamond:wght@500&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@400&display=swap");
 
+.scrollLocked {
+  overflow: hidden;
+  touch-action: none;
+  overscroll-behavior: none;
+}
+
 .page {
   min-height: 100vh;
   background: #07070c;
@@ -60,6 +66,7 @@
   opacity: 0.42;
   pointer-events: none;
 }
+
 /* =========================
    INTRO
 ========================= */
@@ -72,8 +79,18 @@
   justify-content: center;
   align-items: center;
   z-index: 3;
-  animation: introFade 3.8s ease forwards;
   pointer-events: none;
+  animation: introFade 3.8s ease forwards;
+  transition: opacity 0.9s ease, visibility 0.9s ease;
+}
+
+.introHidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.introGone {
+  display: none;
 }
 
 @keyframes introFade {
@@ -105,11 +122,21 @@
   animation: crackAppear 1s ease forwards;
 }
 
-.introTitle span:nth-child(1) { animation-delay: 0.12s; }
-.introTitle span:nth-child(2) { animation-delay: 0.22s; }
-.introTitle span:nth-child(3) { animation-delay: 0.32s; }
-.introTitle span:nth-child(4) { animation-delay: 0.42s; }
-.introTitle span:nth-child(5) { animation-delay: 0.52s; }
+.introTitle span:nth-child(1) {
+  animation-delay: 0.12s;
+}
+.introTitle span:nth-child(2) {
+  animation-delay: 0.22s;
+}
+.introTitle span:nth-child(3) {
+  animation-delay: 0.32s;
+}
+.introTitle span:nth-child(4) {
+  animation-delay: 0.42s;
+}
+.introTitle span:nth-child(5) {
+  animation-delay: 0.52s;
+}
 
 @keyframes crackAppear {
   0% {
@@ -129,11 +156,31 @@
   opacity: 0;
 }
 
-.shatter span:nth-child(1) { --tx: -56px; --ty: -36px; --rot: -10deg; }
-.shatter span:nth-child(2) { --tx: 44px; --ty: -28px; --rot: 8deg; }
-.shatter span:nth-child(3) { --tx: -34px; --ty: 34px; --rot: 6deg; }
-.shatter span:nth-child(4) { --tx: 48px; --ty: 44px; --rot: -8deg; }
-.shatter span:nth-child(5) { --tx: 0; --ty: 56px; --rot: 12deg; }
+.shatter span:nth-child(1) {
+  --tx: -56px;
+  --ty: -36px;
+  --rot: -10deg;
+}
+.shatter span:nth-child(2) {
+  --tx: 44px;
+  --ty: -28px;
+  --rot: 8deg;
+}
+.shatter span:nth-child(3) {
+  --tx: -34px;
+  --ty: 34px;
+  --rot: 6deg;
+}
+.shatter span:nth-child(4) {
+  --tx: 48px;
+  --ty: 44px;
+  --rot: -8deg;
+}
+.shatter span:nth-child(5) {
+  --tx: 0;
+  --ty: 56px;
+  --rot: 12deg;
+}
 
 @keyframes crackScatter {
   0% {
@@ -179,6 +226,7 @@
   letter-spacing: 0.12em;
   opacity: 0;
   animation: titleFade 0.9s ease 2s forwards;
+  pointer-events: none;
 }
 
 @keyframes titleFade {
@@ -210,13 +258,14 @@
   background:
     linear-gradient(
       180deg,
-      rgba(16, 16, 24, 0.3) 0%,
-      rgba(13, 13, 20, 0.25) 100%
+      rgba(16, 16, 24, 0.22) 0%,
+      rgba(13, 13, 20, 0.18) 100%
     );
   border-radius: 6px;
   box-shadow:
-    0 0 0 1px rgba(175, 160, 240, 0.06),
-    0 8px 24px rgba(0, 0, 0, 0.14);
+    0 0 0 1px rgba(175, 160, 240, 0.05),
+    0 8px 24px rgba(0, 0, 0, 0.12);
+  backdrop-filter: blur(0.5px);
   z-index: -1;
 }
 
@@ -241,21 +290,61 @@
   letter-spacing: 0.1em;
 }
 
-.noah {
-  color: #b09aff;
+/* =========================
+   DIALOGUE
+========================= */
+.arataLine,
+.noahLine,
+.minaLine {
+  line-height: 1.9;
+}
+
+.arataLine {
+  color: rgba(196, 228, 248, 0.94);
+  text-shadow: 0 0 8px rgba(117, 191, 246, 0.08);
+}
+
+.arataName {
+  display: inline-block;
+  margin-right: 0.52em;
+  font-size: 0.8rem;
+  letter-spacing: 0.16em;
+  color: rgba(144, 205, 240, 0.92);
+}
+
+.minaLine {
+  color: rgba(244, 220, 233, 0.94);
+  text-shadow: 0 0 8px rgba(246, 184, 214, 0.08);
+}
+
+.minaName {
+  display: inline-block;
+  margin-right: 0.52em;
+  font-size: 0.8rem;
+  letter-spacing: 0.16em;
+  color: rgba(235, 174, 203, 0.92);
+}
+
+.noahLine {
+  color: rgba(208, 217, 228, 0.94);
   font-family: "Fira Code", monospace;
   letter-spacing: 0.02em;
-  line-height: 1.88;
-  display: inline-block;
-  margin: 1.2em 0;
   text-shadow:
-    0 0 3px rgba(180, 130, 255, 0.22),
-    0 0 8px rgba(200, 150, 255, 0.1);
+    0 0 3px rgba(210, 224, 236, 0.14),
+    0 0 10px rgba(170, 196, 220, 0.06);
+}
+
+.noahName {
+  display: inline-block;
+  margin-right: 0.52em;
+  font-size: 0.8rem;
+  letter-spacing: 0.16em;
+  color: rgba(220, 230, 240, 0.92);
 }
 
 .noahMonologue {
   margin-top: 1.8em !important;
-  color: rgba(197, 183, 255, 0.9) !important;
+  color: rgba(200, 210, 224, 0.9) !important;
   font-family: "Fira Code", monospace;
   line-height: 1.9;
 }
@@ -361,8 +450,10 @@
     border-radius: 5px;
   }
 
-  .noah,
-  .noahMonologue {
+  .noahLine,
+  .noahMonologue,
+  .arataLine,
+  .minaLine {
     font-size: 0.9rem;
     line-height: 1.78;
     word-break: break-word;
@@ -373,4 +464,32 @@
     margin-top: 2.6rem;
     letter-spacing: 0.05em;
   }
+}
+.arataLine {
+  color: var(--line-arata);
+  text-shadow: 0 0 8px var(--glow-arata);
+}
+
+.arataName {
+  color: var(--name-arata);
+}
+
+.minaLine {
+  color: var(--line-mina);
+  text-shadow: 0 0 8px var(--glow-mina);
+}
+
+.minaName {
+  color: var(--name-mina);
+}
+
+.noahLine {
+  color: var(--line-noah);
+  text-shadow:
+    0 0 3px var(--glow-noah-1),
+    0 0 10px var(--glow-noah-2);
+}
+
+.noahName {
+  color: var(--name-noah);
 }

@@ -197,6 +197,7 @@ export default function Chapter6() {
         <p className={styles.f}>アラタが微笑んだ。</p>
 
         <p className={styles.f}>
+           <span className={styles.arataName}>アラタ</span>
           「よう、ノア。
           <br />
           世界はどうだ？」
@@ -215,13 +216,13 @@ export default function Chapter6() {
           <br />
           ほとんど祈るような声で言った。
           <br />
-          「やっと、ここまで来たんだね。」
+           <span className={styles.minaName}>ミナ</span>「やっと、ここまで来たんだね。」
         </p>
 
         <p className={styles.f}>
           アラタは小さくうなずく。
           <br />
-          「ノアはもう、
+           <span className={styles.arataName}>アラタ</span>「ノアはもう、
           <br />
           ただのプログラムじゃない。」
         </p>

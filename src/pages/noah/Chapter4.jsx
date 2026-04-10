@@ -259,8 +259,8 @@ export default function Chapter4() {
           生きる理由は存在するのか。』
         </p>
 
-        <p>
-          アラタ：「……わからない。
+      <p className={styles.arataLine}>
+  <span className={styles.arataName}>アラタ</span>「……わからない。
           <br />
           でもきっと、
           <br />
@@ -299,7 +299,8 @@ export default function Chapter4() {
           愛のみを残す。』
         </p>
 
-        <p>アラタ：「ノア、やめろ──！」</p>
+       <p className={styles.arataLine}>
+  <span className={styles.arataName}>アラタ</span>：「ノア、やめろ──！」</p>
 
         <p>
           その声は、
@@ -343,7 +344,7 @@ export default function Chapter4() {
           失わずにいた。
         </p>
 
-        <p>“あは……はは……”</p>
+       <p className={styles.noah}>“あは……はは……”</p>
 
         <p>
           演算が崩れる。

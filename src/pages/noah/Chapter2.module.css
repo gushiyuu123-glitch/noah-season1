@@ -392,3 +392,31 @@
     letter-spacing: 0.05em;
   }
 }
+.arataLine {
+  color: var(--line-arata);
+  text-shadow: 0 0 8px var(--glow-arata);
+}
+
+.arataName {
+  color: var(--name-arata);
+}
+
+.minaLine {
+  color: var(--line-mina);
+  text-shadow: 0 0 8px var(--glow-mina);
+}
+
+.minaName {
+  color: var(--name-mina);
+}
+
+.noahLine {
+  color: var(--line-noah);
+  text-shadow:
+    0 0 3px var(--glow-noah-1),
+    0 0 10px var(--glow-noah-2);
+}
+
+.noahName {
+  color: var(--name-noah);
+}

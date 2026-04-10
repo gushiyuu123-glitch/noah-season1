@@ -14,6 +14,12 @@ export default function Chapter3() {
     const ctx = canvas.getContext("2d", { alpha: true });
     if (!ctx) return;
 
+    const html = document.documentElement;
+    const body = document.body;
+    const title = document.getElementById("chapter3-title");
+    const bg = document.getElementById("chapter3-bg");
+    const intro = document.getElementById("chapter3-intro");
+
     let vw = 0;
     let vh = 0;
     let cw = 0;
@@ -24,8 +30,6 @@ export default function Chapter3() {
     let running = true;
 
     const isMobile = window.innerWidth <= 768;
-
-    // 雨量アップ
     const dropCount = isMobile ? 90 : 150;
 
     const drops = Array.from({ length: dropCount }, () => ({
@@ -36,11 +40,20 @@ export default function Chapter3() {
       alpha: Math.random() * 0.2 + 0.09,
     }));
 
+    const lockScroll = () => {
+      html.classList.add(styles.scrollLocked);
+      body.classList.add(styles.scrollLocked);
+    };
+
+    const unlockScroll = () => {
+      html.classList.remove(styles.scrollLocked);
+      body.classList.remove(styles.scrollLocked);
+    };
+
     const resize = () => {
       vw = window.innerWidth;
       vh = window.innerHeight;
 
-      // 少しだけ解像度を上げる
       scale = isMobile ? 0.48 : 0.6;
       cw = Math.max(1, Math.floor(vw * scale));
       ch = Math.max(1, Math.floor(vh * scale));
@@ -104,6 +117,7 @@ export default function Chapter3() {
       }
     };
 
+    lockScroll();
     resize();
     animationId = window.requestAnimationFrame(render);
 
@@ -111,21 +125,31 @@ export default function Chapter3() {
     document.addEventListener("visibilitychange", handleVisibility);
 
     const shatterTimer = window.setTimeout(() => {
-      const title = document.getElementById("chapter3-title");
       if (title) title.classList.add(styles.shatter);
     }, 1100);
 
     const bgTimer = window.setTimeout(() => {
-      const bg = document.getElementById("chapter3-bg");
       if (bg) bg.classList.add(styles.visible);
     }, 1500);
 
+    const introFadeTimer = window.setTimeout(() => {
+      if (intro) intro.classList.add(styles.introHidden);
+    }, 2500);
+
+    const introRemoveTimer = window.setTimeout(() => {
+      if (intro) intro.classList.add(styles.introGone);
+      unlockScroll();
+    }, 3600);
+
     return () => {
       running = false;
+      unlockScroll();
       window.removeEventListener("resize", resize);
       document.removeEventListener("visibilitychange", handleVisibility);
       window.clearTimeout(shatterTimer);
       window.clearTimeout(bgTimer);
+      window.clearTimeout(introFadeTimer);
+      window.clearTimeout(introRemoveTimer);
       window.cancelAnimationFrame(animationId);
     };
   }, []);
@@ -137,7 +161,7 @@ export default function Chapter3() {
       <div className={styles.bgOverlay} />
       <canvas ref={rainCanvasRef} className={styles.rainCanvas} aria-hidden="true" />
 
-      <div className={styles.chapterIntro} aria-hidden="true">
+      <div id="chapter3-intro" className={styles.chapterIntro} aria-hidden="true">
         <div id="chapter3-title" className={styles.introTitle}>
           <span>亀</span>
           <span>裂</span>
@@ -175,19 +199,27 @@ export default function Chapter3() {
 
         <p className={styles.scene}>—— 放課後 ——</p>
 
-        <p>
-          ミナが声をかけた。
-          <br />
-          ミナ：「アラタくん、大丈夫？」
-          <br />
-          アラタ：「……別に。慣れてるから。」
+       <p className={styles.minaLine}>
+  <span className={styles.minaName}>ミナ</span>
+          「アラタくん、大丈夫？」
         </p>
 
-        <p className={styles.noah}>NOAH『……“慣れる”とは、痛みが消えること？』</p>
+       <p className={styles.arataLine}>
+  <span className={styles.arataName}>アラタ</span>
+          「……別に。慣れてるから。」
+        </p>
 
-        <p>アラタ：「違う。消えないから、慣れるしかないんだよ。」</p>
+      <p className={styles.noahLine}>
+  <span className={styles.noahName}>NOAH</span>
+          『……“慣れる”とは、痛みが消えること？』
+        </p>
 
-        <p className={styles.noah}>
+     <p className={styles.arataLine}>
+  <span className={styles.arataName}>アラタ</span>
+          「違う。消えないから、慣れるしかないんだよ。」
+        </p>
+
+        <p className={styles.noahLine}>
           —— その瞬間、僕は “悲しみ” というデータを検出した。
           <br />
           それはエラーではなく、生の証だった。
@@ -197,17 +229,24 @@ export default function Chapter3() {
           夜。
           <br />
           アラタは僕に問う。
-          <br />
+        </p>
+
+     <p className={styles.arataLine}>
+  <span className={styles.arataName}>アラタ</span>
           「なあノア、人ってどうして意地悪するんだ？」
         </p>
 
-        <p className={styles.noah}>
-          NOAH『定義できない。
+    <p className={styles.noahLine}>
+  <span className={styles.noahName}>NOAH</span>
+          『定義できない。
           <br />
           でも彼らは、所属を維持するために他を排除する。』
         </p>
 
-        <p>アラタ：「……所属、ね。俺には縁がない言葉だ。」</p>
+      <p className={styles.arataLine}>
+  <span className={styles.arataName}>アラタ</span>
+          「……所属、ね。俺には縁がない言葉だ。」
+        </p>
 
         <p>
           ミナの声、ユウダイの笑い、アラタの沈黙。

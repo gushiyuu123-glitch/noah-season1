@@ -5,7 +5,20 @@
 *::after {
   box-sizing: border-box;
 }
+:root {
+  --name-arata: rgba(126, 178, 214, 0.98);
+  --line-arata: rgba(82, 116, 142, 0.98);
+  --glow-arata: rgba(168, 214, 240, 0.12);
 
+  --name-mina: rgba(206, 146, 176, 0.98);
+  --line-mina: rgba(126, 82, 102, 0.98);
+  --glow-mina: rgba(236, 188, 210, 0.12);
+
+  --name-noah: rgba(170, 186, 202, 0.98);
+  --line-noah: rgba(96, 108, 122, 0.98);
+  --glow-noah-1: rgba(214, 228, 240, 0.14);
+  --glow-noah-2: rgba(176, 198, 220, 0.06);
+}
 html {
   height: 100%;
   scroll-behavior: auto;

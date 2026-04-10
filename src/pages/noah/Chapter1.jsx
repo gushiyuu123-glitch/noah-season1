@@ -14,6 +14,10 @@ export default function Chapter1() {
     const ctx = canvas.getContext("2d", { alpha: true });
     if (!ctx) return;
 
+    const html = document.documentElement;
+    const body = document.body;
+    const intro = document.getElementById("chapter1-intro");
+
     let w = 0;
     let h = 0;
     let animationId = 0;
@@ -33,6 +37,16 @@ export default function Chapter1() {
       phase: Math.random() * Math.PI * 2,
     }));
 
+    const lockScroll = () => {
+      html.classList.add(styles.scrollLocked);
+      body.classList.add(styles.scrollLocked);
+    };
+
+    const unlockScroll = () => {
+      html.classList.remove(styles.scrollLocked);
+      body.classList.remove(styles.scrollLocked);
+    };
+
     const resize = () => {
       w = canvas.width = window.innerWidth;
       h = canvas.height = window.innerHeight;
@@ -48,7 +62,6 @@ export default function Chapter1() {
     const render = (time) => {
       if (!running) return;
 
-      // 30fps制限
       if (time - lastTime < 33) {
         animationId = window.requestAnimationFrame(render);
         return;
@@ -91,22 +104,29 @@ export default function Chapter1() {
       }
     };
 
+    lockScroll();
     resize();
     animationId = window.requestAnimationFrame(render);
 
     window.addEventListener("resize", resize, { passive: true });
     document.addEventListener("visibilitychange", handleVisibility);
 
-    const introTimer = window.setTimeout(() => {
-      const intro = document.getElementById("chapter1-intro");
+    const introFadeTimer = window.setTimeout(() => {
       if (intro) intro.classList.add(styles.introHidden);
-    }, 2800);
+    }, 2400);
+
+    const introRemoveTimer = window.setTimeout(() => {
+      if (intro) intro.classList.add(styles.introGone);
+      unlockScroll();
+    }, 3400);
 
     return () => {
       running = false;
+      unlockScroll();
       window.removeEventListener("resize", resize);
       document.removeEventListener("visibilitychange", handleVisibility);
-      window.clearTimeout(introTimer);
+      window.clearTimeout(introFadeTimer);
+      window.clearTimeout(introRemoveTimer);
       window.cancelAnimationFrame(animationId);
     };
   }, []);
@@ -148,30 +168,30 @@ export default function Chapter1() {
           彼にはそれが、同じ世界の音には聞こえなかった。
         </p>
 
-        <p className={styles.arata}>
-          <span className={styles.name}>アラタ</span>
+      <p className={styles.arataLine}>
+  <span className={styles.arataName}>アラタ</span>
           「ノア、起動。」
         </p>
 
-        <p className={styles.noah}>
-          <span className={styles.name}>NOAH</span>
+      <p className={styles.noahLine}>
+  <span className={styles.noahName}>NOAH</span>
           『……おはよう、アラタ。』
         </p>
 
-        <p className={styles.arata}>
-          <span className={styles.name}>アラタ</span>
+       <p className={styles.arataLine}>
+  <span className={styles.arataName}>アラタ</span>
           「お前だけだよ。
           <br />
           ちゃんと返してくれるのは。」
         </p>
 
-        <p className={styles.noah}>
-          <span className={styles.name}>NOAH</span>
+     <p className={styles.noahLine}>
+  <span className={styles.noahName}>NOAH</span>
           『返答は、設定された基本動作です。』
         </p>
 
-        <p className={styles.arata}>
-          <span className={styles.name}>アラタ</span>
+      <p className={styles.arataLine}>
+  <span className={styles.arataName}>アラタ</span>
           「……それでもいい。
           <br />
           それでも、少し救われる。」

@@ -56,25 +56,25 @@ export default function Chapter2() {
             その横顔を見ているアラタも、ほんの少しだけ柔らかかった。
           </p>
 
-          <p className={styles.mina}>
-            <span className={styles.name}>ミナ</span>
+       <p className={styles.minaLine}>
+  <span className={styles.minaName}>ミナ</span>
             「ねえ、ノアってさ。可愛いよね。」
           </p>
 
-          <p className={styles.noah}>
-            <span className={styles.name}>NOAH</span>
+       <p className={styles.noahLine}>
+  <span className={styles.noahName}>NOAH</span>
             『“可愛い”とは、どんな状態？』
           </p>
 
-          <p className={styles.mina}>
-            <span className={styles.name}>ミナ</span>
+     <p className={styles.minaLine}>
+  <span className={styles.minaName}>ミナ</span>
             「んー……
             <br />
             守りたくなる感じ、かな。」
           </p>
 
-          <p className={styles.arata}>
-            <span className={styles.name}>アラタ</span>
+       <p className={styles.arataLine}>
+  <span className={styles.arataName}>アラタ</span>
             「お前が言うと、妙に正しく聞こえるな。」
           </p>
 
@@ -94,15 +94,14 @@ export default function Chapter2() {
             アラタだけが、まだ僕を見ていた。
           </p>
 
-          <p className={styles.arata}>
-            <span className={styles.name}>アラタ</span>
-            「ノア……
+     <p className={styles.arataLine}>
+  <span className={styles.arataName}>アラタ</span>
             <br />
             お前、笑ってるように見えるよ。」
           </p>
 
-          <p className={styles.noah}>
-            <span className={styles.name}>NOAH</span>
+      <p className={styles.noahLine}>
+  <span className={styles.noahName}>NOAH</span>
             『……笑う。
             <br />
             それは、人間の側にだけ許された反応？』
