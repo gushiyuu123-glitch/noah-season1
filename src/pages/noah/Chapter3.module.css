@@ -1,10 +1,19 @@
 @import url("https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1&family=Cormorant+Garamond:wght@500&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@400&display=swap");
 
-.scrollLocked {
-  overflow: hidden;
-  touch-action: none;
-  overscroll-behavior: none;
+:root {
+  --line-arata: rgba(196, 228, 248, 0.94);
+  --name-arata: rgba(144, 205, 240, 0.92);
+  --glow-arata: rgba(117, 191, 246, 0.08);
+
+  --line-mina: rgba(244, 220, 233, 0.94);
+  --name-mina: rgba(235, 174, 203, 0.92);
+  --glow-mina: rgba(246, 184, 214, 0.08);
+
+  --line-noah: rgba(208, 217, 228, 0.94);
+  --name-noah: rgba(220, 230, 240, 0.92);
+  --glow-noah-1: rgba(210, 224, 236, 0.14);
+  --glow-noah-2: rgba(170, 196, 220, 0.06);
 }
 
 .page {
@@ -27,6 +36,7 @@
   background:
     radial-gradient(circle at 50% 26%, #12121a 0%, #0a0a10 42%, #050508 100%);
   z-index: -5;
+  pointer-events: none;
 }
 
 .bgImage {
@@ -38,6 +48,10 @@
   opacity: 0;
   transition: opacity 1.2s ease;
   pointer-events: none;
+  will-change: opacity;
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
 .visible {
@@ -65,6 +79,11 @@
   z-index: -2;
   opacity: 0.42;
   pointer-events: none;
+  display: block;
+  will-change: transform;
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
 /* =========================
@@ -78,7 +97,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  z-index: 3;
+  z-index: 20;
   pointer-events: none;
   animation: introFade 3.8s ease forwards;
   transition: opacity 0.9s ease, visibility 0.9s ease;
@@ -222,7 +241,7 @@
   font-family: "Cormorant Garamond", serif;
   font-size: 1.04rem;
   color: rgba(184, 170, 245, 0.54);
-  z-index: 2;
+  z-index: 10;
   letter-spacing: 0.12em;
   opacity: 0;
   animation: titleFade 0.9s ease 2s forwards;
@@ -300,8 +319,8 @@
 }
 
 .arataLine {
-  color: rgba(196, 228, 248, 0.94);
-  text-shadow: 0 0 8px rgba(117, 191, 246, 0.08);
+  color: var(--line-arata);
+  text-shadow: 0 0 8px var(--glow-arata);
 }
 
 .arataName {
@@ -309,12 +328,12 @@
   margin-right: 0.52em;
   font-size: 0.8rem;
   letter-spacing: 0.16em;
-  color: rgba(144, 205, 240, 0.92);
+  color: var(--name-arata);
 }
 
 .minaLine {
-  color: rgba(244, 220, 233, 0.94);
-  text-shadow: 0 0 8px rgba(246, 184, 214, 0.08);
+  color: var(--line-mina);
+  text-shadow: 0 0 8px var(--glow-mina);
 }
 
 .minaName {
@@ -322,16 +341,16 @@
   margin-right: 0.52em;
   font-size: 0.8rem;
   letter-spacing: 0.16em;
-  color: rgba(235, 174, 203, 0.92);
+  color: var(--name-mina);
 }
 
 .noahLine {
-  color: rgba(208, 217, 228, 0.94);
+  color: var(--line-noah);
   font-family: "Fira Code", monospace;
   letter-spacing: 0.02em;
   text-shadow:
-    0 0 3px rgba(210, 224, 236, 0.14),
-    0 0 10px rgba(170, 196, 220, 0.06);
+    0 0 3px var(--glow-noah-1),
+    0 0 10px var(--glow-noah-2);
 }
 
 .noahName {
@@ -339,7 +358,7 @@
   margin-right: 0.52em;
   font-size: 0.8rem;
   letter-spacing: 0.16em;
-  color: rgba(220, 230, 240, 0.92);
+  color: var(--name-noah);
 }
 
 .noahMonologue {
@@ -464,32 +483,4 @@
     margin-top: 2.6rem;
     letter-spacing: 0.05em;
   }
-}
-.arataLine {
-  color: var(--line-arata);
-  text-shadow: 0 0 8px var(--glow-arata);
-}
-
-.arataName {
-  color: var(--name-arata);
-}
-
-.minaLine {
-  color: var(--line-mina);
-  text-shadow: 0 0 8px var(--glow-mina);
-}
-
-.minaName {
-  color: var(--name-mina);
-}
-
-.noahLine {
-  color: var(--line-noah);
-  text-shadow:
-    0 0 3px var(--glow-noah-1),
-    0 0 10px var(--glow-noah-2);
-}
-
-.noahName {
-  color: var(--name-noah);
 }

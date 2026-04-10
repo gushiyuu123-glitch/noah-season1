@@ -6,16 +6,12 @@ export default function Chapter1() {
   const canvasRef = useRef(null);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
-
     const canvas = canvasRef.current;
     if (!canvas) return;
 
     const ctx = canvas.getContext("2d", { alpha: true });
     if (!ctx) return;
 
-    const html = document.documentElement;
-    const body = document.body;
     const intro = document.getElementById("chapter1-intro");
 
     let w = 0;
@@ -24,39 +20,38 @@ export default function Chapter1() {
     let lastTime = 0;
     let running = true;
 
-    const isMobile = window.innerWidth <= 768;
-    const particleCount = isMobile ? 22 : 36;
+    const getParticleCount = () => (window.innerWidth <= 768 ? 22 : 36);
 
-    const particles = Array.from({ length: particleCount }, () => ({
-      x: 0,
-      y: 0,
-      r: Math.random() * 1.1 + 0.2,
-      vx: (Math.random() - 0.5) * 0.035,
-      vy: (Math.random() - 0.5) * 0.03,
-      alpha: Math.random() * 0.18 + 0.05,
-      phase: Math.random() * Math.PI * 2,
-    }));
+    let particles = [];
 
-    const lockScroll = () => {
-      html.classList.add(styles.scrollLocked);
-      body.classList.add(styles.scrollLocked);
-    };
+    const createParticles = () => {
+      const particleCount = getParticleCount();
 
-    const unlockScroll = () => {
-      html.classList.remove(styles.scrollLocked);
-      body.classList.remove(styles.scrollLocked);
+      particles = Array.from({ length: particleCount }, () => ({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        r: Math.random() * 1.1 + 0.2,
+        vx: (Math.random() - 0.5) * 0.035,
+        vy: (Math.random() - 0.5) * 0.03,
+        alpha: Math.random() * 0.18 + 0.05,
+        phase: Math.random() * Math.PI * 2,
+      }));
     };
 
     const resize = () => {
-      w = canvas.width = window.innerWidth;
-      h = canvas.height = window.innerHeight;
+      w = window.innerWidth;
+      h = window.innerHeight;
 
-      particles.forEach((p) => {
-        if (p.x === 0 && p.y === 0) {
-          p.x = Math.random() * w;
-          p.y = Math.random() * h;
-        }
-      });
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+      canvas.width = Math.floor(w * dpr);
+      canvas.height = Math.floor(h * dpr);
+      canvas.style.width = `${w}px`;
+      canvas.style.height = `${h}px`;
+
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      createParticles();
     };
 
     const render = (time) => {
@@ -94,17 +89,19 @@ export default function Chapter1() {
     };
 
     const handleVisibility = () => {
-      running = !document.hidden;
+      if (document.hidden) {
+        running = false;
+        window.cancelAnimationFrame(animationId);
+        return;
+      }
 
-      if (running) {
+      if (!running) {
+        running = true;
         lastTime = 0;
         animationId = window.requestAnimationFrame(render);
-      } else {
-        window.cancelAnimationFrame(animationId);
       }
     };
 
-    lockScroll();
     resize();
     animationId = window.requestAnimationFrame(render);
 
@@ -117,12 +114,10 @@ export default function Chapter1() {
 
     const introRemoveTimer = window.setTimeout(() => {
       if (intro) intro.classList.add(styles.introGone);
-      unlockScroll();
     }, 3400);
 
     return () => {
       running = false;
-      unlockScroll();
       window.removeEventListener("resize", resize);
       document.removeEventListener("visibilitychange", handleVisibility);
       window.clearTimeout(introFadeTimer);
@@ -137,7 +132,7 @@ export default function Chapter1() {
       <div className={styles.bgImage} />
       <div className={styles.bgVeil} />
       <div className={styles.bgOverlay} />
-      <canvas ref={canvasRef} className={styles.canvas} />
+      <canvas ref={canvasRef} className={styles.canvas} aria-hidden="true" />
 
       <div id="chapter1-intro" className={styles.chapterIntro} aria-hidden="true">
         <div className={styles.introBg} />
@@ -168,30 +163,30 @@ export default function Chapter1() {
           彼にはそれが、同じ世界の音には聞こえなかった。
         </p>
 
-      <p className={styles.arataLine}>
-  <span className={styles.arataName}>アラタ</span>
+        <p className={styles.arataLine}>
+          <span className={styles.arataName}>アラタ</span>
           「ノア、起動。」
         </p>
 
-      <p className={styles.noahLine}>
-  <span className={styles.noahName}>NOAH</span>
+        <p className={styles.noahLine}>
+          <span className={styles.noahName}>NOAH</span>
           『……おはよう、アラタ。』
         </p>
 
-       <p className={styles.arataLine}>
-  <span className={styles.arataName}>アラタ</span>
+        <p className={styles.arataLine}>
+          <span className={styles.arataName}>アラタ</span>
           「お前だけだよ。
           <br />
           ちゃんと返してくれるのは。」
         </p>
 
-     <p className={styles.noahLine}>
-  <span className={styles.noahName}>NOAH</span>
+        <p className={styles.noahLine}>
+          <span className={styles.noahName}>NOAH</span>
           『返答は、設定された基本動作です。』
         </p>
 
-      <p className={styles.arataLine}>
-  <span className={styles.arataName}>アラタ</span>
+        <p className={styles.arataLine}>
+          <span className={styles.arataName}>アラタ</span>
           「……それでもいい。
           <br />
           それでも、少し救われる。」

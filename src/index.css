@@ -5,6 +5,7 @@
 *::after {
   box-sizing: border-box;
 }
+
 :root {
   --name-arata: rgba(126, 178, 214, 0.98);
   --line-arata: rgba(82, 116, 142, 0.98);
@@ -19,18 +20,15 @@
   --glow-noah-1: rgba(214, 228, 240, 0.14);
   --glow-noah-2: rgba(176, 198, 220, 0.06);
 }
-html {
-  height: 100%;
-  scroll-behavior: auto;
-}
 
-body,
-#root {
+html {
   min-height: 100%;
-  height: 100%;
+  scroll-behavior: auto;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
+  min-height: 100%;
   margin: 0;
   font-family: "Shippori Mincho B1", serif;
   background: #050506;
@@ -43,6 +41,7 @@ body {
 
 #root {
   position: relative;
+  min-height: 100%;
 }
 
 a {
@@ -51,11 +50,14 @@ a {
 }
 
 img,
-canvas,
 video,
 svg {
   display: block;
   max-width: 100%;
+}
+
+canvas {
+  display: block;
 }
 
 button,
@@ -74,12 +76,6 @@ button {
   color: #ffffff;
 }
 
-/* iOS の勝手な文字拡大対策 */
-html {
-  -webkit-text-size-adjust: 100%;
-}
-
-/* reduce motion 環境への最低限対応 */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

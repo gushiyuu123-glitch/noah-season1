@@ -1,9 +1,23 @@
 @import url("https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1&family=Cormorant+Garamond:wght@500&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@400&display=swap");
 
+:root {
+  --line-arata: rgba(78, 108, 132, 0.96);
+  --name-arata: rgba(126, 168, 198, 0.92);
+  --glow-arata: rgba(164, 210, 240, 0.08);
+
+  --line-mina: rgba(124, 92, 110, 0.95);
+  --name-mina: rgba(214, 156, 182, 0.92);
+  --glow-mina: rgba(236, 184, 205, 0.08);
+
+  --line-noah: rgba(102, 114, 126, 0.96);
+  --name-noah: rgba(166, 178, 190, 0.92);
+  --glow-noah-1: rgba(210, 225, 240, 0.06);
+  --glow-noah-2: rgba(170, 198, 224, 0.025);
+}
+
 .scrollLocked {
   overflow: hidden;
-  touch-action: none;
   overscroll-behavior: none;
 }
 
@@ -27,6 +41,7 @@
   background:
     radial-gradient(circle at 50% 36%, #f7f2eb 0%, #ece5dc 46%, #e5ddd4 100%);
   z-index: -5;
+  pointer-events: none;
 }
 
 .bgImage {
@@ -40,6 +55,10 @@
   filter: brightness(0.88) saturate(0.82) contrast(0.9);
   z-index: -4;
   pointer-events: none;
+  will-change: opacity;
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
 .bgVeil {
@@ -80,6 +99,11 @@
   z-index: -1;
   opacity: 0.1;
   pointer-events: none;
+  display: block;
+  will-change: transform;
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
 /* =========================
@@ -273,8 +297,8 @@
 }
 
 .arataLine {
-  color: rgba(78, 108, 132, 0.96);
-  text-shadow: 0 0 6px rgba(164, 210, 240, 0.05);
+  color: var(--line-arata);
+  text-shadow: 0 0 8px var(--glow-arata);
 }
 
 .arataName {
@@ -282,12 +306,12 @@
   margin-right: 0.52em;
   font-size: 0.8rem;
   letter-spacing: 0.16em;
-  color: rgba(126, 168, 198, 0.92);
+  color: var(--name-arata);
 }
 
 .minaLine {
-  color: rgba(124, 92, 110, 0.95);
-  text-shadow: 0 0 6px rgba(236, 184, 205, 0.05);
+  color: var(--line-mina);
+  text-shadow: 0 0 8px var(--glow-mina);
 }
 
 .minaName {
@@ -295,16 +319,16 @@
   margin-right: 0.52em;
   font-size: 0.8rem;
   letter-spacing: 0.16em;
-  color: rgba(214, 156, 182, 0.92);
+  color: var(--name-mina);
 }
 
 .noahLine {
-  color: rgba(102, 114, 126, 0.96);
+  color: var(--line-noah);
   font-family: "Fira Code", monospace;
   letter-spacing: 0.02em;
   text-shadow:
-    0 0 2px rgba(210, 225, 240, 0.06),
-    0 0 8px rgba(170, 198, 224, 0.025);
+    0 0 3px var(--glow-noah-1),
+    0 0 10px var(--glow-noah-2);
 }
 
 .noahName {
@@ -312,7 +336,7 @@
   margin-right: 0.52em;
   font-size: 0.8rem;
   letter-spacing: 0.16em;
-  color: rgba(166, 178, 190, 0.92);
+  color: var(--name-noah);
 }
 
 .noahMonologue {
@@ -323,6 +347,7 @@
     0 0 1px rgba(214, 228, 240, 0.04),
     0 0 6px rgba(176, 198, 220, 0.02);
 }
+
 @keyframes fadeLine {
   0% {
     opacity: 0;
@@ -457,31 +482,7 @@
     letter-spacing: 0.08em;
   }
 }
-.arataLine {
-  color: var(--line-arata);
-  text-shadow: 0 0 8px var(--glow-arata);
-}
-
-.arataName {
-  color: var(--name-arata);
-}
-
-.minaLine {
-  color: var(--line-mina);
-  text-shadow: 0 0 8px var(--glow-mina);
-}
-
-.minaName {
-  color: var(--name-mina);
-}
-
-.noahLine {
-  color: var(--line-noah);
-  text-shadow:
-    0 0 3px var(--glow-noah-1),
-    0 0 10px var(--glow-noah-2);
-}
-
-.noahName {
-  color: var(--name-noah);
+.scrollLocked {
+  overflow: hidden;
+  overscroll-behavior: none;
 }

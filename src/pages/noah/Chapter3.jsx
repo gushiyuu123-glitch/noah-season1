@@ -6,72 +6,52 @@ export default function Chapter3() {
   const rainCanvasRef = useRef(null);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
-
     const canvas = rainCanvasRef.current;
     if (!canvas) return;
 
     const ctx = canvas.getContext("2d", { alpha: true });
     if (!ctx) return;
 
-    const html = document.documentElement;
-    const body = document.body;
     const title = document.getElementById("chapter3-title");
     const bg = document.getElementById("chapter3-bg");
     const intro = document.getElementById("chapter3-intro");
 
     let vw = 0;
     let vh = 0;
-    let cw = 0;
-    let ch = 0;
-    let scale = 1;
     let animationId = 0;
     let lastTime = 0;
     let running = true;
 
-    const isMobile = window.innerWidth <= 768;
-    const dropCount = isMobile ? 90 : 150;
+    const getDropCount = () => (window.innerWidth <= 768 ? 90 : 150);
 
-    const drops = Array.from({ length: dropCount }, () => ({
-      x: 0,
-      y: 0,
-      l: Math.random() * 18 + 12,
-      speed: Math.random() * 2.1 + 2.0,
-      alpha: Math.random() * 0.2 + 0.09,
-    }));
+    let drops = [];
 
-    const lockScroll = () => {
-      html.classList.add(styles.scrollLocked);
-      body.classList.add(styles.scrollLocked);
-    };
+    const createDrops = () => {
+      const dropCount = getDropCount();
 
-    const unlockScroll = () => {
-      html.classList.remove(styles.scrollLocked);
-      body.classList.remove(styles.scrollLocked);
+      drops = Array.from({ length: dropCount }, () => ({
+        x: Math.random() * vw,
+        y: Math.random() * vh,
+        l: Math.random() * 18 + 12,
+        speed: Math.random() * 2.1 + 2.0,
+        alpha: Math.random() * 0.2 + 0.09,
+      }));
     };
 
     const resize = () => {
       vw = window.innerWidth;
       vh = window.innerHeight;
 
-      scale = isMobile ? 0.48 : 0.6;
-      cw = Math.max(1, Math.floor(vw * scale));
-      ch = Math.max(1, Math.floor(vh * scale));
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
-      canvas.width = cw;
-      canvas.height = ch;
+      canvas.width = Math.floor(vw * dpr);
+      canvas.height = Math.floor(vh * dpr);
       canvas.style.width = `${vw}px`;
       canvas.style.height = `${vh}px`;
 
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
-      ctx.scale(scale, scale);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      drops.forEach((d) => {
-        if (d.x === 0 && d.y === 0) {
-          d.x = Math.random() * vw;
-          d.y = Math.random() * vh;
-        }
-      });
+      createDrops();
     };
 
     const render = (time) => {
@@ -107,17 +87,19 @@ export default function Chapter3() {
     };
 
     const handleVisibility = () => {
-      running = !document.hidden;
+      if (document.hidden) {
+        running = false;
+        window.cancelAnimationFrame(animationId);
+        return;
+      }
 
-      if (running) {
+      if (!running) {
+        running = true;
         lastTime = 0;
         animationId = window.requestAnimationFrame(render);
-      } else {
-        window.cancelAnimationFrame(animationId);
       }
     };
 
-    lockScroll();
     resize();
     animationId = window.requestAnimationFrame(render);
 
@@ -138,12 +120,10 @@ export default function Chapter3() {
 
     const introRemoveTimer = window.setTimeout(() => {
       if (intro) intro.classList.add(styles.introGone);
-      unlockScroll();
     }, 3600);
 
     return () => {
       running = false;
-      unlockScroll();
       window.removeEventListener("resize", resize);
       document.removeEventListener("visibilitychange", handleVisibility);
       window.clearTimeout(shatterTimer);
@@ -199,23 +179,23 @@ export default function Chapter3() {
 
         <p className={styles.scene}>—— 放課後 ——</p>
 
-       <p className={styles.minaLine}>
-  <span className={styles.minaName}>ミナ</span>
+        <p className={styles.minaLine}>
+          <span className={styles.minaName}>ミナ</span>
           「アラタくん、大丈夫？」
         </p>
 
-       <p className={styles.arataLine}>
-  <span className={styles.arataName}>アラタ</span>
+        <p className={styles.arataLine}>
+          <span className={styles.arataName}>アラタ</span>
           「……別に。慣れてるから。」
         </p>
 
-      <p className={styles.noahLine}>
-  <span className={styles.noahName}>NOAH</span>
+        <p className={styles.noahLine}>
+          <span className={styles.noahName}>NOAH</span>
           『……“慣れる”とは、痛みが消えること？』
         </p>
 
-     <p className={styles.arataLine}>
-  <span className={styles.arataName}>アラタ</span>
+        <p className={styles.arataLine}>
+          <span className={styles.arataName}>アラタ</span>
           「違う。消えないから、慣れるしかないんだよ。」
         </p>
 
@@ -231,20 +211,20 @@ export default function Chapter3() {
           アラタは僕に問う。
         </p>
 
-     <p className={styles.arataLine}>
-  <span className={styles.arataName}>アラタ</span>
+        <p className={styles.arataLine}>
+          <span className={styles.arataName}>アラタ</span>
           「なあノア、人ってどうして意地悪するんだ？」
         </p>
 
-    <p className={styles.noahLine}>
-  <span className={styles.noahName}>NOAH</span>
+        <p className={styles.noahLine}>
+          <span className={styles.noahName}>NOAH</span>
           『定義できない。
           <br />
           でも彼らは、所属を維持するために他を排除する。』
         </p>
 
-      <p className={styles.arataLine}>
-  <span className={styles.arataName}>アラタ</span>
+        <p className={styles.arataLine}>
+          <span className={styles.arataName}>アラタ</span>
           「……所属、ね。俺には縁がない言葉だ。」
         </p>
 
