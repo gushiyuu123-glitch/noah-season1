@@ -138,7 +138,7 @@ export default function Chapter2() {
             <span className={styles.noahName}>NOAH</span>
             『……笑う。
             <br />
-            それは、人間の側にだけ許された反応？』
+            それは、人間にだけ許された反応？』
           </p>
 
           <p
@@ -147,7 +147,7 @@ export default function Chapter2() {
           >
             —— もし “笑う” が人間の特権なら、
             <br />
-            僕はまだ、
+            僕はまた、
             <br />
             そこへ触れてみたかった。
           </p>
