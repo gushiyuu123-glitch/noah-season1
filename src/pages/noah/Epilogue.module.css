@@ -375,3 +375,14 @@
 .noahName {
   color: var(--name-noah);
 }
+@media (max-width: 768px) {
+  .textCanvas {
+    opacity: 0;
+    transform: scale(1.02);
+  }
+
+  .fullText,
+  .closing {
+    max-width: 92%;
+  }
+}

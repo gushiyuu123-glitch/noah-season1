@@ -51,6 +51,8 @@ export default function Epilogue() {
 
     let particles = [];
 
+    const isMobileView = () => window.innerWidth <= 768;
+
     const setupCanvasSize = () => {
       dpr = Math.min(window.devicePixelRatio || 1, 1.5);
       W = window.innerWidth;
@@ -70,22 +72,58 @@ export default function Epilogue() {
       bctx.scale(dpr, dpr);
     };
 
+    const wrapText = (ctx, text, maxWidth) => {
+      const chars = [...text];
+      const lines = [];
+      let current = "";
+
+      for (const ch of chars) {
+        const test = current + ch;
+        const width = ctx.measureText(test).width;
+
+        if (width > maxWidth && current !== "") {
+          lines.push(current);
+          current = ch;
+        } else {
+          current = test;
+        }
+      }
+
+      if (current) lines.push(current);
+      return lines;
+    };
+
     const buildTextParticles = (text) => {
+      const mobile = isMobileView();
+
       bctx.setTransform(1, 0, 0, 1, 0, 0);
       bctx.clearRect(0, 0, buffer.width, buffer.height);
       bctx.scale(dpr, dpr);
 
-      const fontSize = Math.max(28, Math.min(60, W * 0.042));
+      const fontSize = mobile
+        ? Math.max(24, Math.min(38, W * 0.07))
+        : Math.max(28, Math.min(60, W * 0.042));
+
+      const maxTextWidth = mobile ? W * 0.78 : W * 0.76;
+      const lineHeight = fontSize * (mobile ? 1.5 : 1.34);
+
       bctx.globalCompositeOperation = "source-over";
       bctx.font = `600 ${fontSize}px "Cormorant Garamond", serif`;
       bctx.textAlign = "center";
       bctx.textBaseline = "middle";
       bctx.fillStyle = "#ffffff";
-      bctx.fillText(text, W / 2, H / 2);
+
+      const wrapped = mobile ? wrapText(bctx, text, maxTextWidth) : [text];
+      const totalHeight = (wrapped.length - 1) * lineHeight;
+      const startY = H / 2 - totalHeight / 2;
+
+      wrapped.forEach((line, i) => {
+        bctx.fillText(line, W / 2, startY + i * lineHeight);
+      });
 
       const data = bctx.getImageData(0, 0, buffer.width, buffer.height).data;
       const list = [];
-      const step = W <= 768 ? 4 : 3;
+      const step = mobile ? 3 : 3;
 
       for (let y = 0; y < H; y += step) {
         for (let x = 0; x < W; x += step) {
@@ -185,7 +223,9 @@ export default function Epilogue() {
 
       buildTextParticles(lines[currentIndex]);
       currentIndex += 1;
-      lineTimer = window.setTimeout(playLines, 4000);
+
+      const lineDuration = isMobileView() ? 4800 : 4000;
+      lineTimer = window.setTimeout(playLines, lineDuration);
     };
 
     const safePlayVideo = async () => {
@@ -335,7 +375,7 @@ export default function Epilogue() {
       </video>
 
       <div className={styles.videoOverlay} aria-hidden="true" />
-      <div className={styles.soundMsg}>※クリックで波音、背景映像も安定再生されます</div>
+      <div className={styles.soundMsg}>※クリックで波音が再生されます</div>
 
       <div id="ep-intro" className={styles.intro}>
         <div className={styles.titleContainer}>
