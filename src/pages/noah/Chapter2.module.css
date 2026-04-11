@@ -1,295 +1,290 @@
-@import url("https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1&family=Cormorant+Garamond:wght@500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@400;500&family=Cormorant+Garamond:wght@500;600&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@400&display=swap");
 
-.page {
-  min-height: 100vh;
-  background: #f7f1e8;
-  color: #2b2926;
-  font-family: "Shippori Mincho B1", serif;
-  line-height: 2;
-  overflow-x: hidden;
-  position: relative;
-  isolation: isolate;
+:root {
+  --line-arata: rgba(76, 108, 134, 0.96);
+  --name-arata: rgba(108, 156, 194, 0.96);
+  --glow-arata: rgba(160, 202, 232, 0.05);
+
+  --line-mina: rgba(150, 102, 118, 0.96);
+  --name-mina: rgba(196, 130, 154, 0.96);
+  --glow-mina: rgba(220, 170, 190, 0.05);
+
+  --line-noah: rgba(112, 92, 68, 0.96);
+  --name-noah: rgba(164, 136, 102, 0.96);
+  --glow-noah-1: rgba(222, 192, 146, 0.05);
+  --glow-noah-2: rgba(196, 154, 92, 0.025);
 }
 
-/* =========================
-   BACKGROUND
-========================= */
-.bgBase {
-  position: fixed;
-  inset: 0;
-  background:
-    radial-gradient(circle at 50% 26%, #fbf6ef 0%, #f3ebdf 46%, #ebe0d2 100%);
-  z-index: -5;
+.page {
+  position: relative;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  background: #efe5d8;
+  color: rgba(28, 24, 20, 0.96);
+  font-family: "Shippori Mincho B1", serif;
 }
 
 .bgImage {
-  position: fixed;
+  position: absolute;
   inset: 0;
   background-image: url("/assets/bg_ch2.png");
-  background-position: center;
+  background-position: center top;
   background-size: cover;
   background-repeat: no-repeat;
-  opacity: 0.8;
-  filter: brightness(0.9) saturate(0.82) contrast(0.92);
-  z-index: -4;
-  pointer-events: none;
-}
-
-.bgVeil {
-  position: fixed;
-  inset: 0;
-  background:
-    radial-gradient(circle at 50% 22%, rgba(233, 192, 124, 0.1), transparent 36%),
-    radial-gradient(circle at 54% 68%, rgba(255, 255, 255, 0.06), transparent 54%);
-  opacity: 0.62;
-  z-index: -3;
-  pointer-events: none;
+  opacity: 0.4;
+  z-index: 0;
+  filter: brightness(0.62) saturate(0.78) contrast(1.02);
 }
 
 .bgOverlay {
-  position: fixed;
+  position: absolute;
   inset: 0;
+  z-index: 1;
   background:
     linear-gradient(
       180deg,
-      rgba(255, 250, 242, 0.02) 0%,
-      rgba(255, 246, 234, 0.05) 42%,
-      rgba(243, 234, 222, 0.12) 100%
+      rgba(224, 210, 193, 0.22) 0%,
+      rgba(206, 188, 168, 0.16) 38%,
+      rgba(186, 166, 145, 0.26) 100%
     ),
-    linear-gradient(
-      90deg,
-      rgba(0, 0, 0, 0.04) 0%,
-      transparent 16%,
-      transparent 84%,
-      rgba(0, 0, 0, 0.04) 100%
+    radial-gradient(
+      circle at 50% 18%,
+      rgba(154, 112, 62, 0.06),
+      transparent 34%
     );
-  z-index: -2;
-  pointer-events: none;
 }
-
-.noise {
-  position: fixed;
-  inset: 0;
-  background-image: radial-gradient(rgba(80, 62, 30, 0.04) 0.6px, transparent 0.6px);
-  background-size: 5px 5px;
-  opacity: 0.18;
+.textBox::before {
+  content: "";
+  position: absolute;
+  inset: -16px -14px;
   z-index: -1;
-  pointer-events: none;
+  border-radius: 8px;
+  background: rgba(252, 247, 240, 0.42);
+  box-shadow:
+    0 0 0 1px rgba(190, 158, 120, 0.1),
+    0 10px 24px rgba(90, 70, 42, 0.04);
 }
 
-/* =========================
-   INTRO
-========================= */
+.textBox p {
+  margin: 0;
+  color: rgba(30, 26, 22, 0.96);
+}
+/* intro */
 .chapterIntro {
   position: fixed;
   inset: 0;
+  z-index: 20;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
-  background: rgba(248, 241, 232, 0.96);
-  z-index: 10;
+  justify-content: center;
+  background:
+    radial-gradient(circle at center, rgba(255, 255, 255, 0.16), transparent 58%),
+    rgba(248, 241, 232, 0.96);
+  pointer-events: none;
   opacity: 1;
-  transition: opacity 1s ease, transform 1s ease, filter 1s ease;
+  visibility: visible;
+  transition:
+    opacity 0.9s ease,
+    visibility 0.9s ease,
+    transform 0.9s ease;
 }
 
-.fadeOut {
+.introHidden {
   opacity: 0;
-  transform: translateY(24px);
-  filter: blur(2px);
+  visibility: hidden;
+  transform: scale(1.01);
+}
+
+.introInner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.72rem;
 }
 
 .introTitle {
+  margin: 0;
   display: flex;
-  gap: 0.08em;
-}
-
-.introTitle span {
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.06em;
   font-family: "Cormorant Garamond", serif;
-  font-size: clamp(2.8rem, 6vw, 4rem);
-  color: #bb8450;
-  opacity: 0;
-  filter: blur(3px);
-  animation: fadeUp 1.2s ease forwards;
+  font-size: clamp(2rem, 5vw, 3.3rem);
+  letter-spacing: 0.06em;
+  color: rgba(184, 128, 72, 0.94);
 }
 
-.introTitle span:nth-child(1) { animation-delay: 0.12s; }
-.introTitle span:nth-child(2) { animation-delay: 0.22s; }
-.introTitle span:nth-child(3) { animation-delay: 0.32s; }
-.introTitle span:nth-child(4) { animation-delay: 0.42s; }
-.introTitle span:nth-child(5) { animation-delay: 0.52s; }
-.introTitle span:nth-child(6) { animation-delay: 0.62s; }
-.introTitle span:nth-child(7) { animation-delay: 0.72s; }
+.introChar {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(14px);
+  filter: blur(2px);
+  animation: introCharIn 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
 
-@keyframes fadeUp {
-  0% {
-    opacity: 0;
-    transform: translateY(26px);
-    filter: blur(3px);
-  }
-  100% {
+.introChar:nth-child(1) { animation-delay: 0.08s; }
+.introChar:nth-child(2) { animation-delay: 0.16s; }
+.introChar:nth-child(3) { animation-delay: 0.24s; }
+.introChar:nth-child(4) { animation-delay: 0.32s; }
+.introChar:nth-child(5) { animation-delay: 0.40s; }
+.introChar:nth-child(6) { animation-delay: 0.48s; }
+.introChar:nth-child(7) { animation-delay: 0.56s; }
+
+.introSub {
+  margin: 0;
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  color: rgba(116, 84, 48, 0.68);
+  opacity: 0;
+  transform: translateY(8px);
+  animation: introSubIn 0.9s ease 0.7s forwards;
+}
+
+@keyframes introCharIn {
+  to {
     opacity: 1;
     transform: translateY(0);
     filter: blur(0);
   }
 }
 
-.introSub {
-  font-size: 0.86rem;
-  color: rgba(108, 78, 42, 0.7);
-  margin-top: 1em;
-  letter-spacing: 0.18em;
-  opacity: 0;
-  animation: fadeIn 0.9s ease 0.95s forwards;
-}
-
-@keyframes fadeIn {
+@keyframes introSubIn {
   to {
-    opacity: 1;
-  }
-}
-
-/* =========================
-   TITLE
-========================= */
-.chapterTitleFixed {
-  text-align: center;
-  font-family: "Cormorant Garamond", serif;
-  font-size: 1.28rem;
-  color: rgba(185, 129, 68, 0.9);
-  margin: 7vh 0 -6vh 0;
-  opacity: 0;
-  animation: titleFade 1s ease 2.1s forwards;
-  letter-spacing: 0.12em;
-}
-
-@keyframes titleFade {
-  to {
-    opacity: 1;
-  }
-}
-
-/* =========================
-   BODY
-========================= */
-.chapterText {
-  margin: 5vh auto 12vh;
-  max-width: 760px;
-  font-size: 1.02rem;
-  opacity: 0;
-  transform: translateY(12px);
-  animation: bodyFade 1.1s ease 1.9s forwards;
-}
-
-@keyframes bodyFade {
-  to {
-    opacity: 1;
+    opacity: 0.82;
     transform: translateY(0);
   }
 }
 
-.textBox {
+/* hero */
+.hero {
   position: relative;
-  padding: 7vh 7%;
-  margin: 14vh auto 14vh;
-  max-width: 650px;
-  min-height: 70vh;
+  z-index: 2;
+  width: min(90%, 860px);
+  margin: 0 auto;
+  padding: 11dvh 0 3.5rem;
+  text-align: center;
 }
 
-.textBox::before {
-  content: "";
-  position: absolute;
-  inset: -14px -18px;
-  background:
-    linear-gradient(
-      180deg,
-      rgba(255, 251, 245, 0.28) 0%,
-      rgba(255, 248, 240, 0.22) 100%
-    );
-  border-radius: 6px;
-  box-shadow:
-    0 0 0 1px rgba(215, 186, 146, 0.14),
-    0 10px 28px rgba(125, 98, 62, 0.05);
-  z-index: -1;
+.chapterEyebrow {
+  margin: 0 0 0.7rem;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 0.84rem;
+  letter-spacing: 0.22em;
+  color: rgba(116, 84, 48, 0.48);
 }
+
+.chapterTitle {
+  margin: 0;
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(1.7rem, 4vw, 2.5rem);
+  letter-spacing: 0.08em;
+  color: rgba(176, 122, 70, 0.88);
+}
+
+/* body */
+.chapterText {
+  position: relative;
+  z-index: 2;
+  width: min(90%, 760px);
+  margin: 0 auto;
+  padding: 0 0 14dvh;
+  font-size: 1rem;
+  line-height: 2;
+  letter-spacing: 0.03em;
+}
+
+.textBox {
+  position: relative;
+  width: min(100%, 640px);
+  margin: 0 auto;
+  padding: 0;
+}
+
 
 .textBox p {
   margin: 0;
-  color: rgba(40, 36, 31, 0.9);
+  color: rgba(40, 36, 31, 0.92);
 }
 
 .textBox p + p {
-  margin-top: 1.24em;
+  margin-top: 1.28em;
 }
 
-.name {
+.arataLine {
+  color: var(--line-arata);
+  text-shadow: 0 0 6px var(--glow-arata);
+}
+
+.arataName {
   display: inline-block;
   margin-right: 0.52em;
   font-size: 0.8rem;
   letter-spacing: 0.14em;
-  opacity: 0.6;
+  color: var(--name-arata);
 }
 
-.mina {
-  color: rgba(74, 58, 44, 0.92);
+.minaLine {
+  color: var(--line-mina);
+  text-shadow: 0 0 6px var(--glow-mina);
 }
 
-.arata {
-  color: rgba(42, 38, 34, 0.92);
+.minaName {
+  display: inline-block;
+  margin-right: 0.52em;
+  font-size: 0.8rem;
+  letter-spacing: 0.14em;
+  color: var(--name-mina);
 }
 
-.noah {
-  color: #6b5843;
+.noahLine {
+  color: var(--line-noah);
   font-family: "Fira Code", monospace;
-  font-size: 1rem;
   line-height: 1.9;
-  text-shadow: 0 0 2px rgba(201, 162, 100, 0.08);
+  text-shadow:
+    0 0 2px var(--glow-noah-1),
+    0 0 6px var(--glow-noah-2);
 }
 
-.noah .name {
-  color: rgba(107, 88, 67, 0.82);
+.noahName {
+  display: inline-block;
+  margin-right: 0.52em;
+  font-size: 0.8rem;
+  letter-spacing: 0.14em;
+  color: var(--name-noah);
 }
 
 .storyBreak {
-  margin: 2.2em 0 !important;
-  color: rgba(78, 63, 45, 0.88) !important;
-}
-
-.em {
-  font-weight: 600;
-  color: #7a6144;
+  margin: 2.1em 0 !important;
+  color: rgba(100, 76, 50, 0.9) !important;
 }
 
 .noahMonologue {
-  margin-top: 2.6em !important;
-  margin-bottom: 3.8em !important;
-  color: rgba(96, 75, 50, 0.9) !important;
+  margin-top: 2.4em !important;
+  color: rgba(96, 75, 50, 0.92) !important;
   font-family: "Fira Code", monospace;
-  line-height: 1.95;
+  line-height: 1.94;
 }
 
-/* =========================
-   NEXT
-========================= */
+/* next */
+.chapterNav {
+  text-align: center;
+  margin-top: 4.6rem;
+  padding-bottom: 2rem;
+}
+
 .nextChapter {
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin: 2.8rem auto 0;
-  left: 50%;
-  transform: translateX(-50%);
   padding: 0 0 0.36rem;
   font-family: "Cormorant Garamond", serif;
   text-decoration: none;
-  font-size: 1.04rem;
+  font-size: 1rem;
   color: rgba(43, 41, 38, 0.82);
   letter-spacing: 0.08em;
-  transition:
-    color 0.35s ease,
-    letter-spacing 0.35s ease,
-    transform 0.35s ease;
+  transition: color 0.28s ease, transform 0.28s ease, letter-spacing 0.28s ease;
 }
 
 .nextChapter::before {
@@ -300,123 +295,107 @@
   width: 100%;
   height: 1px;
   background: linear-gradient(90deg, transparent, rgba(196, 144, 80, 0.34), transparent);
-  opacity: 0.18;
+  opacity: 0.2;
 }
 
 .nextChapter:hover {
-  color: #c08d55;
+  color: rgba(192, 141, 85, 0.98);
+  transform: translateY(-1px);
   letter-spacing: 0.12em;
-  transform: translateX(-50%) translateY(-1px);
 }
 
-/* =========================
-   MOBILE
-========================= */
+/* mobile */
 @media (max-width: 768px) {
-  .page {
-    font-size: 15px;
-    line-height: 1.9;
-  }
-
   .bgImage {
     background-position: center top;
-    opacity: 0.78;
-    filter: brightness(0.92) saturate(0.82) contrast(0.92);
+    opacity: 0.48;
   }
 
-  .noise {
-    opacity: 0.12;
+  .hero {
+    width: 90%;
+    padding: 10dvh 0 3rem;
   }
 
-  .introTitle {
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.06em;
-  }
-
-  .introTitle span {
-    font-size: 2.2rem;
-    line-height: 1.18;
-  }
-
-  .introSub {
+  .chapterEyebrow {
     font-size: 0.76rem;
-    margin-top: 0.75em;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.16em;
   }
 
-  .chapterTitleFixed {
-    margin: 7vh auto 3vh;
-    font-size: 1.02rem;
-    line-height: 1.5;
-    letter-spacing: 0.06em;
+  .chapterTitle {
+    font-size: 1.4rem;
+    letter-spacing: 0.05em;
   }
 
   .chapterText {
-    max-width: 90%;
-    margin: 4vh auto 9vh;
-    font-size: 0.95rem;
-  }
-
-  .textBox {
-    padding: 5.5vh 6%;
-    margin: 8vh auto 10vh;
-    min-height: auto;
-    max-width: 92%;
+    width: 88%;
+    padding-bottom: 16dvh;
+    font-size: 0.96rem;
+    line-height: 1.9;
   }
 
   .textBox::before {
-    inset: -10px -10px;
-    border-radius: 5px;
+    inset: -10px -8px;
+    border-radius: 6px;
+    background: rgba(255, 250, 244, 0.22);
+    box-shadow: 0 6px 18px rgba(125, 98, 62, 0.025);
   }
 
-  .noah {
-    font-size: 0.91rem;
-    line-height: 1.82;
-    word-break: break-word;
+  .introTitle {
+    font-size: 1.95rem;
+    letter-spacing: 0.04em;
+  }
+
+  .introSub {
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+  }
+
+  .arataLine,
+  .minaLine,
+  .noahLine {
+    font-size: 0.94rem;
   }
 
   .storyBreak {
     margin: 1.8em 0 !important;
-    font-size: 0.9rem;
   }
 
-  .noahMonologue {
-    margin-top: 2em !important;
-    margin-bottom: 3em !important;
+  .chapterNav {
+    margin-top: 4rem;
   }
 
   .nextChapter {
-    font-size: 0.98rem;
-    margin-top: 2.3rem;
-    letter-spacing: 0.05em;
+    font-size: 0.96rem;
+    letter-spacing: 0.06em;
   }
 }
-.arataLine {
-  color: var(--line-arata);
-  text-shadow: 0 0 8px var(--glow-arata);
+
+@media (prefers-reduced-motion: reduce) {
+  .chapterIntro,
+  .introChar,
+  .introSub,
+  .nextChapter {
+    transition: none !important;
+    animation: none !important;
+  }
+
+  .introChar,
+  .introSub {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+}
+.fadeLine {
+  opacity: 0;
+  transform: translateY(10px);
+  will-change: opacity, transform;
+  transition:
+    opacity 0.66s ease,
+    transform 0.66s ease;
 }
 
-.arataName {
-  color: var(--name-arata);
-}
-
-.minaLine {
-  color: var(--line-mina);
-  text-shadow: 0 0 8px var(--glow-mina);
-}
-
-.minaName {
-  color: var(--name-mina);
-}
-
-.noahLine {
-  color: var(--line-noah);
-  text-shadow:
-    0 0 3px var(--glow-noah-1),
-    0 0 10px var(--glow-noah-2);
-}
-
-.noahName {
-  color: var(--name-noah);
+.textReady .fadeLine {
+  opacity: 1;
+  transform: translateY(0);
 }

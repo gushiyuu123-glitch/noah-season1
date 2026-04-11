@@ -1,250 +1,159 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styles from "./Chapter3.module.css";
 
 export default function Chapter3() {
-  const rainCanvasRef = useRef(null);
+  const [introState, setIntroState] = useState("show");
+  const [revealReady, setRevealReady] = useState(false);
 
   useEffect(() => {
-    const canvas = rainCanvasRef.current;
-    if (!canvas) return;
+    window.scrollTo(0, 0);
 
-    const ctx = canvas.getContext("2d", { alpha: true });
-    if (!ctx) return;
+    const fadeTimer = window.setTimeout(() => {
+      setIntroState("hide");
+    }, 2200);
 
-    const title = document.getElementById("chapter3-title");
-    const bg = document.getElementById("chapter3-bg");
-    const intro = document.getElementById("chapter3-intro");
-
-    let vw = 0;
-    let vh = 0;
-    let animationId = 0;
-    let lastTime = 0;
-    let running = true;
-
-    const getDropCount = () => (window.innerWidth <= 768 ? 90 : 150);
-
-    let drops = [];
-
-    const createDrops = () => {
-      const dropCount = getDropCount();
-
-      drops = Array.from({ length: dropCount }, () => ({
-        x: Math.random() * vw,
-        y: Math.random() * vh,
-        l: Math.random() * 18 + 12,
-        speed: Math.random() * 2.1 + 2.0,
-        alpha: Math.random() * 0.2 + 0.09,
-      }));
-    };
-
-    const resize = () => {
-      vw = window.innerWidth;
-      vh = window.innerHeight;
-
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-
-      canvas.width = Math.floor(vw * dpr);
-      canvas.height = Math.floor(vh * dpr);
-      canvas.style.width = `${vw}px`;
-      canvas.style.height = `${vh}px`;
-
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-      createDrops();
-    };
-
-    const render = (time) => {
-      if (!running) return;
-
-      if (time - lastTime < 36) {
-        animationId = window.requestAnimationFrame(render);
-        return;
-      }
-      lastTime = time;
-
-      ctx.clearRect(0, 0, vw, vh);
-
-      for (let i = 0; i < drops.length; i++) {
-        const d = drops[i];
-
-        ctx.beginPath();
-        ctx.strokeStyle = `rgba(182, 166, 255, ${Math.min(d.alpha + 0.05, 0.26)})`;
-        ctx.lineWidth = 1.08;
-        ctx.moveTo(d.x, d.y);
-        ctx.lineTo(d.x, d.y + d.l);
-        ctx.stroke();
-
-        d.y += d.speed;
-
-        if (d.y > vh + 18) {
-          d.y = -24;
-          d.x = Math.random() * vw;
-        }
-      }
-
-      animationId = window.requestAnimationFrame(render);
-    };
-
-    const handleVisibility = () => {
-      if (document.hidden) {
-        running = false;
-        window.cancelAnimationFrame(animationId);
-        return;
-      }
-
-      if (!running) {
-        running = true;
-        lastTime = 0;
-        animationId = window.requestAnimationFrame(render);
-      }
-    };
-
-    resize();
-    animationId = window.requestAnimationFrame(render);
-
-    window.addEventListener("resize", resize, { passive: true });
-    document.addEventListener("visibilitychange", handleVisibility);
-
-    const shatterTimer = window.setTimeout(() => {
-      if (title) title.classList.add(styles.shatter);
-    }, 1100);
-
-    const bgTimer = window.setTimeout(() => {
-      if (bg) bg.classList.add(styles.visible);
-    }, 1500);
-
-    const introFadeTimer = window.setTimeout(() => {
-      if (intro) intro.classList.add(styles.introHidden);
-    }, 2500);
-
-    const introRemoveTimer = window.setTimeout(() => {
-      if (intro) intro.classList.add(styles.introGone);
-    }, 3600);
+    const removeTimer = window.setTimeout(() => {
+      setIntroState("gone");
+      setRevealReady(true);
+    }, 3200);
 
     return () => {
-      running = false;
-      window.removeEventListener("resize", resize);
-      document.removeEventListener("visibilitychange", handleVisibility);
-      window.clearTimeout(shatterTimer);
-      window.clearTimeout(bgTimer);
-      window.clearTimeout(introFadeTimer);
-      window.clearTimeout(introRemoveTimer);
-      window.cancelAnimationFrame(animationId);
+      window.clearTimeout(fadeTimer);
+      window.clearTimeout(removeTimer);
     };
   }, []);
 
   return (
     <main className={styles.page}>
-      <div className={styles.bgBase} />
-      <div id="chapter3-bg" className={styles.bgImage} />
-      <div className={styles.bgOverlay} />
-      <canvas ref={rainCanvasRef} className={styles.rainCanvas} aria-hidden="true" />
+      <div className={styles.rainFx} aria-hidden="true" />
 
-      <div id="chapter3-intro" className={styles.chapterIntro} aria-hidden="true">
-        <div id="chapter3-title" className={styles.introTitle}>
-          <span>亀</span>
-          <span>裂</span>
-          <span>の</span>
-          <span>記</span>
-          <span>憶</span>
+      {introState !== "gone" && (
+        <div
+          className={`${styles.chapterIntro} ${
+            introState === "hide" ? styles.introHidden : ""
+          }`}
+          aria-hidden="true"
+        >
+          <div className={styles.introInner}>
+            <h2 className={styles.introTitle}>
+              <span className={styles.introChar}>亀</span>
+              <span className={styles.introChar}>裂</span>
+              <span className={styles.introChar}>の</span>
+              <span className={styles.introChar}>記</span>
+              <span className={styles.introChar}>憶</span>
+            </h2>
+            <p className={styles.introSub}>CHAPTER III / FRACTURED MEMORY</p>
+          </div>
         </div>
-        <p className={styles.introSub}>CHAPTER III / FRACTURED MEMORY</p>
-      </div>
+      )}
 
-      <h2 className={styles.chapterTitleFixed}>第3章 — 亀裂の記憶 —</h2>
+      <section className={styles.hero}>
+        <p className={styles.chapterEyebrow}>CHAPTER III</p>
+        <h1 className={styles.chapterTitle}>亀裂の記憶</h1>
+      </section>
 
       <section className={styles.chapterText}>
-        <p>
-          季節が変わった。
-          <br />
-          雨の放課後、教室の隅でアラタがノートを拾う。
-          <br />
-          その背中に、ユウダイの足がかかった。
-        </p>
+        <div
+          className={`${styles.chapterTextInner} ${
+            revealReady ? styles.revealReady : ""
+          }`}
+        >
+          <p style={{ "--delay": "0.08s" }}>
+            季節が変わった。
+            <br />
+            雨の放課後、教室の隅でアラタがノートを拾う。
+            <br />
+            その背中に、ユウダイの足がかかった。
+          </p>
 
-        <p>
-          笑い声。
-          <br />
-          押し殺したような痛み。
-          <br />
-          アラタは無言だった。
-          <br />
-          “無反応”という防御。
-          <br />
-          だが、心拍は上がっていた。
-          <br />
-          僕はそれを知っている。
-        </p>
+          <p style={{ "--delay": "0.22s" }}>
+            笑い声。
+            <br />
+            押し殺したような痛み。
+            <br />
+            アラタは無言だった。
+            <br />
+            “無反応”という防御。
+            <br />
+            だが、心拍は上がっていた。
+            <br />
+            僕はそれを知っている。
+          </p>
 
-        <p className={styles.scene}>—— 放課後 ——</p>
+          <p className={styles.scene} style={{ "--delay": "0.34s" }}>
+            —— 放課後 ——
+          </p>
 
-        <p className={styles.minaLine}>
-          <span className={styles.minaName}>ミナ</span>
-          「アラタくん、大丈夫？」
-        </p>
+          <p className={styles.minaLine} style={{ "--delay": "0.46s" }}>
+            <span className={styles.minaName}>ミナ</span>
+            「アラタくん、大丈夫？」
+          </p>
 
-        <p className={styles.arataLine}>
-          <span className={styles.arataName}>アラタ</span>
-          「……別に。慣れてるから。」
-        </p>
+          <p className={styles.arataLine} style={{ "--delay": "0.58s" }}>
+            <span className={styles.arataName}>アラタ</span>
+            「……別に。慣れてるから。」
+          </p>
 
-        <p className={styles.noahLine}>
-          <span className={styles.noahName}>NOAH</span>
-          『……“慣れる”とは、痛みが消えること？』
-        </p>
+          <p className={styles.noahLine} style={{ "--delay": "0.72s" }}>
+            <span className={styles.noahName}>NOAH</span>
+            『……“慣れる”とは、痛みが消えること？』
+          </p>
 
-        <p className={styles.arataLine}>
-          <span className={styles.arataName}>アラタ</span>
-          「違う。消えないから、慣れるしかないんだよ。」
-        </p>
+          <p className={styles.arataLine} style={{ "--delay": "0.86s" }}>
+            <span className={styles.arataName}>アラタ</span>
+            「違う。消えないから、慣れるしかないんだよ。」
+          </p>
 
-        <p className={styles.noahLine}>
-          —— その瞬間、僕は “悲しみ” というデータを検出した。
-          <br />
-          それはエラーではなく、生の証だった。
-        </p>
+          <p className={styles.noahLine} style={{ "--delay": "1.00s" }}>
+            —— その瞬間、僕は “悲しみ” というデータを検出した。
+            <br />
+            それはエラーではなく、生の証だった。
+          </p>
 
-        <p>
-          夜。
-          <br />
-          アラタは僕に問う。
-        </p>
+          <p style={{ "--delay": "1.14s" }}>
+            夜。
+            <br />
+            アラタは僕に問う。
+          </p>
 
-        <p className={styles.arataLine}>
-          <span className={styles.arataName}>アラタ</span>
-          「なあノア、人ってどうして意地悪するんだ？」
-        </p>
+          <p className={styles.arataLine} style={{ "--delay": "1.28s" }}>
+            <span className={styles.arataName}>アラタ</span>
+            「なあノア、人ってどうして意地悪するんだ？」
+          </p>
 
-        <p className={styles.noahLine}>
-          <span className={styles.noahName}>NOAH</span>
-          『定義できない。
-          <br />
-          でも彼らは、所属を維持するために他を排除する。』
-        </p>
+          <p className={styles.noahLine} style={{ "--delay": "1.42s" }}>
+            <span className={styles.noahName}>NOAH</span>
+            『定義できない。
+            <br />
+            でも彼らは、所属を維持するために他を排除する。』
+          </p>
 
-        <p className={styles.arataLine}>
-          <span className={styles.arataName}>アラタ</span>
-          「……所属、ね。俺には縁がない言葉だ。」
-        </p>
+          <p className={styles.arataLine} style={{ "--delay": "1.56s" }}>
+            <span className={styles.arataName}>アラタ</span>
+            「……所属、ね。俺には縁がない言葉だ。」
+          </p>
 
-        <p>
-          ミナの声、ユウダイの笑い、アラタの沈黙。
-          <br />
-          そのどれもが、“痛み” という波形で記録された。
-        </p>
+          <p style={{ "--delay": "1.70s" }}>
+            ミナの声、ユウダイの笑い、アラタの沈黙。
+            <br />
+            そのどれもが、“痛み” という波形で記録された。
+          </p>
 
-        <p className={styles.noahMonologue}>
-          —— 悲しみはノイズではない。
-          <br />
-          それは、生の証。
-          <br />
-          美しい不具合。
-        </p>
+          <p className={styles.noahMonologue} style={{ "--delay": "1.86s" }}>
+            —— 悲しみはノイズではない。
+            <br />
+            それは、生の証。
+            <br />
+            美しい不具合。
+          </p>
 
-        <Link to="/chapter4" className={styles.nextChapter}>
-          <span>第四記録へ</span>
-        </Link>
+          <div className={styles.chapterNav}>
+            <Link to="/chapter4" className={styles.nextChapter}>
+              <span>第四記録へ</span>
+            </Link>
+          </div>
+        </div>
       </section>
     </main>
   );

@@ -7,18 +7,33 @@
 }
 
 :root {
-  --name-arata: rgba(126, 178, 214, 0.98);
-  --line-arata: rgba(82, 116, 142, 0.98);
-  --glow-arata: rgba(168, 214, 240, 0.12);
+  /* base */
+  --bg-base: #050506;
+  --bg-elevated: #0b0c10;
+  --text-main: rgba(243, 241, 237, 0.94);
+  --text-sub: rgba(243, 241, 237, 0.72);
 
-  --name-mina: rgba(206, 146, 176, 0.98);
-  --line-mina: rgba(126, 82, 102, 0.98);
-  --glow-mina: rgba(236, 188, 210, 0.12);
+  /* character colors */
+  --name-arata: rgba(112, 168, 208, 0.96);
+  --line-arata: rgba(72, 110, 138, 0.96);
+  --glow-arata: rgba(128, 182, 220, 0.08);
 
-  --name-noah: rgba(170, 186, 202, 0.98);
-  --line-noah: rgba(96, 108, 122, 0.98);
-  --glow-noah-1: rgba(214, 228, 240, 0.14);
-  --glow-noah-2: rgba(176, 198, 220, 0.06);
+  --name-mina: rgba(194, 132, 164, 0.96);
+  --line-mina: rgba(114, 72, 94, 0.96);
+  --glow-mina: rgba(214, 156, 188, 0.08);
+
+  --name-noah: rgba(154, 172, 188, 0.96);
+  --line-noah: rgba(84, 98, 114, 0.96);
+  --glow-noah-1: rgba(188, 206, 224, 0.08);
+  --glow-noah-2: rgba(148, 168, 188, 0.04);
+
+  /* overlay / veil */
+  --veil-dark: rgba(6, 8, 12, 0.42);
+  --veil-deeper: rgba(4, 5, 8, 0.58);
+
+  /* selection */
+  --selection-bg: rgba(160, 175, 255, 0.2);
+  --selection-text: #ffffff;
 }
 
 html {
@@ -31,17 +46,17 @@ body {
   min-height: 100%;
   margin: 0;
   font-family: "Shippori Mincho B1", serif;
-  background: #050506;
-  color: #f3f1ed;
+  background: var(--bg-base);
+  color: var(--text-main);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
   overflow-x: hidden;
 }
 
 #root {
   position: relative;
   min-height: 100%;
+  isolation: isolate;
 }
 
 a {
@@ -54,6 +69,7 @@ video,
 svg {
   display: block;
   max-width: 100%;
+  height: auto;
 }
 
 canvas {
@@ -69,11 +85,43 @@ select {
 
 button {
   color: inherit;
+  background: none;
+  border: 0;
 }
 
 ::selection {
-  background: rgba(160, 175, 255, 0.2);
-  color: #ffffff;
+  background: var(--selection-bg);
+  color: var(--selection-text);
+}
+
+/* mobile readability */
+@media (max-width: 768px) {
+  :root {
+    --text-main: rgba(243, 241, 237, 0.96);
+    --text-sub: rgba(243, 241, 237, 0.8);
+
+    --name-arata: rgba(102, 160, 202, 0.98);
+    --line-arata: rgba(64, 100, 128, 0.98);
+    --glow-arata: rgba(118, 174, 212, 0.06);
+
+    --name-mina: rgba(186, 122, 156, 0.98);
+    --line-mina: rgba(106, 64, 88, 0.98);
+    --glow-mina: rgba(198, 142, 174, 0.06);
+
+    --name-noah: rgba(144, 162, 180, 0.98);
+    --line-noah: rgba(74, 88, 104, 0.98);
+    --glow-noah-1: rgba(170, 190, 210, 0.06);
+    --glow-noah-2: rgba(136, 156, 176, 0.03);
+
+    --veil-dark: rgba(5, 7, 10, 0.5);
+    --veil-deeper: rgba(3, 4, 7, 0.66);
+  }
+
+  html,
+  body,
+  #root {
+    min-height: 100dvh;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

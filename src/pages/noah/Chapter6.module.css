@@ -35,7 +35,7 @@
       rgba(248, 248, 250, 0.04) 44%,
       rgba(236, 238, 242, 0.08) 100%
     ),
-    url("/assets/noah_reconstruction4.png") center / cover no-repeat;
+    url("/assets/noah_reconstruction4.jpg") center / cover no-repeat;
   z-index: -3;
   filter: brightness(0.95) contrast(1.12) saturate(0.96) blur(1.4px);
   transform: scale(1.01);
@@ -164,8 +164,8 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.24);
   line-height: 2.16;
   opacity: 0;
-  transform: translateY(36px);
-  animation: fadeInText 1.45s ease 4.8s forwards;
+  transform: none;
+  animation: fadeInText 1.1s ease 4.8s forwards;
 }
 
 .chapterText::before {
@@ -183,10 +183,10 @@
     );
 }
 
+
 @keyframes fadeInText {
   to {
     opacity: 1;
-    transform: translateY(0);
   }
 }
 

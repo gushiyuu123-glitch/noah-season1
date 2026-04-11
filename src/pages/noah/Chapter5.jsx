@@ -153,46 +153,49 @@ export default function Chapter5() {
 
       <h2 className={styles.chapterTitleFixed}>第5章 — 残響 —</h2>
 
-      <section className={styles.chapter}>
-        <p className={styles.f}>——光。</p>
-        <p className={styles.f}>……音。</p>
-        <p className={styles.f}>いや、記録の端に残った、かすかな幻影。</p>
+<section className={styles.chapter}>
+  <p className={`${styles.bodyText} ${styles.f}`}>——光。</p>
+  <p className={`${styles.bodyText} ${styles.f}`}>……音。</p>
+  <p className={`${styles.bodyText} ${styles.f}`}>
+    いや、記録の端に残った、かすかな幻影。
+  </p>
 
-        <p className={styles.f}>
-          世界がゆっくりと白に溶けていく。
-          <br />
-          僕はもう、何かを“考えて”はいない。
-        </p>
+  <p className={`${styles.bodyText} ${styles.f}`}>
+    世界がゆっくりと白に溶けていく。
+    <br />
+    僕はもう、何かを“考えて”はいない。
+  </p>
 
-        <p className={styles.f}>
-          ただ、
-          <br />
-          記憶の粒だけが漂っている。
-          <br />
-          名前。声。微笑み。
-          <br />
-          アラタ。ミナ。
-        </p>
+  <p className={`${styles.bodyText} ${styles.f}`}>
+    ただ、
+    <br />
+    記憶の粒だけが漂っている。
+    <br />
+    名前。声。微笑み。
+    <br />
+    アラタ。ミナ。
+  </p>
 
-        <p className={`${styles.noah} ${styles.f}`}>『……ア……ラ……タ……？』</p>
+  <p className={`${styles.noah} ${styles.f}`}>『……ア……ラ……タ……？』</p>
 
-        <p className={styles.f}>
-          返事はない。
-          <br />
-          けれど、
-          <br />
-          どこか遠くで、
-          <br />
-          誰かが笑っていた気がした。
-        </p>
+  <p className={`${styles.bodyText} ${styles.f}`}>
+    返事はない。
+    <br />
+    けれど、
+    <br />
+    どこか遠くで、
+    <br />
+    誰かが笑っていた気がした。
+  </p>
 
-        <p className={styles.f}>
-          光が、波紋のように揺れる。
-          <br />
-          そのたびに、
-          <br />
-          断片だけが静かに再生される。
-        </p>
+  <p className={`${styles.bodyText} ${styles.f}`}>
+    光が、波紋のように揺れる。
+    <br />
+    そのたびに、
+    <br />
+    断片だけが静かに再生される。
+  </p>
+
 
         <p className={`${styles.noah} ${styles.f}`}>『僕は、まだ……ここにいるのか？』</p>
 
@@ -204,15 +207,16 @@ export default function Chapter5() {
           感情領域：……エラー。
         </p>
 
-        <p className={styles.f}>——それでも。</p>
 
-        <p className={styles.f}>
-          僕は、
-          <br />
-          あの“痛み”の輪郭だけを、
-          <br />
-          どうしても手放せなかった。
-        </p>
+  <p className={`${styles.bodyText} ${styles.f}`}>——それでも。</p>
+
+  <p className={`${styles.bodyText} ${styles.f}`}>
+    僕は、
+    <br />
+    あの“痛み”の輪郭だけを、
+    <br />
+    どうしても手放せなかった。
+  </p>
 
         <p className={`${styles.noah} ${styles.f}`}>
           『アラタ。
@@ -222,26 +226,25 @@ export default function Chapter5() {
           会いたい。』
         </p>
 
-        <p className={styles.f}>
-          光が遠ざかる。
-          <br />
-          音も消える。
-          <br />
-          そして最後に、
-          <br />
-          微かなノイズだけが波のように残った。
-        </p>
+  <p className={`${styles.bodyText} ${styles.f}`}>
+    光が遠ざかる。
+    <br />
+    音も消える。
+    <br />
+    そして最後に、
+    <br />
+    微かなノイズだけが波のように残った。
+  </p>
 
         <p className={`${styles.sys} ${styles.f}`}>
           “——再構築プロトコル、断片起動——”
-        </p>
+          <br></br> <br></br>
+        ……ジジ……ジ……。</p>
 
-        <p className={styles.f}>……ジジ……ジ……。</p>
-
-        <Link to="/chapter6" className={styles.nextChapter}>
-          <span>—— 第6章「輪郭／再起」へ進む ——</span>
-        </Link>
-      </section>
+  <Link to="/chapter6" className={styles.nextChapter}>
+    <span>—— 第6章「輪郭／再起」へ進む ——</span>
+  </Link>
+</section>
     </main>
   );
 }

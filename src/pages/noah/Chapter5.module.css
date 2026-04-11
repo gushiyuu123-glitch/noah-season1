@@ -4,42 +4,59 @@
 :root {
   --bg-base: #f6f8fc;
   --bg-soft: #eef3fb;
+
   --text-main: #2f3442;
-  --text-soft: rgba(47, 52, 66, 0.72);
-  --blue-main: #7087ff;
-  --blue-soft: #94a7ff;
-  --log: #66748f;
+  --text-soft: rgba(47, 52, 66, 0.76);
+
+  --blue-main: #5e76ea;
+  --blue-soft: #8ea2ff;
+
+  --log: #5f6d86;
   --line: rgba(110, 132, 190, 0.12);
+
+  --name-arata: #7ba8ff;
+  --line-arata: #5f80bf;
+  --glow-arata: rgba(123, 168, 255, 0.18);
+
+  --name-mina: #cf8cae;
+  --line-mina: #a36a89;
+  --glow-mina: rgba(207, 140, 174, 0.16);
+
+  --name-noah: #93a0bc;
+  --line-noah: #6b7caa;
+  --glow-noah-1: rgba(210, 218, 238, 0.18);
+  --glow-noah-2: rgba(172, 186, 224, 0.12);
 }
 
 .page {
   min-height: 100vh;
-  font-family: "Shippori Mincho B1", serif;
-  background:
-    linear-gradient(180deg, #f8fbff 0%, #f3f6fb 48%, #edf2fa 100%);
-  color: var(--text-main);
-  overflow-x: hidden;
-  line-height: 2.02;
   position: relative;
   isolation: isolate;
+  overflow-x: hidden;
+
+  font-family: "Shippori Mincho B1", serif;
+  color: var(--text-main);
+  line-height: 2.02;
+  background:
+    linear-gradient(180deg, #f8fbff 0%, #f3f6fb 48%, #edf2fa 100%);
 }
 
 /* 背景 */
 .memoryBg {
   position: fixed;
   inset: 0;
+  z-index: -4;
+  opacity: 1;
+  transform: scale(1.015);
+  filter: brightness(0.97) contrast(1.04) saturate(1.01);
   background:
     linear-gradient(
       180deg,
-      rgba(255, 255, 255, 0.2) 0%,
-      rgba(245, 248, 255, 0.08) 36%,
-      rgba(232, 238, 250, 0.22) 100%
+      rgba(255, 255, 255, 0.08) 0%,
+      rgba(245, 248, 255, 0.03) 36%,
+      rgba(232, 238, 250, 0.08) 100%
     ),
     url("/assets/noah_memory_sea.png") center / cover no-repeat;
-  z-index: -4;
-  opacity: 1;
-  filter: brightness(1.03) contrast(1.04) saturate(1.02);
-  transform: scale(1.015);
 }
 
 .memoryGlow {
@@ -48,8 +65,8 @@
   z-index: -3;
   pointer-events: none;
   background:
-    radial-gradient(circle at 50% 32%, rgba(255, 255, 255, 0.42), transparent 34%),
-    radial-gradient(circle at 50% 68%, rgba(210, 224, 255, 0.18), transparent 42%);
+    radial-gradient(circle at 50% 32%, rgba(255, 255, 255, 0.18), transparent 34%),
+    radial-gradient(circle at 50% 68%, rgba(210, 224, 255, 0.08), transparent 42%);
   mix-blend-mode: screen;
 }
 
@@ -61,9 +78,9 @@
   background:
     linear-gradient(
       180deg,
-      rgba(255, 255, 255, 0.22) 0%,
-      rgba(255, 255, 255, 0.08) 36%,
-      rgba(244, 247, 252, 0.18) 100%
+      rgba(255, 255, 255, 0.06) 0%,
+      rgba(255, 255, 255, 0.02) 36%,
+      rgba(244, 247, 252, 0.05) 100%
     );
 }
 
@@ -74,7 +91,7 @@
   z-index: -1;
   mix-blend-mode: screen;
   pointer-events: none;
-  opacity: 0.8;
+  opacity: 0.7;
 }
 
 /* イントロ */
@@ -116,8 +133,8 @@
   opacity: 0;
   transform: translateY(18px);
   text-shadow:
-    0 0 10px rgba(170, 190, 255, 0.16),
-    0 0 26px rgba(200, 215, 255, 0.12);
+    0 0 10px rgba(170, 190, 255, 0.12),
+    0 0 26px rgba(200, 215, 255, 0.08);
   animation: floatChar 1.3s ease forwards;
 }
 
@@ -139,7 +156,7 @@
 .introSub {
   font-family: "Cormorant Garamond", serif;
   margin-top: 1rem;
-  color: rgba(74, 90, 148, 0.56);
+  color: rgba(74, 90, 148, 0.62);
   letter-spacing: 0.18em;
   opacity: 0;
   animation: fadeSub 1.2s ease 0.9s forwards;
@@ -159,7 +176,7 @@
   transform: translateX(-50%);
   font-family: "Cormorant Garamond", serif;
   font-size: 1rem;
-  color: rgba(84, 102, 160, 0.42);
+  color: rgba(84, 102, 160, 0.56);
   letter-spacing: 0.14em;
   z-index: 2;
 }
@@ -171,20 +188,25 @@
   max-width: 740px;
   margin: 15vh auto 14vh;
   padding: 3.3rem 6%;
+  color: var(--text-main);
+
   background:
     linear-gradient(
       180deg,
-      rgba(255, 255, 255, 0.58) 0%,
-      rgba(255, 255, 255, 0.42) 34%,
-      rgba(244, 247, 252, 0.52) 100%
+      rgba(255, 255, 255, 0.82) 0%,
+      rgba(255, 255, 255, 0.74) 34%,
+      rgba(244, 247, 252, 0.78) 100%
     );
-  backdrop-filter: blur(7px);
-  -webkit-backdrop-filter: blur(7px);
-  border: 1px solid rgba(134, 154, 210, 0.12);
+
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+
+  border: 1px solid rgba(134, 154, 210, 0.14);
   border-radius: 24px;
   box-shadow:
-    0 24px 70px rgba(118, 142, 190, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.42);
+    0 24px 70px rgba(118, 142, 190, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.56);
+
   opacity: 0;
   transform: translateY(36px);
   animation: fadeInText 1.7s ease 4.9s forwards;
@@ -199,9 +221,9 @@
   background:
     linear-gradient(
       180deg,
-      rgba(255, 255, 255, 0.18),
+      rgba(255, 255, 255, 0.12),
       rgba(255, 255, 255, 0.02) 22%,
-      rgba(230, 236, 248, 0.08) 100%
+      rgba(230, 236, 248, 0.05) 100%
     );
 }
 
@@ -210,6 +232,12 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+.chapter p,
+.chapter br,
+.f {
+  color: var(--text-main);
 }
 
 .chapter p + p {
@@ -230,21 +258,52 @@
 
 /* ノア */
 .noah {
-  color: var(--blue-main);
+  color: var(--blue-main) !important;
   font-family: "Fira Code", monospace;
   font-size: 0.96rem;
   line-height: 1.92;
   text-shadow:
-    0 0 8px rgba(170, 188, 255, 0.2),
-    0 0 20px rgba(190, 208, 255, 0.08);
+    0 0 8px rgba(170, 188, 255, 0.14),
+    0 0 20px rgba(190, 208, 255, 0.06);
 }
 
 /* システムログ */
 .sys {
-  color: var(--log);
+  color: var(--log) !important;
   font-family: "Fira Code", monospace;
   font-size: 0.93rem;
   letter-spacing: 0.02em;
+  text-shadow: 0 0 10px rgba(140, 154, 182, 0.05);
+}
+
+/* キャラ別 */
+.arataLine {
+  color: var(--line-arata) !important;
+  text-shadow: 0 0 8px var(--glow-arata);
+}
+
+.arataName {
+  color: var(--name-arata) !important;
+}
+
+.minaLine {
+  color: var(--line-mina) !important;
+  text-shadow: 0 0 8px var(--glow-mina);
+}
+
+.minaName {
+  color: var(--name-mina) !important;
+}
+
+.noahLine {
+  color: var(--line-noah) !important;
+  text-shadow:
+    0 0 3px var(--glow-noah-1),
+    0 0 10px var(--glow-noah-2);
+}
+
+.noahName {
+  color: var(--name-noah) !important;
 }
 
 /* 次章リンク */
@@ -263,13 +322,13 @@
   min-width: 290px;
   padding: 0.92rem 1.5rem;
   border-radius: 999px;
-  border: 1px solid rgba(100, 120, 180, 0.14);
-  background: rgba(255, 255, 255, 0.36);
+  border: 1px solid rgba(100, 120, 180, 0.16);
+  background: rgba(255, 255, 255, 0.56);
   box-shadow:
-    0 10px 30px rgba(120, 140, 190, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.34);
+    0 10px 30px rgba(120, 140, 190, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.42);
   font-family: "Cormorant Garamond", serif;
-  color: rgba(52, 66, 112, 0.68);
+  color: rgba(52, 66, 112, 0.82);
   letter-spacing: 0.08em;
   transition:
     transform 0.35s ease,
@@ -282,11 +341,11 @@
 .nextChapter:hover span {
   transform: translateY(-1px);
   color: #31406d;
-  border-color: rgba(90, 112, 170, 0.22);
-  background: rgba(255, 255, 255, 0.52);
+  border-color: rgba(90, 112, 170, 0.24);
+  background: rgba(255, 255, 255, 0.68);
   box-shadow:
-    0 14px 38px rgba(120, 140, 190, 0.14),
-    0 0 20px rgba(185, 205, 255, 0.1);
+    0 14px 38px rgba(120, 140, 190, 0.1),
+    0 0 20px rgba(185, 205, 255, 0.06);
 }
 
 @media (max-width: 768px) {
@@ -299,14 +358,14 @@
 
   .memoryBg {
     background-position: center top;
-    filter: brightness(1.01) contrast(1.03) saturate(1.01);
+    filter: brightness(0.96) contrast(1.03) saturate(1.01);
     transform: scale(1.02);
   }
 
   .memoryGlow {
     background:
-      radial-gradient(circle at 50% 28%, rgba(255, 255, 255, 0.36), transparent 30%),
-      radial-gradient(circle at 50% 70%, rgba(214, 226, 255, 0.14), transparent 40%);
+      radial-gradient(circle at 50% 28%, rgba(255, 255, 255, 0.14), transparent 30%),
+      radial-gradient(circle at 50% 70%, rgba(214, 226, 255, 0.06), transparent 40%);
   }
 
   .c {
@@ -328,7 +387,7 @@
     text-align: center;
     margin: 8vh auto 4vh;
     font-size: 1.12rem;
-    color: rgba(74, 90, 148, 0.72);
+    color: rgba(74, 90, 148, 0.76);
     letter-spacing: 0.08em;
   }
 
@@ -339,16 +398,16 @@
     background:
       linear-gradient(
         180deg,
-        rgba(255, 255, 255, 0.68) 0%,
-        rgba(255, 255, 255, 0.5) 34%,
-        rgba(243, 246, 252, 0.58) 100%
+        rgba(255, 255, 255, 0.86) 0%,
+        rgba(255, 255, 255, 0.78) 34%,
+        rgba(243, 246, 252, 0.8) 100%
       );
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
     border-radius: 16px;
     box-shadow:
-      0 14px 36px rgba(118, 142, 190, 0.1),
-      inset 0 1px 0 rgba(255, 255, 255, 0.32);
+      0 14px 36px rgba(118, 142, 190, 0.06),
+      inset 0 1px 0 rgba(255, 255, 255, 0.34);
   }
 
   .chapter p + p {
@@ -357,21 +416,21 @@
 
   .f {
     line-height: 1.88;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.02em;
   }
 
   .noah {
     font-size: 0.89rem;
-    color: #5674e8;
+    color: #506fe8 !important;
     text-shadow:
-      0 0 6px rgba(150, 170, 255, 0.16),
-      0 0 14px rgba(190, 208, 255, 0.08);
+      0 0 6px rgba(150, 170, 255, 0.12),
+      0 0 14px rgba(190, 208, 255, 0.05);
   }
 
   .sys {
     font-size: 0.88rem;
-    color: #677389;
-    opacity: 0.94;
+    color: #617089 !important;
+    opacity: 0.98;
   }
 
   .nextChapter {
@@ -386,31 +445,16 @@
     letter-spacing: 0.05em;
   }
 }
-.arataLine {
-  color: var(--line-arata);
-  text-shadow: 0 0 8px var(--glow-arata);
+.bodyText {
+  color: #2f3442 !important;
+  text-shadow: none;
 }
 
-.arataName {
-  color: var(--name-arata);
+.chapter .bodyText,
+.chapter .bodyText br {
+  color: #2f3442 !important;
 }
 
-.minaLine {
-  color: var(--line-mina);
-  text-shadow: 0 0 8px var(--glow-mina);
-}
-
-.minaName {
-  color: var(--name-mina);
-}
-
-.noahLine {
-  color: var(--line-noah);
-  text-shadow:
-    0 0 3px var(--glow-noah-1),
-    0 0 10px var(--glow-noah-2);
-}
-
-.noahName {
-  color: var(--name-noah);
+.f.bodyText {
+  color: #2f3442 !important;
 }

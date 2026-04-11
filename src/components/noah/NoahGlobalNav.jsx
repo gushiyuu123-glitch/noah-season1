@@ -22,12 +22,13 @@ export default function NoahGlobalNav() {
   }, [location.pathname]);
 
   useEffect(() => {
-    if (!open) {
-      document.body.style.overflow = "";
-      return;
-    }
+    const body = document.body;
 
-    document.body.style.overflow = "hidden";
+    if (open) {
+      body.classList.add("noah-nav-open");
+    } else {
+      body.classList.remove("noah-nav-open");
+    }
 
     const handleKeyDown = (e) => {
       if (e.key === "Escape") {
@@ -35,10 +36,12 @@ export default function NoahGlobalNav() {
       }
     };
 
-    window.addEventListener("keydown", handleKeyDown);
+    if (open) {
+      window.addEventListener("keydown", handleKeyDown);
+    }
 
     return () => {
-      document.body.style.overflow = "";
+      body.classList.remove("noah-nav-open");
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [open]);
