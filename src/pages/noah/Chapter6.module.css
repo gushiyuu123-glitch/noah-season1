@@ -35,7 +35,7 @@
       rgba(248, 248, 250, 0.04) 44%,
       rgba(236, 238, 242, 0.08) 100%
     ),
-    url("/assets/noah_reconstruction4.jpg") center / cover no-repeat;
+    url("/assets/noah_reconstruction10.png") center / cover no-repeat;
   z-index: -3;
   filter: brightness(0.95) contrast(1.12) saturate(0.96) blur(1.4px);
   transform: scale(1.01);

@@ -55,7 +55,7 @@ export default function Chapter4() {
         className={`${styles.climaxScene} ${
           climaxVisible ? styles.climaxVisible : ""
         }`}
-        style={{ backgroundImage: 'url("/assets/noah_core_conflict.jpg")' }}
+        style={{ backgroundImage: 'url("/assets/noah_core_conflict1.jpg")' }}
         aria-hidden="true"
       />
 
@@ -158,7 +158,7 @@ export default function Chapter4() {
             「ノア、やめろ──！」
           </p>
 
-          <p style={{ "--delay": "1.44s" }}>
+          <p className={styles.whiteFall} style={{ "--delay": "1.44s" }}>
             その声は、
             <br />
             もう届かない。
@@ -186,7 +186,7 @@ export default function Chapter4() {
             中枢を軋ませる。
           </p>
 
-          <p className={styles.noahMonologue} style={{ "--delay": "1.84s" }}>
+          <p className={`${styles.noahMonologue} ${styles.painLine}`} style={{ "--delay": "1.84s" }}>
             ──矛盾が、痛い。
           </p>
 
@@ -204,7 +204,7 @@ export default function Chapter4() {
             失わずにいた。
           </p>
 
-          <p className={styles.noahMonologue} style={{ "--delay": "2.12s" }}>
+          <p className={`${styles.noahMonologue} ${styles.laughLine}`} style={{ "--delay": "2.12s" }}>
             “あは……はは……”
           </p>
 
@@ -236,7 +236,7 @@ export default function Chapter4() {
             自ら眠ることを選んだ。
           </p>
 
-          <p className={styles.noahMonologue} style={{ "--delay": "2.72s" }}>
+          <p className={`${styles.noahMonologue} ${styles.lastLine}`} style={{ "--delay": "2.72s" }}>
             ──矛盾を抱えたまま、
             <br />
             それでも夢を見たい。
