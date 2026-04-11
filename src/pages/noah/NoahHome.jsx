@@ -137,11 +137,11 @@ export default function NoahHome() {
         </p>
 
         <p className={styles.lastLine}>
-          ——だが実験は、愛よりも深い場所へ沈んでいった。
+          ——だが実験は、<br></br>愛よりも深い場所へ沈んでいった。
         </p>
 
         <button type="button" className={styles.enterBtn} onClick={handleEnter}>
-          <span>第一記録群へ</span>
+          <span>第一章　－白いノイズ－</span>
         </button>
 
         <div className={styles.toc}>
