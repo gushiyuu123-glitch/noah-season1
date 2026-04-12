@@ -6,7 +6,7 @@
 
 :global(body.bodyFadeOut) {
   opacity: 0;
-  transition: opacity 1.5s ease;
+  transition: opacity 1.1s ease;
 }
 
 /* =========================================
@@ -14,25 +14,30 @@
 ========================================= */
 .page {
   position: relative;
-  min-height: 100vh;
-  overflow-x: hidden;
+  min-height: 100svh;
+  overflow-x: clip;
   color: #ece9e6;
   font-family: "Shippori Mincho B1", serif;
   line-height: 2.12;
   isolation: isolate;
 }
 
-.bgBase {
+.bgBase,
+.bgImage,
+.bgVeil,
+.bgOverlay,
+.canvas {
   position: fixed;
   inset: 0;
+}
+
+.bgBase {
   background:
     radial-gradient(circle at 50% 46%, #101116 0%, #07080b 44%, #020203 100%);
   z-index: -5;
 }
 
 .bgImage {
-  position: fixed;
-  inset: 0;
   background-image: url("/assets/bg_intro.png");
   background-position: center;
   background-size: cover;
@@ -43,8 +48,6 @@
 }
 
 .bgVeil {
-  position: fixed;
-  inset: 0;
   background:
     radial-gradient(circle at 50% 40%, rgba(255, 255, 255, 0.055), transparent 42%),
     radial-gradient(circle at 52% 72%, rgba(112, 145, 255, 0.03), transparent 52%);
@@ -54,8 +57,6 @@
 }
 
 .bgOverlay {
-  position: fixed;
-  inset: 0;
   background:
     linear-gradient(
       180deg,
@@ -71,13 +72,12 @@
       rgba(0, 0, 0, 0.14) 100%
     );
   backdrop-filter: blur(0.85px);
+  -webkit-backdrop-filter: blur(0.85px);
   z-index: -2;
   pointer-events: none;
 }
 
 .canvas {
-  position: fixed;
-  inset: 0;
   z-index: -1;
   opacity: 0.54;
   mix-blend-mode: screen;
@@ -174,7 +174,7 @@
   line-height: 2.14;
   opacity: 0;
   text-align: justify;
-  animation: fadeInBlock 2.8s ease 4.8s forwards;
+  animation: fadeInBlock 2.4s ease 4.8s forwards;
 }
 
 @keyframes fadeInBlock {
@@ -244,6 +244,8 @@
     transform 0.45s ease,
     letter-spacing 0.45s ease,
     opacity 0.45s ease;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 @keyframes fadeInEnter {
@@ -331,6 +333,7 @@
     background 0.45s ease,
     transform 0.45s ease,
     box-shadow 0.45s ease;
+  -webkit-tap-highlight-color: transparent;
 }
 
 @keyframes archiveFadeIn {
@@ -420,11 +423,45 @@
 ========================================= */
 @media (max-width: 768px) {
   .page {
+    min-height: 100svh;
     line-height: 1.92;
   }
 
+  .bgBase,
+  .bgImage,
+  .bgVeil,
+  .bgOverlay,
+  .canvas {
+    position: absolute;
+    inset: 0;
+  }
+
+  .bgImage {
+    background-position: center center;
+    opacity: 0.86;
+  }
+
+  .bgVeil {
+    opacity: 0.76;
+  }
+
+  .bgOverlay {
+    backdrop-filter: blur(0.28px);
+    -webkit-backdrop-filter: blur(0.28px);
+  }
+
+  .canvas {
+    opacity: 0.44;
+    mix-blend-mode: lighten;
+  }
+
   .introTitle {
+    position: absolute;
     gap: 0.02em;
+  }
+
+  .introTitle span {
+    font-size: clamp(2.7rem, 15vw, 5.2rem);
   }
 
   .n {
@@ -448,12 +485,14 @@
   }
 
   .introText {
-    width: 87%;
-    padding-top: 22vh;
-    padding-bottom: 24vh;
+    width: min(87%, 34rem);
+    padding-top: max(18svh, 120px);
+    padding-bottom: max(16svh, 120px);
     font-size: 0.95rem;
     line-height: 1.92;
     text-align: left;
+    word-break: normal;
+    overflow-wrap: break-word;
   }
 
   .openingLabel {
@@ -466,6 +505,11 @@
     margin-bottom: 0.9em;
     font-size: 1.03rem;
     letter-spacing: 0.08em;
+    line-height: 1.72;
+  }
+
+  .introText p + p {
+    margin-top: 1.02em;
   }
 
   .lastLine {
@@ -475,6 +519,11 @@
   .enterBtn {
     margin-top: 2.2rem;
     font-size: 0.98rem;
+    letter-spacing: 0.08em;
+  }
+
+  .enterBtn:hover {
+    transform: none;
     letter-spacing: 0.08em;
   }
 
@@ -512,7 +561,12 @@
   .tocItem:nth-child(3):hover,
   .tocItem:nth-child(5):hover,
   .tocItem:nth-child(7):hover {
-    transform: translateY(-1px);
+    transform: none;
+    box-shadow: none;
+  }
+
+  .tocItem::before {
+    display: none;
   }
 
   .tocItemLabel {
@@ -522,13 +576,104 @@
   .tocItemTitle {
     font-size: 0.84rem;
   }
+}
 
-  .bgOverlay {
-    backdrop-filter: blur(0.55px);
+/* =========================================
+   SMALL MOBILE
+========================================= */
+@media (max-width: 430px) {
+  .introText {
+    width: min(88.5%, 32rem);
+    padding-top: max(17svh, 108px);
+    padding-bottom: max(15svh, 104px);
+    font-size: 0.93rem;
+  }
+
+  .introTitle span {
+    font-size: clamp(2.5rem, 15.5vw, 4.6rem);
+  }
+
+  .n {
+    --tx: -74px;
+    --ty: -70px;
+  }
+
+  .o {
+    --tx: 74px;
+    --ty: -78px;
+  }
+
+  .a {
+    --tx: -70px;
+    --ty: 70px;
+  }
+
+  .h {
+    --tx: 68px;
+    --ty: 66px;
+  }
+}
+
+@media (max-width: 380px) {
+  .introText {
+    width: 89%;
+    padding-top: max(16svh, 98px);
+    padding-bottom: max(14svh, 92px);
+    font-size: 0.9rem;
+    line-height: 1.86;
+  }
+
+  .openingLabel {
+    font-size: 0.76rem;
+  }
+
+  .introText h2 {
+    font-size: 0.98rem;
+  }
+
+  .enterBtn {
+    font-size: 0.92rem;
+  }
+
+  .tocItem {
+    padding: 12px 13px 13px;
+  }
+
+  .tocItemLabel {
+    font-size: 0.88rem;
+  }
+
+  .tocItemTitle {
+    font-size: 0.8rem;
+  }
+}
+
+/* =========================================
+   REDUCED MOTION
+========================================= */
+@media (prefers-reduced-motion: reduce) {
+  :global(body.bodyFadeOut) {
+    transition: opacity 0.01s linear;
+  }
+
+  .introTitle span,
+  .introText,
+  .enterBtn,
+  .tocItem,
+  .enterBtn::before {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+    filter: none !important;
+    opacity: 1 !important;
   }
 
   .canvas {
-    opacity: 0.46;
-    mix-blend-mode: lighten;
+    display: none;
+  }
+
+  .bgOverlay {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
   }
 }

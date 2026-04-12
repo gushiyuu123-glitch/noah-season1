@@ -13,7 +13,6 @@
 
 body.noah-nav-open {
   overflow: hidden;
-  touch-action: none;
 }
 
 /* top bar */
@@ -83,6 +82,8 @@ body.noah-nav-open {
     0 4px 14px rgba(0, 0, 0, 0.12),
     inset 0 1px 0 rgba(255, 255, 255, 0.025);
   will-change: transform, opacity;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 .trigger:hover {
@@ -138,7 +139,8 @@ body.noah-nav-open {
   top: 0;
   right: 0;
   width: min(460px, 100%);
-  height: 100%;
+  height: 100dvh;
+  min-height: 100%;
   padding: 28px 22px 30px;
   background:
     linear-gradient(
@@ -219,6 +221,7 @@ body.noah-nav-open {
   cursor: pointer;
   padding: 0.25rem 0;
   transition: color 0.24s ease, opacity 0.24s ease;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .close:hover {
@@ -253,6 +256,7 @@ body.noah-nav-open {
   transform: translate3d(0, 8px, 0);
   opacity: 0;
   will-change: transform, opacity;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .innerOpen .item {
@@ -292,6 +296,10 @@ body.noah-nav-open {
   font-size: 0.88rem;
   letter-spacing: 0.12em;
   color: rgba(255, 255, 255, 0.42);
+}
+
+.active .itemIndex {
+  color: rgba(255, 255, 255, 0.62);
 }
 
 .itemRule {
@@ -361,6 +369,10 @@ body.noah-nav-open {
     gap: 0.55rem;
   }
 
+  .trigger:hover {
+    transform: none;
+  }
+
   .triggerLine {
     width: 14px;
   }
@@ -373,6 +385,7 @@ body.noah-nav-open {
     width: 100%;
     padding: 22px 16px 26px;
     box-shadow: none;
+    border-left: 0;
   }
 
   .head {
@@ -423,6 +436,40 @@ body.noah-nav-open {
   .itemArrow {
     font-size: 0.9rem;
   }
+
+  .item:hover {
+    transform: translate3d(0, 0, 0);
+    box-shadow: none;
+  }
+
+  .item:hover .itemArrow {
+    transform: translate3d(0, -1px, 0);
+  }
+}
+
+@media (max-width: 430px) {
+  .bar {
+    top: 12px;
+    left: 12px;
+    right: 12px;
+  }
+
+  .inner {
+    padding: 20px 14px 24px;
+  }
+
+  .item {
+    padding: 12px 11px;
+  }
+
+  .label {
+    font-size: 0.94rem;
+  }
+
+  .sub {
+    font-size: 0.78rem;
+    line-height: 1.55;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -433,5 +480,11 @@ body.noah-nav-open {
   .itemArrow,
   .trigger {
     transition: none !important;
+  }
+
+  .item,
+  .inner {
+    transform: none !important;
+    opacity: 1 !important;
   }
 }

@@ -15,46 +15,72 @@ const chapterLinks = [
 export default function NoahHome() {
   const canvasRef = useRef(null);
   const navigate = useNavigate();
+  const enterTimeoutRef = useRef(null);
+  const isNavigatingRef = useRef(false);
+  const rafRef = useRef(0);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d", { alpha: true });
     if (!ctx) return;
+
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+
+    if (prefersReducedMotion) return;
 
     let w = 0;
     let h = 0;
-    let animationId = 0;
     let tick = 0;
+    let running = true;
 
-    const particles = Array.from({ length: 78 }, () => ({
-      x: 0,
-      y: 0,
-      r: Math.random() * 1.35 + 0.22,
-      vx: (Math.random() - 0.5) * 0.08,
-      vy: (Math.random() - 0.5) * 0.06,
-      a: Math.random() * 0.22 + 0.08,
+    const dpr = Math.min(window.devicePixelRatio || 1, isMobile ? 1.25 : 1.6);
+    const particleCount = isMobile ? 34 : 62;
+
+    const particles = Array.from({ length: particleCount }, () => ({
+      x: Math.random(),
+      y: Math.random(),
+      r: Math.random() * (isMobile ? 1.0 : 1.3) + 0.2,
+      vx: (Math.random() - 0.5) * (isMobile ? 0.045 : 0.08),
+      vy: (Math.random() - 0.5) * (isMobile ? 0.035 : 0.06),
+      a: Math.random() * 0.18 + 0.06,
       pulse: Math.random() * Math.PI * 2,
     }));
 
-    const resize = () => {
-      w = canvas.width = window.innerWidth;
-      h = canvas.height = window.innerHeight;
+    const setCanvasSize = () => {
+      const vw = window.visualViewport?.width || window.innerWidth;
+      const vh = window.visualViewport?.height || window.innerHeight;
+
+      w = Math.floor(vw);
+      h = Math.floor(vh);
+
+      canvas.width = Math.floor(w * dpr);
+      canvas.height = Math.floor(h * dpr);
+      canvas.style.width = `${w}px`;
+      canvas.style.height = `${h}px`;
+
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
       particles.forEach((p) => {
-        if (p.x === 0 && p.y === 0) {
-          p.x = Math.random() * w;
-          p.y = Math.random() * h;
-        }
+        p.x *= w;
+        p.y *= h;
       });
     };
 
     const animate = () => {
-      tick += 0.0045;
+      if (!running) return;
+
+      tick += isMobile ? 0.0032 : 0.0045;
       ctx.clearRect(0, 0, w, h);
 
-      particles.forEach((p, i) => {
+      for (let i = 0; i < particles.length; i += 1) {
+        const p = particles[i];
+
         p.x += p.vx;
         p.y += p.vy;
 
@@ -63,34 +89,67 @@ export default function NoahHome() {
         if (p.y < -8) p.y = h + 8;
         if (p.y > h + 8) p.y = -8;
 
-        const alpha = p.a + Math.sin(tick * 2 + p.pulse + i * 0.07) * 0.04;
+        const alpha = p.a + Math.sin(tick * 2 + p.pulse + i * 0.07) * 0.035;
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255,255,255,${Math.max(0.03, alpha)})`;
+        ctx.fillStyle = `rgba(255,255,255,${Math.max(0.025, alpha)})`;
         ctx.fill();
-      });
+      }
 
-      animationId = window.requestAnimationFrame(animate);
+      rafRef.current = window.requestAnimationFrame(animate);
     };
 
-    resize();
-    animate();
-    window.addEventListener("resize", resize);
+    const onResize = () => {
+      setCanvasSize();
+    };
+
+    const onVisibilityChange = () => {
+      if (document.hidden) {
+        running = false;
+        window.cancelAnimationFrame(rafRef.current);
+      } else {
+        running = true;
+        rafRef.current = window.requestAnimationFrame(animate);
+      }
+    };
+
+    setCanvasSize();
+    rafRef.current = window.requestAnimationFrame(animate);
+
+    window.addEventListener("resize", onResize);
+    window.visualViewport?.addEventListener("resize", onResize);
+    document.addEventListener("visibilitychange", onVisibilityChange);
 
     return () => {
-      window.removeEventListener("resize", resize);
-      window.cancelAnimationFrame(animationId);
+      running = false;
+      window.cancelAnimationFrame(rafRef.current);
+      window.removeEventListener("resize", onResize);
+      window.visualViewport?.removeEventListener("resize", onResize);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
+    };
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (enterTimeoutRef.current) {
+        window.clearTimeout(enterTimeoutRef.current);
+      }
+      document.body.classList.remove("bodyFadeOut");
     };
   }, []);
 
   const handleEnter = () => {
+    if (isNavigatingRef.current) return;
+    isNavigatingRef.current = true;
+
     document.body.classList.add("bodyFadeOut");
 
-    window.setTimeout(() => {
+    enterTimeoutRef.current = window.setTimeout(() => {
       navigate("/chapter1");
       document.body.classList.remove("bodyFadeOut");
-    }, 1500);
+      isNavigatingRef.current = false;
+    }, 1100);
   };
 
   return (
@@ -99,7 +158,7 @@ export default function NoahHome() {
       <div className={styles.bgImage} />
       <div className={styles.bgVeil} />
       <div className={styles.bgOverlay} />
-      <canvas ref={canvasRef} className={styles.canvas} />
+      <canvas ref={canvasRef} className={styles.canvas} aria-hidden="true" />
 
       <div className={styles.introTitle} aria-hidden="true">
         <span className={styles.n}>N</span>
@@ -137,11 +196,13 @@ export default function NoahHome() {
         </p>
 
         <p className={styles.lastLine}>
-          ——だが実験は、<br></br>愛よりも深い場所へ沈んでいった。
+          ——だが実験は、
+          <br />
+          愛よりも深い場所へ沈んでいった。
         </p>
 
         <button type="button" className={styles.enterBtn} onClick={handleEnter}>
-          <span>第一章　－白いノイズ－</span>
+          <span>第１章　－白いノイズ－</span>
         </button>
 
         <div className={styles.toc}>

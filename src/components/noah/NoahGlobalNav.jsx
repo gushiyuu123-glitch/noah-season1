@@ -1,18 +1,16 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import styles from "./NoahGlobalNav.module.css";
-
 const items = [
-  { to: "/", label: "序文", sub: "ノアの記録より" },
-  { to: "/chapter1", label: "第1章", sub: "白いノイズ" },
-  { to: "/chapter2", label: "第2章", sub: "やわらかな回路" },
-  { to: "/chapter3", label: "第3章", sub: "亀裂の記憶" },
-  { to: "/chapter4", label: "第4章", sub: "歪み" },
-  { to: "/chapter5", label: "第5章", sub: "残響" },
-  { to: "/chapter6", label: "第6章", sub: "再構築" },
-  { to: "/epilogue", label: "Epilogue", sub: "ノアの手記" },
+  { to: "/", index: "00", label: "序文", sub: "ノアの記録より" },
+  { to: "/chapter1", index: "01", label: "第1章", sub: "白いノイズ" },
+  { to: "/chapter2", index: "02", label: "第2章", sub: "やわらかな回路" },
+  { to: "/chapter3", index: "03", label: "第3章", sub: "亀裂の記憶" },
+  { to: "/chapter4", index: "04", label: "第4章", sub: "歪み" },
+  { to: "/chapter5", index: "05", label: "第5章", sub: "残響" },
+  { to: "/chapter6", index: "06", label: "第6章", sub: "再構築" },
+  { to: "/epilogue", index: "07", label: "Epilogue", sub: "ノアの手記" },
 ];
-
 export default function NoahGlobalNav() {
   const [open, setOpen] = useState(false);
   const location = useLocation();
@@ -110,9 +108,7 @@ export default function NoahGlobalNav() {
                   style={{ transitionDelay: open ? `${80 + index * 28}ms` : "0ms" }}
                 >
                   <span className={styles.itemMeta}>
-                    <span className={styles.itemIndex}>
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
+                    <span className={styles.itemIndex}>{item.index}</span>
                     <span className={styles.itemRule} />
                   </span>
 
