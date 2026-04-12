@@ -160,11 +160,20 @@ export default function NoahHome() {
       <div className={styles.bgOverlay} />
       <canvas ref={canvasRef} className={styles.canvas} aria-hidden="true" />
 
-      <div className={styles.introTitle} aria-hidden="true">
+      {/* PC title */}
+      <div className={styles.introTitlePc} aria-hidden="true">
         <span className={styles.n}>N</span>
         <span className={styles.o}>O</span>
         <span className={styles.a}>A</span>
         <span className={styles.h}>H</span>
+      </div>
+
+      {/* SP title */}
+      <div className={styles.introTitleSp} aria-hidden="true">
+        <span className={styles.spN}>N</span>
+        <span className={styles.spO}>O</span>
+        <span className={styles.spA}>A</span>
+        <span className={styles.spH}>H</span>
       </div>
 
       <section className={styles.introText}>
