@@ -514,7 +514,7 @@
 
   .introText {
     width: min(87%, 34rem);
-    padding-top: max(18svh, 120px);
+    padding-top: max(26svh, 120px);
     padding-bottom: max(16svh, 120px);
     font-size: 0.95rem;
     line-height: 1.92;
@@ -640,7 +640,7 @@
 
   .introText {
     width: min(88.5%, 32rem);
-    padding-top: max(17svh, 108px);
+    padding-top: max(26svh, 108px);
     padding-bottom: max(15svh, 104px);
     font-size: 0.93rem;
   }
@@ -653,7 +653,7 @@
 
   .introText {
     width: 89%;
-    padding-top: max(16svh, 98px);
+    padding-top: max(26svh, 98px);
     padding-bottom: max(14svh, 92px);
     font-size: 0.9rem;
     line-height: 1.86;
