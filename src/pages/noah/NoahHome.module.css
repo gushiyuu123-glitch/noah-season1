@@ -472,15 +472,17 @@
   }
 
   .introTitleSp {
-    position: absolute;
-    inset: 0;
+    position: fixed;
+    left: 50%;
+    top: 38svh;
     z-index: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 0.02em;
-    transform: translateY(-6svh);
+    width: max-content;
+    transform: translate(-50%, -50%);
   }
 
   .introTitleSp span {
@@ -606,12 +608,9 @@
   }
 }
 
-/* =========================================
-   SMALL MOBILE
-========================================= */
 @media (max-width: 430px) {
   .introTitleSp {
-    transform: translateY(-8svh);
+    top: 34svh;
   }
 
   .introTitleSp span {
@@ -648,7 +647,8 @@
 
 @media (max-width: 380px) {
   .introTitleSp {
-    transform: translateY(-70svh);
+    top: 32svh;
+    transform: translate(-50%, -50%);
   }
 
   .introText {
